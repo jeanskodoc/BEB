@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accès - Générateur de Bulletins d'Examen Blanc</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            max-width: 1000px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .request-card {
+            background: white;
+            color: #333;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-card .card-title {
+            color: white;
+        }
+
+        .request-card .card-title {
+            color: #667eea;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .login-card .card-subtitle {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .request-card .card-subtitle {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .login-card label {
+            color: white;
+        }
+
+        .request-card label {
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .request-card input,
+        .request-card select,
+        .request-card textarea {
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #333;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .request-card input:focus,
+        .request-card select:focus,
+        .request-card textarea:focus {
+            border-color: #667eea;
+            background: white;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .request-card input::placeholder {
+            color: #999;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-access {
+            background: #667eea;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-access:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .info-box p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logo {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .contact-info i {
+            font-size: 1.5rem;
+            color: #25D366;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step.active .step-number {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .step.active .step-text {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .app-preview {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .app-preview h3 {
+            margin-bottom: 20px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .preview-item i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                max-width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>Générateur de Bulletins d'Examen Blanc</h1>
+            <p>Application professionnelle pour la gestion des examens BEPC, BAC1 et BAC2</p>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-text">Demande d'accès</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-text">Connexion</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-text">Application</div>
+            </div>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="main-content">
+            <!-- Carte de Demande d'Accès -->
+            <div class="card request-card" id="requestCard">
+                <h2 class="card-title">
+                    <i class="fas fa-file-alt"></i> Demande d'Accès
+                </h2>
+                <p class="card-subtitle">
+                    Remplissez ce formulaire pour obtenir les identifiants d'accès à l'application
+                </p>
+
+                <form id="accessRequestForm">
+                    <div class="form-group">
+                        <label for="institutionName">
+                            <i class="fas fa-school"></i> Nom de l'Établissement *
+                        </label>
+                        <input type="text" id="institutionName" 
+                               placeholder="Ex: Collège d'Enseignement Général de Lomé" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="examType">
+                            <i class="fas fa-file-contract"></i> Type d'Examen Blanc *
+                        </label>
+                        <select id="examType" required>
+                            <option value="">Sélectionnez le type d'examen</option>
+                            <option value="BEPC">BEPC (Brevet d'Études du Premier Cycle)</option>
+                            <option value="BAC1">BAC Première</option>
+                            <option value="BAC2">BAC Terminale</option>
+                            <option value="TOUS">Tous les examens</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="directorName">
+                            <i class="fas fa-user-tie"></i> Nom du Directeur/Responsable *
+                        </label>
+                        <input type="text" id="directorName" 
+                               placeholder="Nom et prénom du responsable" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">
+                            <i class="fas fa-phone"></i> Numéro de Téléphone *
+                        </label>
+                        <input type="tel" id="phoneNumber" 
+                               placeholder="Ex: +228 XX XX XX XX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> Adresse Email
+                        </label>
+                        <input type="email" id="email" 
+                               placeholder="email@etablissement.tg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">
+                            <i class="fas fa-comment"></i> Message Additionnel
+                        </label>
+                        <textarea id="message" rows="4" 
+                                  placeholder="Informations complémentaires (nombre d'élèves, période d'examen, etc.)"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Envoyer la Demande par WhatsApp
+                    </button>
+                </form>
+
+                <div class="contact-info">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <strong>Contact:</strong> +228 92 87 16 05
+                        <br>
+                        <small>Envoyez votre demande pour obtenir les identifiants</small>
+                    </div>
+                </div>
+
+                <div class="info-box" style="background: #f8f9fa; border-left-color: #667eea; margin-top: 20px;">
+                    <h4 style="color: #333;">Instructions</h4>
+                    <p style="color: #666;">
+                        1. Remplissez tous les champs obligatoires (*)<br>
+                        2. Cliquez sur "Envoyer par WhatsApp"<br>
+                        3. Un administrateur vous enverra les identifiants<br>
+                        4. Utilisez les identifiants pour vous connecter
+                    </p>
+                </div>
+            </div>
+
+            <!-- Carte de Connexion -->
+            <div class="card login-card hidden" id="loginCard">
+                <h2 class="card-title">
+                    <i class="fas fa-lock"></i> Connexion à l'Application
+                </h2>
+                <p class="card-subtitle">
+                    Utilisez les identifiants fournis par l'administrateur
+                </p>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Identifiant *
+                        </label>
+                        <input type="text" id="username" 
+                               placeholder="Votre identifiant" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-key"></i> Mot de passe *
+                        </label>
+                        <input type="password" id="password" 
+                               placeholder="Votre mot de passe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="examAccess">
+                            <i class="fas fa-graduation-cap"></i> Examen à Accéder *
+                        </label>
+                        <select id="examAccess" required>
+                            <option value="">Sélectionnez l'examen</option>
+                            <option value="BEPC">BEPC</option>
+                            <option value="BAC1">BAC Première</option>
+                            <option value="BAC2">BAC Terminale</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Se Connecter
+                    </button>
+                </form>
+
+                <div class="info-box">
+                    <h4>Accès à l'Application</h4>
+                    <p>Après connexion, vous serez redirigé vers l'application complète de génération des bulletins d'examen blanc.</p>
+                </div>
+
+                <button class="btn btn-access" id="backToRequestBtn">
+                    <i class="fas fa-arrow-left"></i> Retour à la Demande d'Accès
+                </button>
+            </div>
+        </div>
+
+        <div class="app-preview">
+            <h3>Fonctionnalités de l'Application</h3>
+            <div class="preview-grid">
+                <div class="preview-item">
+                    <i class="fas fa-users"></i>
+                    <h4>Gestion des Élèves</h4>
+                    <small>Ajout et organisation</small>
+                </div>
+                <div class="preview-item">
+                    <i class="fas fa-book"></i>
+                    <h4>Matières & Coefficients</h4>
+                    <small>Configuration complète</small>
+                </div>
+                <div class="preview-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Saisie des Notes</h4>
+                    <small>Par enseignant</small>
+                </div>
+                <div class="preview-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <h4>Génération Bulletins</h4>
+                    <small>Avec classement</small>
+                </div>
+                <div class="preview-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4>Statistiques</h4>
+                    <small>Analyses détaillées</small>
+                </div>
+                <div class="preview-item">
+                    <i class="fas fa-database"></i>
+                    <h4>Import/Export</h4>
+                    <small>Données JSON</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Application développée par Jean SKODOC | © 2023 - Générateur de Bulletins d'Examen Blanc</p>
+            <p>Contact: +228 92 87 16 05 | Accès réservé aux établissements autorisés</p>
+        </div>
+    </div>
+
+    <script>
+        // Identifiants par défaut (devraient être sécurisés côté serveur en production)
+        const DEFAULT_CREDENTIALS = {
+            username: 'CEG',
+            password: 'MASSEDENA'
+        };
+
+        // URL de l'application principale
+        const APP_URL = 'https://jeanskodoc.github.io/GENERATAUR-BULLETINS-BLANC/';
+
+        // Numéro WhatsApp
+        const WHATSAPP_NUMBER = '+22892871605';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si l'utilisateur a déjà des identifiants
+            const savedCredentials = localStorage.getItem('examAppCredentials');
+            if (savedCredentials) {
+                showLoginCard();
+            }
+
+            // Gestion du formulaire de demande d'accès
+            document.getElementById('accessRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendWhatsAppRequest();
+            });
+
+            // Gestion du formulaire de connexion
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+
+            // Bouton retour à la demande
+            document.getElementById('backToRequestBtn').addEventListener('click', function() {
+                showRequestCard();
+            });
+        });
+
+        // Fonction pour envoyer la demande par WhatsApp
+        function sendWhatsAppRequest() {
+            const institutionName = document.getElementById('institutionName').value.trim();
+            const examType = document.getElementById('examType').value;
+            const directorName = document.getElementById('directorName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // Validation
+            if (!institutionName || !examType || !directorName || !phoneNumber) {
+                showAlert('Veuillez remplir tous les champs obligatoires (*)', 'error');
+                return;
+            }
+
+            // Créer le message WhatsApp
+            const whatsappMessage = encodeURIComponent(
+                `📋 DEMANDE D'ACCÈS - GÉNÉRATEUR DE BULLETINS\n\n` +
+                `🏫 Établissement: ${institutionName}\n` +
+                `📚 Examen: ${examType}\n` +
+                `👨‍💼 Responsable: ${directorName}\n` +
+                `📞 Téléphone: ${phoneNumber}\n` +
+                `📧 Email: ${email || 'Non renseigné'}\n` +
+                `💬 Message: ${message || 'Aucun message supplémentaire'}\n\n` +
+                `🕐 Date: ${new Date().toLocaleDateString('fr-FR')}\n` +
+                `⏰ Heure: ${new Date().toLocaleTimeString('fr-FR')}`
+            );
+
+            // Créer l'URL WhatsApp
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, '')}?text=${whatsappMessage}`;
+
+            // Ouvrir WhatsApp dans un nouvel onglet
+            window.open(whatsappUrl, '_blank');
+
+            // Afficher un message de confirmation
+            showAlert('✅ Demande envoyée avec succès! L\'administrateur vous contactera avec vos identifiants.', 'success');
+
+            // Optionnel: Sauvegarder la demande localement
+            saveRequestLocally({
+                institutionName,
+                examType,
+                directorName,
+                phoneNumber,
+                email,
+                message,
+                date: new Date().toISOString()
+            });
+
+            // Passer à la carte de connexion après 3 secondes
+            setTimeout(() => {
+                showLoginCard();
+            }, 3000);
+        }
+
+        // Fonction pour gérer la connexion
+        function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const examAccess = document.getElementById('examAccess').value;
+
+            // Validation
+            if (!username || !password || !examAccess) {
+                showAlert('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            // Vérifier les identifiants
+            if (username === DEFAULT_CREDENTIALS.username && password === DEFAULT_CREDENTIALS.password) {
+                // Sauvegarder les identifiants
+                const credentials = {
+                    username,
+                    exam: examAccess,
+                    loginDate: new Date().toISOString()
+                };
+                localStorage.setItem('examAppCredentials', JSON.stringify(credentials));
+
+                // Rediriger vers l'application
+                redirectToApp(examAccess);
+            } else {
+                showAlert('Identifiants incorrects. Veuillez vérifier ou demander l\'accès.', 'error');
+            }
+        }
+
+        // Fonction pour rediriger vers l'application
+        function redirectToApp(examType) {
+            // Afficher un message de chargement
+            showAlert('✅ Connexion réussie! Redirection vers l\'application...', 'success');
+
+            // Rediriger après 2 secondes
+            setTimeout(() => {
+                // On pourrait passer des paramètres dans l'URL
+                const redirectUrl = APP_URL;
+                window.location.href = redirectUrl;
+            }, 2000);
+        }
+
+        // Fonction pour afficher la carte de demande
+        function showRequestCard() {
+            document.getElementById('requestCard').classList.remove('hidden');
+            document.getElementById('loginCard').classList.add('hidden');
+            
+            // Mettre à jour l'indicateur d'étape
+            updateStepIndicator(1);
+        }
+
+        // Fonction pour afficher la carte de connexion
+        function showLoginCard() {
+            document.getElementById('requestCard').classList.add('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+            
+            // Mettre à jour l'indicateur d'étape
+            updateStepIndicator(2);
+            
+            // Remplir automatiquement les identifiants si disponibles
+            const savedCredentials = localStorage.getItem('examAppCredentials');
+            if (savedCredentials) {
+                try {
+                    const credentials = JSON.parse(savedCredentials);
+                    document.getElementById('username').value = credentials.username || '';
+                    document.getElementById('examAccess').value = credentials.exam || '';
+                } catch (e) {
+                    console.error('Error parsing saved credentials:', e);
+                }
+            }
+        }
+
+        // Fonction pour mettre à jour l'indicateur d'étape
+        function updateStepIndicator(stepNumber) {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                if (index < stepNumber) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        // Fonction pour sauvegarder la demande localement
+        function saveRequestLocally(requestData) {
+            try {
+                const requests = JSON.parse(localStorage.getItem('examAppRequests') || '[]');
+                requests.push(requestData);
+                localStorage.setItem('examAppRequests', JSON.stringify(requests));
+            } catch (e) {
+                console.error('Error saving request:', e);
+            }
+        }
+
+        // Fonction pour afficher les alertes
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+
+            // Masquer l'alerte après 5 secondes
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Fonction pour simuler l'accès direct (pour développement)
+        function directAccess() {
+            document.getElementById('username').value = DEFAULT_CREDENTIALS.username;
+            document.getElementById('password').value = DEFAULT_CREDENTIALS.password;
+            document.getElementById('examAccess').value = 'BEPC';
+            showLoginCard();
+        }
+
+        // Ajouter un bouton d'accès direct en développement
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            const devBtn = document.createElement('button');
+            devBtn.className = 'btn btn-primary';
+            devBtn.style.position = 'fixed';
+            devBtn.style.top = '10px';
+            devBtn.style.right = '10px';
+            devBtn.style.zIndex = '1000';
+            devBtn.style.padding = '10px';
+            devBtn.textContent = 'Accès Direct (Dev)';
+            devBtn.onclick = directAccess;
+            document.body.appendChild(devBtn);
+        }
+    </script>
+</body>
+</html>
