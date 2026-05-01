@@ -20,7 +20,6 @@
             color: #333;
         }
 
-        /* ========== AUTHENTIFICATION RESPONSIVE ========== */
         .auth-overlay {
             position: fixed;
             top: 0;
@@ -126,11 +125,9 @@
         .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
         .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
 
-        /* ========== MAIN APP RESPONSIVE ========== */
         .main-app { display: none; background: #f5f7fa; min-height: 100vh; }
         .container { max-width: 1400px; margin: 0 auto; padding: 12px; }
 
-        /* Barre de session responsive */
         .session-info-bar {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
@@ -144,55 +141,20 @@
             gap: 12px;
         }
 
-        .session-info { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-        }
-        .session-badge { 
-            background: rgba(255,255,255,0.2); 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            font-size: 0.7rem; 
-        }
-        .countdown-timer { 
-            background: rgba(0,0,0,0.3); 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            font-family: monospace; 
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
+        .session-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .session-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; }
+        .countdown-timer { background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 20px; font-family: monospace; font-weight: bold; font-size: 0.8rem; }
         .countdown-timer.warning { background: #f39c12; color: #2c3e50; animation: pulse 1s infinite; }
         .countdown-timer.danger { background: #e74c3c; color: white; animation: pulse 0.5s infinite; }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
-        .session-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .logout-btn, .back-to-home-btn {
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.8rem;
-            border: none;
-        }
+        .session-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .logout-btn, .back-to-home-btn { padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.8rem; border: none; }
         .logout-btn { background: #e74c3c; color: white; }
         .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
         .back-to-home-btn { background: #95a5a6; color: white; }
         .back-to-home-btn:hover { background: #7f8c8d; transform: translateY(-2px); }
 
-        /* Header responsive */
         header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
@@ -202,134 +164,35 @@
             position: relative;
         }
 
-        .header-content { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0 16px; 
-            flex-wrap: wrap; 
-            gap: 15px; 
-        }
-        .header-buttons { 
-            display: flex; 
-            gap: 10px; 
-            position: absolute; 
-            top: 12px; 
-            right: 12px; 
-        }
-        .header-btn { 
-            background: rgba(255,255,255,0.2); 
-            border: 1px solid rgba(255,255,255,0.3); 
-            padding: 5px 10px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            color: white; 
-            transition: all 0.3s;
-            font-size: 0.8rem;
-        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-wrap: wrap; gap: 15px; }
+        .header-buttons { display: flex; gap: 10px; position: absolute; top: 12px; right: 12px; }
+        .header-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 6px; cursor: pointer; color: white; transition: all 0.3s; font-size: 0.8rem; }
         .header-btn:hover { background: rgba(255,255,255,0.3); }
         h1 { font-size: 1.2rem; }
         .subtitle { font-size: 0.7rem; opacity: 0.9; }
         .logo { font-size: 1.8rem; }
 
-        /* Exam selector responsive */
-        .exam-selector { 
-            display: flex; 
-            justify-content: center; 
-            gap: 8px; 
-            margin: 15px 0 20px; 
-            flex-wrap: wrap; 
-        }
-        .exam-btn { 
-            background: white; 
-            border: none; 
-            padding: 8px 16px; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.85rem;
-        }
+        .exam-selector { display: flex; justify-content: center; gap: 8px; margin: 15px 0 20px; flex-wrap: wrap; }
+        .exam-btn { background: white; border: none; padding: 8px 16px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 0.85rem; }
         .exam-btn.active { background: #e74c3c; color: white; transform: scale(1.05); }
         .exam-btn:hover { transform: translateY(-2px); }
 
-        /* Tabs responsive */
-        .tabs { 
-            display: flex; 
-            margin-bottom: 20px; 
-            border-bottom: 1px solid #ddd; 
-            overflow-x: auto; 
-            gap: 3px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-        }
-        .tab { 
-            padding: 8px 12px; 
-            cursor: pointer; 
-            background: #f8f9fa; 
-            border: 1px solid #ddd; 
-            border-bottom: none; 
-            border-radius: 8px 8px 0 0; 
-            font-weight: 600; 
-            white-space: nowrap; 
-            font-size: 0.7rem; 
-            transition: all 0.3s; 
-        }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; overflow-x: auto; gap: 3px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+        .tab { padding: 8px 12px; cursor: pointer; background: #f8f9fa; border: 1px solid #ddd; border-bottom: none; border-radius: 8px 8px 0 0; font-weight: 600; white-space: nowrap; font-size: 0.7rem; transition: all 0.3s; }
         .tab.active { background: white; color: #3498db; border-top: 3px solid #3498db; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Form sections responsive */
-        .form-section { 
-            background: white; 
-            border-radius: 12px; 
-            padding: 16px; 
-            margin-bottom: 16px; 
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
-        }
-        .form-title { 
-            color: #2c3e50; 
-            border-bottom: 2px solid #3498db; 
-            padding-bottom: 8px; 
-            margin-bottom: 15px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            gap: 10px;
-            font-size: 1rem;
-        }
+        .form-section { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
+        .form-title { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 1rem; }
         .form-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
         .form-group { flex: 1; min-width: 150px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.8rem; color: #2c3e50; }
-        input, select { 
-            width: 100%; 
-            padding: 10px 12px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            font-size: 0.85rem;
-            -webkit-appearance: none;
-            appearance: none;
-        }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; -webkit-appearance: none; appearance: none; }
         input:focus, select:focus { border-color: #3498db; outline: none; }
 
-        /* Buttons responsive */
-        .btn { 
-            background: #3498db; 
-            color: white; 
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: all 0.3s;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .btn { background: #3498db; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; }
         .btn:hover { transform: translateY(-2px); background: #2980b9; }
         .btn-danger { background: #e74c3c; }
         .btn-danger:hover { background: #c0392b; }
@@ -340,275 +203,270 @@
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
 
-        /* Tables responsive */
-        .table-container { 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            min-width: 400px; 
-        }
-        th, td { 
-            padding: 8px 10px; 
-            text-align: left; 
-            border-bottom: 1px solid #ddd; 
-            font-size: 0.75rem; 
-        }
+        .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 400px; }
+        th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 0.75rem; }
         th { background: #f8f9fa; font-weight: 700; color: #2c3e50; }
-        .action-btn { 
-            padding: 4px 8px; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: all 0.3s;
-            font-size: 0.7rem;
-        }
+        .action-btn { padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s; font-size: 0.7rem; }
 
-        /* Stats grid responsive */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 16px; 
-            margin-bottom: 16px; 
-        }
-        .stat-card { 
-            background: white; 
-            border-radius: 12px; 
-            padding: 16px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-        }
-        .stat-card h3 { 
-            color: #2c3e50; 
-            border-bottom: 2px solid #3498db; 
-            padding-bottom: 8px; 
-            margin-bottom: 12px; 
-            font-size: 0.9rem; 
-        }
-        .stat-value { 
-            font-size: 1.8rem; 
-            font-weight: bold; 
-            text-align: center; 
-            margin: 12px 0; 
-            color: #2c3e50; 
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 16px; }
+        .stat-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-card h3 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; margin-bottom: 12px; font-size: 0.9rem; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; text-align: center; margin: 12px 0; color: #2c3e50; }
         .progress-bar { height: 8px; background: #ecf0f1; border-radius: 4px; margin: 10px 0; overflow: hidden; }
         .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
         .progress-success { background: #2ecc71; }
         .progress-warning { background: #f39c12; }
         .progress-danger { background: #e74c3c; }
 
-        /* Badges */
-        .difficulty-badge, .warning-badge, .good-badge { 
-            padding: 2px 8px; 
-            border-radius: 20px; 
-            font-size: 0.65rem; 
-            margin-left: 5px;
+        /* Styles améliorés pour les bulletins */
+        .bulletin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            page-break-after: always;
+            transition: transform 0.3s;
+        }
+        .bulletin-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        .bulletin-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+        }
+        .bulletin-header h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .bulletin-header h3 {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+        }
+        .bulletin-header .school-year {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 0.75rem;
+            background: #3498db;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .student-info-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .student-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .student-detail p {
+            margin: 0;
+            font-size: 0.85rem;
+        }
+        .student-detail strong {
+            color: #2c3e50;
+            min-width: 100px;
             display: inline-block;
         }
-        .difficulty-badge { background: #e74c3c; color: white; }
-        .warning-badge { background: #f39c12; color: white; }
-        .good-badge { background: #2ecc71; color: white; }
-
-        /* Student cards responsive */
-        .student-card { 
-            background: white; 
-            border-radius: 12px; 
-            padding: 16px; 
-            margin-bottom: 12px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        .average-box {
+            text-align: center;
+            background: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            min-width: 180px;
         }
-        .student-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-bottom: 12px; 
-            padding-bottom: 8px; 
-            border-bottom: 2px solid #3498db; 
+        .average-box .avg-value {
+            font-size: 2rem;
+            font-weight: bold;
         }
-        .student-name { font-size: 1rem; font-weight: bold; color: #2c3e50; }
-        .student-average { 
-            font-size: 0.9rem; 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            font-weight: bold; 
+        .average-box .avg-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
         }
-        .average-pass { background: #d4edda; color: #155724; }
-        .average-fail { background: #f8d7da; color: #721c24; }
+        .mention-box {
+            text-align: center;
+            background: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        .mention-box.mention-fail { background: #e74c3c; }
+        .mention-box.mention-passable { background: #f39c12; }
+        .mention-box.mention-bien { background: #3498db; }
+        .mention-box.mention-tb { background: #2ecc71; }
+        .mention-box.mention-exc { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2c3e50; }
         
-        .subjects-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 8px; 
-            margin-top: 10px; 
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.8rem;
         }
-        .subject-item { 
-            padding: 6px 10px; 
-            border-radius: 8px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            font-size: 0.75rem;
+        .grades-table th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: center;
         }
-        .subject-difficulty { background: #f8d7da; border-left: 4px solid #e74c3c; }
-        .subject-warning { background: #fff3cd; border-left: 4px solid #f39c12; }
-        .subject-good { background: #d4edda; border-left: 4px solid #2ecc71; }
-        .subject-name { font-weight: 600; }
-        .subject-grade { font-weight: bold; }
-        .grade-low { color: #e74c3c; }
-        .grade-medium { color: #f39c12; }
-        .grade-high { color: #2ecc71; }
-
-        /* Filter bar responsive */
-        .filter-bar { 
-            display: flex; 
-            gap: 12px; 
-            margin-bottom: 16px; 
-            flex-wrap: wrap; 
-            align-items: center; 
+        .grades-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
         }
-        .filter-bar input, .filter-bar select { 
-            width: auto; 
-            min-width: 180px; 
+        .grades-table tr:hover {
+            background: #f8f9fa;
+        }
+        .scientific-row {
+            background: #e3f2fd;
+        }
+        .literary-row {
+            background: #fce4ec;
+        }
+        .grade-excellent { color: #2ecc71; font-weight: bold; }
+        .-grade-good { color: #3498db; font-weight: bold; }
+        .-grade-passable { color: #f39c12; font-weight: bold; }
+        .-grade-fail { color: #e74c3c; font-weight: bold; }
+        
+        .category-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .category-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            border-left: 4px solid;
+        }
+        .category-card.scientific { border-left-color: #3498db; }
+        .category-card.literary { border-left-color: #e91e63; }
+        .category-card h4 {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .category-card .value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .category-card .percentage {
+            font-size: 0.7rem;
+            color: #666;
+        }
+        
+        .stats-summary {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #ddd;
+        }
+        .stat-item {
+            text-align: center;
             flex: 1;
+            min-width: 100px;
+        }
+        .stat-item .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+        .stat-item .stat-number {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
         }
         
-        .summary-stats { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 12px; 
-            margin-bottom: 20px; 
+        .rank-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #2c3e50;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
         }
-        .summary-card { 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            color: white; 
-            padding: 12px 16px; 
-            border-radius: 12px; 
-            text-align: center; 
+        .rank-badge.first { background: linear-gradient(135deg, #ffd700, #ffed4e); }
+        .rank-badge.second { background: linear-gradient(135deg, #c0c0c0, #e0e0e0); }
+        .rank-badge.third { background: linear-gradient(135deg, #cd7f32, #e8a87c); }
+        
+        .print-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
         }
+        .print-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+        .filter-bar input, .filter-bar select { width: auto; min-width: 180px; flex: 1; }
+        
+        .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .summary-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 16px; border-radius: 12px; text-align: center; }
         .summary-card h4 { font-size: 0.7rem; opacity: 0.9; margin-bottom: 5px; }
         .summary-card .number { font-size: 1.5rem; font-weight: bold; }
 
-        /* Chart container responsive */
-        .chart-container { 
-            height: 250px; 
-            margin: 15px 0; 
-            width: 100%;
-        }
-        .subject-selector select { 
-            width: 100%; 
-            padding: 12px; 
-            font-size: 0.9rem; 
-        }
+        .chart-container { height: 250px; margin: 15px 0; width: 100%; }
+        .subject-selector select { width: 100%; padding: 12px; font-size: 0.9rem; }
 
-        /* Bulletin section responsive */
-        .bulletin-section { 
-            background: white; 
-            border-radius: 12px; 
-            padding: 16px; 
-            margin-top: 16px; 
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
-        }
-        .bulletin-header { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #3498db; }
-        .bulletin-header h2 { font-size: 1rem; }
-        .bulletin-header p { font-size: 0.7rem; }
-        
-        .student-info { 
-            display: flex; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            gap: 12px; 
-            margin-bottom: 15px; 
-            padding: 12px; 
-            background: #f8f9fa; 
-            border-radius: 8px;
-            font-size: 0.8rem;
-        }
-        .average { font-size: 1rem; font-weight: bold; }
-        .ranking-badge { background: #2c3e50; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; }
-        .warning { color: #e74c3c; font-weight: bold; }
-        
-        .generate-section { text-align: center; margin: 20px 0; }
-        .generate-btn { 
-            background: linear-gradient(135deg, #2ecc71, #27ae60); 
-            color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            border-radius: 50px; 
-            font-size: 0.9rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-        }
-        .generate-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
+        .footer { text-align: center; margin-top: 20px; padding-top: 12px; border-top: 1px solid #ddd; color: #7f8c8d; font-size: 0.7rem; }
 
-        .footer { 
-            text-align: center; 
-            margin-top: 20px; 
-            padding-top: 12px; 
-            border-top: 1px solid #ddd; 
-            color: #7f8c8d; 
-            font-size: 0.7rem; 
-        }
-
-        /* ========== MEDIA QUERIES RESPONSIVES ========== */
         @media (max-width: 768px) {
             .container { padding: 10px; }
             .session-info-bar { flex-direction: column; text-align: center; }
             .session-info { justify-content: center; }
             .session-actions { justify-content: center; }
-            
             .header-content { flex-direction: column; text-align: center; padding-top: 45px; }
             .header-buttons { position: static; justify-content: center; margin-bottom: 10px; }
             h1 { font-size: 1rem; }
-            
             .stats-grid { grid-template-columns: 1fr; }
             .tab { padding: 6px 10px; font-size: 0.65rem; }
-            .subjects-grid { grid-template-columns: 1fr; }
-            
             .form-group { min-width: 100%; }
-            .filter-bar input, .filter-bar select { min-width: 100%; }
             .filter-bar { flex-direction: column; }
-            
-            .summary-stats { grid-template-columns: repeat(2, 1fr); }
-            
-            .student-header { flex-direction: column; text-align: center; }
-            .student-info { flex-direction: column; text-align: center; }
-            
-            .btn-group { justify-content: center; }
-            .btn { justify-content: center; }
-        }
-        
-        @media (max-width: 480px) {
-            .auth-container { padding: 20px 16px; }
-            .auth-header .logo { font-size: 2rem; }
-            .auth-header h2 { font-size: 1.1rem; }
-            
-            .summary-stats { grid-template-columns: 1fr; }
-            
-            .session-badge, .countdown-timer { font-size: 0.65rem; }
-            
-            th, td { padding: 6px 8px; font-size: 0.7rem; }
-            
-            .stat-value { font-size: 1.5rem; }
-            
-            .bulletin-section { padding: 12px; }
-        }
-        
-        @media (min-width: 1200px) {
-            .container { padding: 20px; }
-            .stats-grid { grid-template-columns: repeat(3, 1fr); }
-            .summary-stats { grid-template-columns: repeat(4, 1fr); }
+            .filter-bar input, .filter-bar select { min-width: 100%; }
+            .student-info-card { flex-direction: column; }
+            .category-summary { grid-template-columns: 1fr; }
+            .bulletin-section { padding: 15px; }
+            .bulletin-header h2 { font-size: 1.1rem; }
+            .grades-table { font-size: 0.7rem; }
+            .grades-table th, .grades-table td { padding: 6px 4px; }
         }
 
         @media print {
             .session-info-bar, .exam-selector, .tabs, .header-buttons, 
             .generate-section, .logout-btn, .btn, .actions, .form-section, 
-            #alert, .footer, .filter-bar, .back-to-home-btn { display: none !important; }
-            .bulletin-section { page-break-after: always; box-shadow: none; margin: 0; padding: 0; }
+            #alert, .footer, .filter-bar, .back-to-home-btn, .print-btn { display: none !important; }
+            .bulletin-section { page-break-after: always; break-inside: avoid; box-shadow: none; margin: 0; padding: 20px; }
             body { background: white; }
         }
     </style>
@@ -681,7 +539,7 @@
                 <div class="tab" data-tab="grades">Notes</div>
                 <div class="tab" data-tab="analysis">📊 Analyse</div>
                 <div class="tab" data-tab="statistics">📈 Stats</div>
-                <div class="tab" data-tab="bulletin">Bulletins</div>
+                <div class="tab" data-tab="bulletin">📜 Bulletins</div>
                 <div class="tab" data-tab="data">Données</div>
             </div>
 
@@ -712,13 +570,14 @@
                     <div class="form-row">
                         <div class="form-group"><label>Matière</label><input type="text" id="subjectName" placeholder="Nom"></div>
                         <div class="form-group"><label>Coefficient</label><input type="number" id="coefficient" min="1" max="10" value="1"></div>
+                        <div class="form-group"><label>Catégorie</label><select id="subjectCategory"><option value="scientific">Scientifique</option><option value="literary">Littéraire</option></select></div>
                     </div>
                     <div class="form-row"><div class="form-group"><label>Examen</label><select id="subjectExam"><option value="BEPC">BEPC</option><option value="BAC1">BAC1</option><option value="BAC2">BAC2</option></select></div></div>
                     <button class="btn btn-success" id="addSubjectBtn"><i class="fas fa-plus"></i> Ajouter</button>
                 </div>
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-list"></i> Liste des matières</h2>
-                    <div class="table-container"><table id="subjectsTable"><thead><tr><th>ID</th><th>Matière</th><th>Coeff</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="subjectsList"></tbody></table></div>
+                    <div class="table-container"><table id="subjectsTable"><thead><tr><th>ID</th><th>Matière</th><th>Coeff</th><th>Catégorie</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="subjectsList"></tbody></table></div>
                 </div>
             </div>
 
@@ -781,7 +640,7 @@
 
             <div id="bulletin-tab" class="tab-content">
                 <div class="generate-section">
-                    <button class="generate-btn" id="generateBulletinsBtn"><i class="fas fa-file-pdf"></i> Générer tous les bulletins</button>
+                    <button class="generate-btn" id="generateBulletinsBtn"><i class="fas fa-file-alt"></i> Générer tous les bulletins</button>
                 </div>
                 <div id="bulletinResults"></div>
             </div>
@@ -942,12 +801,25 @@
         }
 
         // === DONNÉES ===
-        let appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
+        let appData = { 
+            currentExam: 'BEPC', 
+            students: [], 
+            subjects: [], 
+            grades: [], 
+            nextStudentId: 1, 
+            nextSubjectId: 1, 
+            nextGradeId: 1 
+        };
         let autoSaveInterval = null;
 
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('examData_' + (activeSession?.username || 'default'));
-            if (saved) { try { const data = JSON.parse(saved); appData = { ...appData, ...data }; } catch(e) {} }
+            if (saved) { 
+                try { 
+                    const data = JSON.parse(saved); 
+                    appData = { ...appData, ...data }; 
+                } catch(e) {} 
+            }
         }
 
         function saveToLocalStorage() {
@@ -960,7 +832,16 @@
         }
 
         // === CRUD ===
-        function updateUI() { renderStudents(); renderSubjects(); renderGrades(); updateSelects(); updateGeneralStats(); updateAnalysisTab(); updateCounters(); saveToLocalStorage(); }
+        function updateUI() { 
+            renderStudents(); 
+            renderSubjects(); 
+            renderGrades(); 
+            updateSelects(); 
+            updateGeneralStats(); 
+            updateAnalysisTab(); 
+            updateCounters(); 
+            saveToLocalStorage(); 
+        }
 
         function renderStudents() {
             const tbody = document.getElementById('studentsList');
@@ -976,8 +857,11 @@
             if (!tbody) return;
             tbody.innerHTML = '';
             const filtered = appData.subjects.filter(s => s.exam === appData.currentExam);
-            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Aucune matière</td></tr>'; return; }
-            filtered.forEach(s => { tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.coefficient}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; });
+            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune matière</td></tr>'; return; }
+            filtered.forEach(s => { 
+                const categoryLabel = s.category === 'scientific' ? '🔬 Scientifique' : '📖 Littéraire';
+                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.coefficient}</td><td>${categoryLabel}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+            });
         }
 
         function renderGrades() {
@@ -986,7 +870,13 @@
             tbody.innerHTML = '';
             const filtered = appData.grades.filter(g => { const s = appData.students.find(st => st.id === g.studentId); return s && s.exam === appData.currentExam; });
             if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune note</td></tr>'; return; }
-            filtered.forEach(g => { const student = appData.students.find(s => s.id === g.studentId); const subject = appData.subjects.find(s => s.id === g.subjectId); if (student && subject) { tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; } });
+            filtered.forEach(g => { 
+                const student = appData.students.find(s => s.id === g.studentId); 
+                const subject = appData.subjects.find(s => s.id === g.subjectId); 
+                if (student && subject) { 
+                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+                } 
+            });
         }
 
         function updateSelects() {
@@ -998,7 +888,7 @@
             const subjectSelect = document.getElementById('gradeSubject');
             if (subjectSelect) {
                 subjectSelect.innerHTML = '<option value="">Choisir</option>';
-                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { subjectSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
+                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { subjectSelect.innerHTML += `<option value="${s.id}">${s.name} (${s.category === 'scientific' ? 'Scientifique' : 'Littéraire'})</option>`; });
             }
             const statSelect = document.getElementById('subjectStatsSelect');
             if (statSelect) {
@@ -1027,9 +917,12 @@
             const name = document.getElementById('subjectName').value.trim();
             const coeff = parseInt(document.getElementById('coefficient').value);
             const exam = document.getElementById('subjectExam').value;
+            const category = document.getElementById('subjectCategory').value;
             if (!name || coeff < 1) { showAlert('Nom et coefficient valides', 'error'); return; }
-            appData.subjects.push({ id: appData.nextSubjectId++, name, coefficient: coeff, exam });
-            updateUI(); document.getElementById('subjectName').value = ''; showAlert('Matière ajoutée', 'success');
+            appData.subjects.push({ id: appData.nextSubjectId++, name, coefficient: coeff, exam, category });
+            updateUI(); 
+            document.getElementById('subjectName').value = ''; 
+            showAlert('Matière ajoutée', 'success');
         }
 
         window.deleteSubject = function(id) {
@@ -1045,7 +938,9 @@
             const existing = appData.grades.findIndex(g => g.studentId === studentId && g.subjectId === subjectId);
             if (existing !== -1) { appData.grades[existing] = { ...appData.grades[existing], value, teacher }; showAlert('Note mise à jour', 'success'); }
             else { appData.grades.push({ id: appData.nextGradeId++, studentId, subjectId, value, teacher }); showAlert('Note ajoutée', 'success'); }
-            updateUI(); document.getElementById('gradeValue').value = ''; document.getElementById('gradeTeacher').value = '';
+            updateUI(); 
+            document.getElementById('gradeValue').value = ''; 
+            document.getElementById('gradeTeacher').value = '';
         }
 
         window.deleteGrade = function(id) {
@@ -1059,10 +954,295 @@
             return coeffs > 0 ? points / coeffs : 0;
         }
 
+        function getStudentAverageByCategory(studentId, category) {
+            const grades = appData.grades.filter(g => g.studentId === studentId);
+            let points = 0, coeffs = 0;
+            grades.forEach(g => { 
+                const subj = appData.subjects.find(s => s.id === g.subjectId); 
+                if (subj && subj.category === category) { 
+                    points += g.value * subj.coefficient; 
+                    coeffs += subj.coefficient; 
+                } 
+            });
+            return coeffs > 0 ? points / coeffs : 0;
+        }
+
+        function getMention(average) {
+            if (average >= 16) return { text: "EXCELLENT", class: "mention-exc" };
+            if (average >= 14) return { text: "TRÈS BIEN", class: "mention-tb" };
+            if (average >= 12) return { text: "BIEN", class: "mention-bien" };
+            if (average >= 10) return { text: "PASSABLE", class: "mention-passable" };
+            return { text: "NON ADMIS", class: "mention-fail" };
+        }
+
+        function getGradeClass(grade) {
+            if (grade >= 16) return "grade-excellent";
+            if (grade >= 14) return "grade-good";
+            if (grade >= 10) return "grade-passable";
+            return "grade-fail";
+        }
+
+        function getPercentage(value, total) {
+            if (total === 0) return 0;
+            return ((value / total) * 100).toFixed(1);
+        }
+
         function getStudentGradesDetailed(studentId) {
             const grades = appData.grades.filter(g => g.studentId === studentId);
-            return grades.map(g => { const subj = appData.subjects.find(s => s.id === g.subjectId); return { subjectName: subj ? subj.name : 'Inconnu', coefficient: subj ? subj.coefficient : 1, grade: g.value, isDifficulty: g.value < 10, isWarning: g.value >= 10 && g.value < 12, isGood: g.value >= 12 }; });
+            return grades.map(g => { 
+                const subj = appData.subjects.find(s => s.id === g.subjectId); 
+                return { 
+                    subjectName: subj ? subj.name : 'Inconnu', 
+                    coefficient: subj ? subj.coefficient : 1, 
+                    grade: g.value,
+                    category: subj ? subj.category : 'literary',
+                    teacher: g.teacher
+                }; 
+            });
         }
+
+        function generateBulletins() {
+            const container = document.getElementById('bulletinResults');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            let students = appData.students.filter(s => s.exam === appData.currentExam);
+            if (students.length === 0) { showAlert('Aucun élève pour cet examen', 'error'); return; }
+            
+            // Calculer les moyennes et rangs
+            const studentsWithAvg = students.map(s => ({
+                ...s,
+                average: getStudentAverage(s.id),
+                scientificAvg: getStudentAverageByCategory(s.id, 'scientific'),
+                literaryAvg: getStudentAverageByCategory(s.id, 'literary'),
+                grades: getStudentGradesDetailed(s.id)
+            }));
+            
+            studentsWithAvg.sort((a, b) => b.average - a.average);
+            
+            // Calculer les statistiques globales
+            const classAvg = studentsWithAvg.reduce((sum, s) => sum + s.average, 0) / studentsWithAvg.length;
+            const passCount = studentsWithAvg.filter(s => s.average >= 10).length;
+            const successRate = (passCount / studentsWithAvg.length) * 100;
+            
+            studentsWithAvg.forEach((student, idx) => {
+                const rank = idx + 1;
+                const totalStudents = studentsWithAvg.length;
+                const percentage = getPercentage(rank, totalStudents);
+                const mention = getMention(student.average);
+                const isTop3 = rank <= 3;
+                
+                let rankClass = '';
+                if (rank === 1) rankClass = 'first';
+                else if (rank === 2) rankClass = 'second';
+                else if (rank === 3) rankClass = 'third';
+                
+                const bulletin = document.createElement('div');
+                bulletin.className = 'bulletin-section';
+                
+                // Générer le tableau des notes
+                let gradesHtml = '';
+                let scientificPoints = 0, scientificCoeffs = 0;
+                let literaryPoints = 0, literaryCoeffs = 0;
+                
+                student.grades.forEach(g => {
+                    const gradeClass = getGradeClass(g.grade);
+                    const rowClass = g.category === 'scientific' ? 'scientific-row' : 'literary-row';
+                    gradesHtml += `
+                        <tr class="${rowClass}">
+                            <td><strong>${g.subjectName}</strong></td>
+                            <td>${g.coefficient}</td>
+                            <td class="${gradeClass}">${g.grade}/20</td>
+                            <td>${(g.grade * g.coefficient).toFixed(1)}</td>
+                            <td>${g.teacher || '-'}</td>
+                        </tr>
+                    `;
+                    
+                    if (g.category === 'scientific') {
+                        scientificPoints += g.grade * g.coefficient;
+                        scientificCoeffs += g.coefficient;
+                    } else {
+                        literaryPoints += g.grade * g.coefficient;
+                        literaryCoeffs += g.coefficient;
+                    }
+                });
+                
+                const scientificTotal = scientificCoeffs > 0 ? (scientificPoints / scientificCoeffs).toFixed(2) : 0;
+                const literaryTotal = literaryCoeffs > 0 ? (literaryPoints / literaryCoeffs).toFixed(2) : 0;
+                
+                bulletin.innerHTML = `
+                    <div class="bulletin-header">
+                        <div class="school-year">Année 2025-2026</div>
+                        <h2>BULLETIN D'EXAMEN BLANC</h2>
+                        <h3>${student.exam === 'BEPC' ? 'Brevet d\'Études du Premier Cycle' : student.exam === 'BAC1' ? 'Baccalauréat Première Partie' : 'Baccalauréat Terminale'}</h3>
+                        <h3>${student.exam}</h3>
+                    </div>
+                    
+                    <div class="student-info-card">
+                        <div class="student-detail">
+                            <p><strong>Nom :</strong> ${student.lastName}</p>
+                            <p><strong>Prénom :</strong> ${student.firstName}</p>
+                            <p><strong>Matricule :</strong> ${student.matricule}</p>
+                        </div>
+                        <div class="average-box">
+                            <div class="avg-value">${student.average.toFixed(2)}/20</div>
+                            <div class="avg-label">Moyenne Générale</div>
+                        </div>
+                        <div class="mention-box ${mention.class}">
+                            <div><i class="fas fa-star"></i> ${mention.text}</div>
+                            <div class="avg-label">Mention</div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-summary">
+                        <div class="category-card scientific">
+                            <h4><i class="fas fa-flask"></i> Matières Scientifiques</h4>
+                            <div class="value">${scientificTotal}/20</div>
+                            <div class="percentage">Moyenne Scientifique</div>
+                        </div>
+                        <div class="category-card literary">
+                            <h4><i class="fas fa-book"></i> Matières Littéraires</h4>
+                            <div class="value">${literaryTotal}/20</div>
+                            <div class="percentage">Moyenne Littéraire</div>
+                        </div>
+                    </div>
+                    
+                    <table class="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Matières</th>
+                                <th>Coeff.</th>
+                                <th>Note /20</th>
+                                <th>Points</th>
+                                <th>Enseignant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${gradesHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: #f8f9fa; font-weight: bold;">
+                                <td colspan="2"><strong>Totaux</strong></td>
+                                <td><strong>${student.average.toFixed(2)}/20</strong></td>
+                                <td><strong>${(student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1)}</strong></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div class="stats-summary">
+                        <div class="stat-item">
+                            <div class="stat-label">Rang</div>
+                            <div class="stat-number rank-badge ${rankClass}">${rank}/${totalStudents}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Pourcentage</div>
+                            <div class="stat-number">${percentage}%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Moyenne Classe</div>
+                            <div class="stat-number">${classAvg.toFixed(2)}/20</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Écart</div>
+                            <div class="stat-number ${student.average >= classAvg ? 'grade-good' : 'grade-fail'}">${(student.average - classAvg).toFixed(2)}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Taux Réussite</div>
+                            <div class="stat-number">${successRate.toFixed(1)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <p><strong>Appréciation :</strong> ${getAppreciation(student.average)}</p>
+                        <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">
+                            ${student.average >= 10 ? 
+                                '<i class="fas fa-check-circle" style="color:#2ecc71"></i> Félicitations ! Vous êtes admis(e) à l\'examen blanc.' : 
+                                '<i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Des efforts supplémentaires sont nécessaires pour réussir.'}
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="print-btn" onclick="printBulletin(this)"><i class="fas fa-print"></i> Imprimer le bulletin</button>
+                    </div>
+                `;
+                container.appendChild(bulletin);
+            });
+            
+            showAlert(`${students.length} bulletin(s) généré(s) avec succès`, 'success');
+        }
+
+        function getAppreciation(avg) {
+            if (avg >= 16) return "Excellent travail ! Félicitations pour ces résultats exceptionnels. Continuez sur cette lancée !";
+            if (avg >= 14) return "Très bon travail ! Vous maîtrisez bien les connaissances. Quelques améliorations possibles pour exceller.";
+            if (avg >= 12) return "Bon travail ! Des progrès notables. Continuez vos efforts pour atteindre l'excellence.";
+            if (avg >= 10) return "Travail satisfaisant. Vous avez les bases, mais des révisions supplémentaires sont nécessaires.";
+            if (avg >= 8) return "Travail insuffisant. Une révision sérieuse s'impose. Concentrez-vous sur les matières où vous avez des difficultés.";
+            return "Travail très insuffisant. Un rattrapage intensif est nécessaire. Contactez vos enseignants pour un soutien supplémentaire.";
+        }
+
+        window.printBulletin = function(btn) {
+            const bulletin = btn.closest('.bulletin-section').cloneNode(true);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Bulletin - ${bulletin.querySelector('.student-detail p:first-child')?.innerText || 'Élève'}</title>
+                    <meta charset="UTF-8">
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+                        body { padding: 20px; background: white; }
+                        .bulletin-section { max-width: 1000px; margin: 0 auto; background: white; }
+                        .bulletin-header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 15px; position: relative; }
+                        .bulletin-header h2 { font-size: 1.5rem; color: #2c3e50; }
+                        .bulletin-header h3 { font-size: 0.9rem; color: #666; }
+                        .school-year { position: absolute; top: 0; right: 0; font-size: 0.7rem; background: #3498db; color: white; padding: 2px 8px; border-radius: 20px; }
+                        .student-info-card { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+                        .student-detail p { margin: 5px 0; font-size: 0.9rem; }
+                        .average-box, .mention-box { text-align: center; padding: 10px 20px; border-radius: 12px; min-width: 150px; }
+                        .average-box { background: #3498db; color: white; }
+                        .avg-value { font-size: 1.8rem; font-weight: bold; }
+                        .mention-box { background: #2ecc71; color: white; }
+                        .mention-box.mention-fail { background: #e74c3c; }
+                        .mention-box.mention-passable { background: #f39c12; }
+                        .mention-box.mention-bien { background: #3498db; }
+                        .mention-box.mention-tb { background: #2ecc71; }
+                        .mention-box.mention-exc { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2c3e50; }
+                        .category-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+                        .category-card { background: #f8f9fa; border-radius: 10px; padding: 12px; text-align: center; border-left: 4px solid; }
+                        .category-card.scientific { border-left-color: #3498db; }
+                        .category-card.literary { border-left-color: #e91e63; }
+                        .category-card .value { font-size: 1.3rem; font-weight: bold; }
+                        .grades-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        .grades-table th { background: #2c3e50; color: white; padding: 10px; font-size: 0.85rem; }
+                        .grades-table td { padding: 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 0.8rem; }
+                        .scientific-row { background: #e3f2fd; }
+                        .literary-row { background: #fce4ec; }
+                        .grade-excellent { color: #2ecc71; font-weight: bold; }
+                        .grade-fail { color: #e74c3c; font-weight: bold; }
+                        .stats-summary { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ddd; }
+                        .stat-item { text-align: center; flex: 1; }
+                        .stat-label { font-size: 0.7rem; color: #666; }
+                        .stat-number { font-size: 1rem; font-weight: bold; }
+                        .rank-badge { background: #ffd700; color: #2c3e50; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+                        .rank-badge.first { background: linear-gradient(135deg, #ffd700, #ffed4e); }
+                        .rank-badge.second { background: linear-gradient(135deg, #c0c0c0, #e0e0e0); }
+                        .rank-badge.third { background: linear-gradient(135deg, #cd7f32, #e8a87c); }
+                        .print-btn, .btn, button { display: none !important; }
+                        @media print {
+                            .print-btn, button { display: none; }
+                            body { padding: 0; }
+                            .bulletin-section { page-break-after: always; }
+                        }
+                    </style>
+                </head>
+                <body>${bulletin.outerHTML}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        };
 
         function updateAnalysisTab() {
             const students = appData.students.filter(s => s.exam === appData.currentExam);
@@ -1075,7 +1255,7 @@
             const studentsData = students.map(s => {
                 const avg = getStudentAverage(s.id);
                 const details = getStudentGradesDetailed(s.id);
-                const hasDiff = details.some(g => g.isDifficulty);
+                const hasDiff = details.some(g => g.grade < 10);
                 if (details.length > 0) { totalAvg += avg; studentsWithGrades++; if (hasDiff) studentsWithDifficulty++; if (avg >= 10) passingStudents++; }
                 return { ...s, average: avg, gradesDetails: details, hasDifficulty: hasDiff, isPassing: avg >= 10, hasGrades: details.length > 0 };
             });
@@ -1089,12 +1269,18 @@
             if (filterType === 'good') filtered = filtered.filter(s => !s.hasDifficulty);
             if (filtered.length === 0) { container.innerHTML = '<div class="form-section" style="text-align:center">Aucun élève correspondant</div>'; return; }
             filtered.sort((a, b) => b.average - a.average);
-            container.innerHTML = filtered.map((s, idx) => `<div class="student-card"><div class="student-header"><div><span class="student-name">${s.firstName} ${s.lastName}</span><span style="font-size:0.7rem;color:#666;margin-left:8px;">${s.matricule}</span></div><div><span class="student-average ${s.isPassing ? 'average-pass' : 'average-fail'}">${s.average.toFixed(2)}/20</span><span style="margin-left:8px;font-size:0.7rem;">Rang: ${idx+1}/${filtered.length}</span></div></div><div class="subjects-grid">${s.gradesDetails.map(g => `<div class="subject-item ${g.isDifficulty ? 'subject-difficulty' : g.isWarning ? 'subject-warning' : 'subject-good'}"><span class="subject-name">${g.subjectName}</span><span class="subject-grade ${g.isDifficulty ? 'grade-low' : g.isWarning ? 'grade-medium' : 'grade-high'}">${g.grade}/20</span></div>`).join('')}</div></div>`).join('');
+            container.innerHTML = filtered.map((s, idx) => `<div class="student-card"><div class="student-header"><div><span class="student-name">${s.firstName} ${s.lastName}</span><span style="font-size:0.7rem;color:#666;margin-left:8px;">${s.matricule}</span></div><div><span class="student-average ${s.isPassing ? 'average-pass' : 'average-fail'}">${s.average.toFixed(2)}/20</span><span style="margin-left:8px;font-size:0.7rem;">Rang: ${idx+1}/${filtered.length}</span></div></div><div class="subjects-grid">${s.gradesDetails.map(g => `<div class="subject-item ${g.grade < 10 ? 'subject-difficulty' : g.grade < 12 ? 'subject-warning' : 'subject-good'}"><span class="subject-name">${g.subjectName}</span><span class="subject-grade ${g.grade < 10 ? 'grade-low' : g.grade < 12 ? 'grade-medium' : 'grade-high'}">${g.grade}/20</span></div>`).join('')}</div></div>`).join('');
         }
 
         function exportAnalysis() {
             const students = appData.students.filter(s => s.exam === appData.currentExam);
-            const data = students.map(s => ({ nom: s.lastName, prenom: s.firstName, matricule: s.matricule, moyenne: getStudentAverage(s.id).toFixed(2), statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' }));
+            const data = students.map(s => ({ 
+                nom: s.lastName, 
+                prenom: s.firstName, 
+                matricule: s.matricule, 
+                moyenne: getStudentAverage(s.id).toFixed(2), 
+                statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' 
+            }));
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `analyse_${appData.currentExam}_${Date.now()}.json`; a.click(); URL.revokeObjectURL(a.href);
         }
@@ -1106,7 +1292,13 @@
             const subjects = appData.subjects.filter(s => s.exam === appData.currentExam);
             let total = 0, count = 0, pass = 0;
             students.forEach(s => { const a = getStudentAverage(s.id); if (a > 0) { total += a; count++; if (a >= 10) pass++; } });
-            container.innerHTML = `<div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div></div><div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div></div><div class="stat-card"><h3>Performance</h3><div class="stat-value">${count > 0 ? (total / count).toFixed(2) : 0}/20</div><div class="progress-bar"><div class="progress-fill ${pass/count*100 >= 70 ? 'progress-success' : pass/count*100 >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${count > 0 ? (pass/count*100) : 0}%"></div></div><p>Taux: ${count > 0 ? Math.round(pass/count*100) : 0}%</p></div>`;
+            const avg = count > 0 ? (total / count).toFixed(2) : 0;
+            const rate = count > 0 ? Math.round(pass / count * 100) : 0;
+            container.innerHTML = `
+                <div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div><p>${count} avec notes</p></div>
+                <div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div><p>${subjects.filter(s => s.category === 'scientific').length} scientifiques, ${subjects.filter(s => s.category === 'literary').length} littéraires</p></div>
+                <div class="stat-card"><h3>Performance</h3><div class="stat-value">${avg}/20</div><div class="progress-bar"><div class="progress-fill ${rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${rate}%"></div></div><p>Taux réussite: ${rate}% (${pass}/${count})</p></div>
+            `;
         }
 
         function showSubjectStats(subjectId) {
@@ -1120,9 +1312,6 @@
             const container = document.getElementById('subjectDetailedStats');
             container.style.display = 'block';
             container.innerHTML = `<div style="background:white;border-radius:12px;padding:16px;"><h3>${subject.name}</h3><div class="stat-value">${avg.toFixed(2)}/20</div></div>`;
-            if (charts[subjectId]) charts[subjectId].destroy();
-            const ctx = document.createElement('canvas'); document.getElementById('subjectDetailedStats').appendChild(ctx);
-            charts[subjectId] = new Chart(ctx, { type: 'bar', data: { labels: ['0-4', '5-9', '10-14', '15-20'], datasets: [{ label: subject.name, data: [0,0,0,0], backgroundColor: ['#e74c3c','#f39c12','#3498db','#2ecc71'] }] } });
         }
 
         function updateCounters() {
@@ -1130,36 +1319,6 @@
             if (document.getElementById('subjectsCount')) document.getElementById('subjectsCount').textContent = appData.subjects.length;
             if (document.getElementById('gradesCount')) document.getElementById('gradesCount').textContent = appData.grades.length;
         }
-
-        function generateBulletins() {
-            const container = document.getElementById('bulletinResults');
-            if (!container) return;
-            container.innerHTML = '';
-            const students = appData.students.filter(s => s.exam === appData.currentExam);
-            if (students.length === 0) { showAlert('Aucun élève', 'error'); return; }
-            students.forEach(s => {
-                const avg = getStudentAverage(s.id);
-                const bulletin = document.createElement('div');
-                bulletin.className = 'bulletin-section';
-                bulletin.innerHTML = `<div class="bulletin-header"><h2>BULLETIN - ${s.exam}</h2></div><div class="student-info"><div><strong>${s.firstName} ${s.lastName}</strong><br>${s.matricule}</div><div>Moyenne: ${avg.toFixed(2)}/20</div></div><button class="btn btn-info" onclick="printBulletin(this)">🖨️ Imprimer</button>`;
-                container.appendChild(bulletin);
-            });
-        }
-
-        function getAppreciation(avg) {
-            if (avg >= 16) return "Excellent !";
-            if (avg >= 14) return "Très bien !";
-            if (avg >= 12) return "Bien";
-            if (avg >= 10) return "Satisfaisant";
-            return "Insuffisant";
-        }
-
-        window.printBulletin = function(btn) {
-            const section = btn.closest('.bulletin-section').cloneNode(true);
-            const win = window.open('', '_blank');
-            win.document.write(`<html><head><title>Bulletin</title><style>body{font-family:Arial;padding:20px}</style></head><body>${section.innerHTML}</body></html>`);
-            win.document.close(); win.print();
-        };
 
         function exportAllData() {
             const data = JSON.stringify(appData, null, 2);
