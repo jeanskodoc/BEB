@@ -244,11 +244,38 @@
             transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
         .alert {
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .alert-success {
@@ -395,31 +422,37 @@
         }
 
         .temp-credentials {
-            background: rgba(255,255,255,0.15);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
             margin-top: 20px;
             text-align: center;
+            color: white;
         }
 
         .temp-credentials h4 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 1.1rem;
         }
 
         .credential-code {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 12px;
             border-radius: 8px;
             font-family: monospace;
-            font-size: 1.2rem;
+            font-size: 1rem;
             margin: 10px 0;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .credential-code:hover {
-            background: rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.3);
             transform: scale(1.02);
         }
 
@@ -430,18 +463,35 @@
         }
 
         .copy-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.3);
             border: none;
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.8rem;
-            margin-top: 5px;
         }
 
         .copy-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .new-request-btn {
+            background: #ff9800;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .new-request-btn:hover {
+            background: #f57c00;
+        }
+
+        .access-blocked {
+            text-align: center;
+            padding: 30px;
+            background: rgba(231, 76, 60, 0.9);
+            border-radius: 15px;
+            margin: 20px;
         }
 
         @media (max-width: 768px) {
@@ -464,6 +514,12 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .alert {
+                left: 20px;
+                right: 20px;
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -482,15 +538,15 @@
         </div>
 
         <div class="step-indicator">
-            <div class="step active">
+            <div class="step active" id="step1">
                 <div class="step-number">1</div>
                 <div class="step-text">Demande d'accès</div>
             </div>
-            <div class="step">
+            <div class="step" id="step2">
                 <div class="step-number">2</div>
                 <div class="step-text">Connexion</div>
             </div>
-            <div class="step">
+            <div class="step" id="step3">
                 <div class="step-number">3</div>
                 <div class="step-text">Application</div>
             </div>
@@ -583,7 +639,8 @@
                         2. Cliquez sur "Envoyer par WhatsApp"<br>
                         3. Un identifiant et mot de passe temporaires seront générés automatiquement<br>
                         4. Ces identifiants sont valables uniquement pendant 6 heures<br>
-                        5. Utilisez les identifiants pour vous connecter
+                        5. Utilisez les identifiants pour vous connecter<br>
+                        6. Après expiration, vous pouvez faire une nouvelle demande
                     </p>
                 </div>
             </div>
@@ -641,6 +698,10 @@
                 <button class="btn btn-access" id="backToRequestBtn">
                     <i class="fas fa-arrow-left"></i> Retour à la Demande d'Accès
                 </button>
+                
+                <button class="btn btn-danger" id="resetAndNewRequestBtn">
+                    <i class="fas fa-sync-alt"></i> Nouvelle Inscription
+                </button>
             </div>
         </div>
 
@@ -695,14 +756,19 @@
         
         // Stockage des identifiants temporaires
         let temporaryCredentials = {};
+        
+        // Stockage des demandes d'inscription
+        let registrationRequests = {};
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             // Charger les identifiants sauvegardés
             loadCredentials();
+            loadRegistrationRequests();
             
             // Vérifier l'expiration des identifiants toutes les minutes
             setInterval(checkCredentialsExpiration, 60000);
+            setInterval(cleanExpiredRegistrations, 60000);
             
             // Gestion du formulaire de demande d'accès
             document.getElementById('accessRequestForm').addEventListener('submit', function(e) {
@@ -719,6 +785,11 @@
             // Bouton retour à la demande
             document.getElementById('backToRequestBtn').addEventListener('click', function() {
                 showRequestCard();
+            });
+            
+            // Bouton nouvelle inscription
+            document.getElementById('resetAndNewRequestBtn').addEventListener('click', function() {
+                resetAndNewRegistration();
             });
 
             // Bouton fermer la page
@@ -745,11 +816,17 @@
             return password;
         }
 
+        // Fonction pour générer un ID de demande unique
+        function generateRequestId() {
+            return 'REQ_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
         // Fonction pour générer des identifiants temporaires
-        function generateTemporaryCredentials(institutionName, examType, phoneNumber) {
+        function generateTemporaryCredentials(institutionName, examType, phoneNumber, directorName, email, message) {
             const username = generateUsername(institutionName);
             const password = generatePassword();
             const expirationTime = Date.now() + (6 * 60 * 60 * 1000); // 6 heures en millisecondes
+            const requestId = generateRequestId();
             
             const credentials = {
                 username: username,
@@ -758,12 +835,25 @@
                 institutionName: institutionName,
                 examType: examType,
                 phoneNumber: phoneNumber,
-                createdAt: new Date().toISOString()
+                directorName: directorName,
+                email: email,
+                message: message,
+                createdAt: new Date().toISOString(),
+                requestId: requestId,
+                isActive: true
             };
             
             // Sauvegarder les identifiants
             temporaryCredentials[username] = credentials;
             saveCredentialsToStorage();
+            
+            // Sauvegarder la demande d'inscription
+            registrationRequests[requestId] = {
+                ...credentials,
+                username: username,
+                requestId: requestId
+            };
+            saveRegistrationRequests();
             
             return credentials;
         }
@@ -784,7 +874,7 @@
             }
 
             // Générer les identifiants temporaires
-            const credentials = generateTemporaryCredentials(institutionName, examType, phoneNumber);
+            const credentials = generateTemporaryCredentials(institutionName, examType, phoneNumber, directorName, email, message);
             
             // Formater la date d'expiration
             const expirationDate = new Date(credentials.expirationTime);
@@ -798,19 +888,21 @@
 
             // Créer le message WhatsApp avec les identifiants
             const whatsappMessage = encodeURIComponent(
-                `📋 DEMANDE D'ACCÈS AVEC IDENTIFIANTS TEMPORAIRES - GÉNÉRATEUR DE BULLETINS\n\n` +
+                `📋 NOUVELLE DEMANDE D'INSCRIPTION - GÉNÉRATEUR DE BULLETINS\n\n` +
                 `🏫 Établissement: ${institutionName}\n` +
                 `📚 Examen: ${examType}\n` +
                 `👨‍💼 Responsable: ${directorName}\n` +
                 `📞 Téléphone: ${phoneNumber}\n` +
                 `📧 Email: ${email || 'Non renseigné'}\n` +
-                `💬 Message: ${message || 'Aucun message supplémentaire'}\n\n` +
-                `🔐 IDENTIFIANTS D'ACCÈS TEMPORAIRES:\n` +
+                `💬 Message: ${message || 'Aucun message supplémentaire'}\n` +
+                `🆔 ID Demande: ${credentials.requestId}\n\n` +
+                `🔐 IDENTIFIANTS D'ACCÈS TEMPORAIRES GÉNÉRÉS:\n` +
                 `👤 Identifiant: ${credentials.username}\n` +
                 `🔑 Mot de passe: ${credentials.password}\n` +
                 `⏰ Valable jusqu'au: ${formattedExpiration}\n` +
                 `⏱️ Durée de validité: 6 heures\n\n` +
-                `⚠️ Ces identifiants sont temporaires et seront automatiquement détruits après expiration.\n\n` +
+                `⚠️ Ces identifiants sont temporaires et seront automatiquement bloqués après expiration.\n` +
+                `📝 Une nouvelle inscription sera possible après expiration.\n\n` +
                 `🕐 Date demande: ${new Date().toLocaleDateString('fr-FR')}\n` +
                 `⏰ Heure: ${new Date().toLocaleTimeString('fr-FR')}`
             );
@@ -831,15 +923,19 @@
             const timeRemaining = getTimeRemaining(credentials.expirationTime);
             
             const credentialsHTML = `
-                <div class="temp-credentials" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 20px;">
+                <div class="temp-credentials" id="tempCredentials_${credentials.username}">
                     <h4><i class="fas fa-key"></i> Vos identifiants temporaires</h4>
-                    <div class="credential-code" onclick="copyToClipboard('${credentials.username}')">
-                        <i class="fas fa-user"></i> Identifiant: <strong>${credentials.username}</strong>
-                        <span class="copy-btn"><i class="fas fa-copy"></i> Copier</span>
+                    <div class="credential-code" data-credential="${credentials.username}">
+                        <span><i class="fas fa-user"></i> Identifiant: <strong>${credentials.username}</strong></span>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${credentials.username}')">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
                     </div>
-                    <div class="credential-code" onclick="copyToClipboard('${credentials.password}')">
-                        <i class="fas fa-lock"></i> Mot de passe: <strong>${credentials.password}</strong>
-                        <span class="copy-btn"><i class="fas fa-copy"></i> Copier</span>
+                    <div class="credential-code" data-credential="${credentials.password}">
+                        <span><i class="fas fa-lock"></i> Mot de passe: <strong>${credentials.password}</strong></span>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${credentials.password}')">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
                     </div>
                     <div class="countdown">
                         <i class="fas fa-hourglass-half"></i> Valable pendant: <span id="countdown_${credentials.username}">${timeRemaining}</span>
@@ -849,6 +945,10 @@
                     <button onclick="proceedToLoginWithCredentials('${credentials.username}', '${credentials.password}')" 
                             class="btn btn-primary" style="margin-top: 10px; background: #4CAF50;">
                         <i class="fas fa-sign-in-alt"></i> Procéder à la connexion
+                    </button>
+                    <button onclick="resetAndNewRegistration()" 
+                            class="btn new-request-btn">
+                        <i class="fas fa-plus-circle"></i> Nouvelle Inscription
                     </button>
                 </div>
             `;
@@ -864,7 +964,7 @@
             // Démarrer le compte à rebours
             startCountdown(credentials.username, credentials.expirationTime);
             
-            showAlert('✅ Identifiants temporaires générés avec succès! Valables 6 heures.', 'success');
+            showAlert('✅ Inscription réussie! Identifiants temporaires générés. Valables 6 heures.', 'success');
         }
 
         // Fonction pour obtenir le temps restant
@@ -894,12 +994,20 @@
                     
                     if (timeRemaining === 'Expiré') {
                         clearInterval(interval);
-                        const tempDiv = document.querySelector('.temp-credentials');
+                        const tempDiv = document.getElementById(`tempCredentials_${username}`);
                         if (tempDiv) {
                             tempDiv.style.opacity = '0.5';
-                            tempDiv.innerHTML += '<p style="color: #ff6b6b; margin-top: 10px;"><i class="fas fa-exclamation-triangle"></i> Identifiants expirés! Veuillez faire une nouvelle demande.</p>';
+                            const proceedBtn = tempDiv.querySelector('.btn-primary');
+                            if (proceedBtn) {
+                                proceedBtn.disabled = true;
+                                proceedBtn.style.opacity = '0.5';
+                                proceedBtn.style.cursor = 'not-allowed';
+                                proceedBtn.textContent = '⏰ Accès Expiré';
+                            }
+                            tempDiv.innerHTML += '<p style="color: #ff9999; margin-top: 10px;"><i class="fas fa-exclamation-triangle"></i> Identifiants expirés! Vous pouvez faire une nouvelle inscription.</p>';
                         }
-                        // Supprimer les identifiants expirés
+                        // Bloquer l'accès et supprimer les identifiants expirés
+                        blockExpiredAccess(username);
                         delete temporaryCredentials[username];
                         saveCredentialsToStorage();
                     }
@@ -908,9 +1016,40 @@
                 }
             }, 1000);
         }
+        
+        // Fonction pour bloquer l'accès après expiration
+        function blockExpiredAccess(username) {
+            // Vérifier si une session existe pour cet utilisateur
+            const session = localStorage.getItem('examAppSession');
+            if (session) {
+                try {
+                    const sessionData = JSON.parse(session);
+                    if (sessionData.username === username) {
+                        localStorage.removeItem('examAppSession');
+                        localStorage.removeItem('currentExamSession');
+                        showAlert('⏰ Votre session a expiré après 6 heures. Veuillez faire une nouvelle inscription.', 'warning');
+                    }
+                } catch (e) {
+                    console.error('Erreur:', e);
+                }
+            }
+            
+            // Désactiver les identifiants dans le stockage
+            if (temporaryCredentials[username]) {
+                temporaryCredentials[username].isActive = false;
+                saveCredentialsToStorage();
+            }
+        }
 
         // Fonction pour procéder à la connexion avec les identifiants générés
         window.proceedToLoginWithCredentials = function(username, password) {
+            // Vérifier si les identifiants sont encore valides
+            const credentials = temporaryCredentials[username];
+            if (!credentials || Date.now() > credentials.expirationTime) {
+                showAlert('❌ Ces identifiants ont expiré! Veuillez faire une nouvelle inscription.', 'error');
+                return;
+            }
+            
             document.getElementById('username').value = username;
             document.getElementById('password').value = password;
             showLoginCard();
@@ -920,9 +1059,16 @@
         // Fonction pour copier dans le presse-papier
         window.copyToClipboard = function(text) {
             navigator.clipboard.writeText(text).then(() => {
-                showAlert('Texte copié dans le presse-papier!', 'success');
+                showAlert('✓ Texte copié dans le presse-papier!', 'success');
             }).catch(() => {
-                showAlert('Erreur lors de la copie', 'error');
+                // Méthode de secours
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showAlert('✓ Texte copié dans le presse-papier!', 'success');
             });
         };
 
@@ -944,9 +1090,16 @@
             if (credentials && credentials.password === password) {
                 // Vérifier l'expiration
                 if (Date.now() > credentials.expirationTime) {
-                    showAlert('❌ Vos identifiants ont expiré! Veuillez faire une nouvelle demande.', 'error');
+                    showAlert('❌ Vos identifiants ont expiré! Veuillez faire une nouvelle inscription.', 'error');
+                    blockExpiredAccess(username);
                     delete temporaryCredentials[username];
                     saveCredentialsToStorage();
+                    return;
+                }
+                
+                // Vérifier si le compte est actif
+                if (credentials.isActive === false) {
+                    showAlert('❌ Ce compte a été désactivé. Veuillez faire une nouvelle inscription.', 'error');
                     return;
                 }
                 
@@ -956,15 +1109,19 @@
                     exam: examAccess,
                     institutionName: credentials.institutionName,
                     loginTime: new Date().toISOString(),
-                    expirationTime: credentials.expirationTime
+                    expirationTime: credentials.expirationTime,
+                    requestId: credentials.requestId
                 };
                 
                 localStorage.setItem('examAppSession', JSON.stringify(sessionData));
                 
+                // Mettre à jour l'indicateur d'étape
+                updateStepIndicator(3);
+                
                 // Rediriger vers l'application
                 redirectToApp(examAccess);
             } else {
-                showAlert('❌ Identifiants incorrects ou expirés. Veuillez vérifier ou faire une nouvelle demande.', 'error');
+                showAlert('❌ Identifiants incorrects ou expirés. Veuillez vérifier ou faire une nouvelle inscription.', 'error');
             }
         }
 
@@ -974,6 +1131,7 @@
             
             for (const [username, credentials] of Object.entries(temporaryCredentials)) {
                 if (Date.now() > credentials.expirationTime) {
+                    blockExpiredAccess(username);
                     delete temporaryCredentials[username];
                     hasChanges = true;
                 }
@@ -981,6 +1139,56 @@
             
             if (hasChanges) {
                 saveCredentialsToStorage();
+            }
+        }
+        
+        // Fonction pour nettoyer les inscriptions expirées
+        function cleanExpiredRegistrations() {
+            let hasChanges = false;
+            const now = Date.now();
+            
+            for (const [requestId, registration] of Object.entries(registrationRequests)) {
+                if (now > registration.expirationTime) {
+                    delete registrationRequests[requestId];
+                    hasChanges = true;
+                }
+            }
+            
+            if (hasChanges) {
+                saveRegistrationRequests();
+            }
+        }
+        
+        // Fonction pour réinitialiser et faire une nouvelle inscription
+        function resetAndNewRegistration() {
+            if (confirm('⚠️ Voulez-vous vraiment faire une nouvelle inscription?\n\n' +
+                       'Cela effacera tous les identifiants actuels non expirés.\n' +
+                       'Vous pourrez générer de nouveaux identifiants valables 6 heures.\n\n' +
+                       'Souhaitez-vous continuer ?')) {
+                
+                // Effacer toutes les sessions et identifiants
+                localStorage.removeItem('examAppSession');
+                localStorage.removeItem('currentExamSession');
+                
+                // Réinitialiser les stockages
+                temporaryCredentials = {};
+                registrationRequests = {};
+                saveCredentialsToStorage();
+                saveRegistrationRequests();
+                
+                // Réinitialiser le formulaire
+                document.getElementById('accessRequestForm').reset();
+                
+                // Supprimer les identifiants affichés
+                const tempDiv = document.querySelector('.temp-credentials');
+                if (tempDiv) {
+                    tempDiv.remove();
+                }
+                
+                // Revenir à la carte de demande
+                showRequestCard();
+                
+                showAlert('✅ Réinitialisation réussie! Vous pouvez maintenant faire une nouvelle inscription.', 'success');
             }
         }
 
@@ -999,6 +1207,23 @@
                     checkCredentialsExpiration();
                 } catch (e) {
                     console.error('Erreur lors du chargement des identifiants:', e);
+                }
+            }
+        }
+        
+        // Fonction pour sauvegarder les demandes d'inscription
+        function saveRegistrationRequests() {
+            localStorage.setItem('registrationRequests', JSON.stringify(registrationRequests));
+        }
+        
+        // Fonction pour charger les demandes d'inscription
+        function loadRegistrationRequests() {
+            const saved = localStorage.getItem('registrationRequests');
+            if (saved) {
+                try {
+                    registrationRequests = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Erreur lors du chargement des demandes:', e);
                 }
             }
         }
@@ -1054,7 +1279,9 @@
                     const sessionData = JSON.parse(session);
                     if (Date.now() < sessionData.expirationTime) {
                         document.getElementById('username').value = sessionData.username || '';
-                        document.getElementById('examAccess').value = sessionData.exam || '';
+                        if (sessionData.exam) {
+                            document.getElementById('examAccess').value = sessionData.exam;
+                        }
                     }
                 } catch (e) {
                     console.error('Erreur:', e);
@@ -1064,14 +1291,17 @@
 
         // Fonction pour mettre à jour l'indicateur d'étape
         function updateStepIndicator(stepNumber) {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((step, index) => {
-                if (index < stepNumber) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            
+            step1.classList.remove('active');
+            step2.classList.remove('active');
+            step3.classList.remove('active');
+            
+            if (stepNumber >= 1) step1.classList.add('active');
+            if (stepNumber >= 2) step2.classList.add('active');
+            if (stepNumber >= 3) step3.classList.add('active');
         }
 
         // Fonction pour afficher les alertes
@@ -1082,7 +1312,11 @@
             alertDiv.style.display = 'block';
 
             setTimeout(() => {
-                alertDiv.style.display = 'none';
+                alertDiv.style.opacity = '0';
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                    alertDiv.style.opacity = '1';
+                }, 300);
             }, 5000);
         }
 
