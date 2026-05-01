@@ -39,7 +39,7 @@
             border-radius: 20px;
             padding: 24px 20px;
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.5s ease;
         }
@@ -111,6 +111,10 @@
             font-size: 0.75rem; 
             text-align: center; 
         }
+        .expiry-warning {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+        }
         .auth-footer { text-align: center; margin-top: 15px; font-size: 0.75rem; color: #7f8c8d; }
 
         .alert { 
@@ -146,6 +150,7 @@
         .countdown-timer { background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 20px; font-family: monospace; font-weight: bold; font-size: 0.8rem; }
         .countdown-timer.warning { background: #f39c12; color: #2c3e50; animation: pulse 1s infinite; }
         .countdown-timer.danger { background: #e74c3c; color: white; animation: pulse 0.5s infinite; }
+        .countdown-timer.expired { background: #2c3e50; color: #95a5a6; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
         .session-actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -202,6 +207,25 @@
         .btn-info { background: #17a2b8; }
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
+        
+        .file-input-label {
+            background: #6c5ce7;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .file-input-label:hover {
+            background: #5b4bc4;
+            transform: translateY(-2px);
+        }
+        input[type="file"] { display: none; }
 
         .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 400px; }
@@ -219,7 +243,6 @@
         .progress-warning { background: #f39c12; }
         .progress-danger { background: #e74c3c; }
 
-        /* Styles améliorés pour les bulletins */
         .bulletin-section {
             background: white;
             border-radius: 16px;
@@ -230,203 +253,55 @@
             page-break-after: always;
             transition: transform 0.3s;
         }
-        .bulletin-section:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-        .bulletin-header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #3498db;
-            position: relative;
-        }
-        .bulletin-header h2 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        .bulletin-header h3 {
-            font-size: 1rem;
-            color: #666;
-            font-weight: normal;
-        }
-        .bulletin-header .school-year {
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 0.75rem;
-            background: #3498db;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-        }
-        .student-info-card {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .student-detail {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .student-detail p {
-            margin: 0;
-            font-size: 0.85rem;
-        }
-        .student-detail strong {
-            color: #2c3e50;
-            min-width: 100px;
-            display: inline-block;
-        }
-        .average-box {
-            text-align: center;
-            background: #3498db;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            min-width: 180px;
-        }
-        .average-box .avg-value {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        .average-box .avg-label {
-            font-size: 0.7rem;
-            opacity: 0.9;
-        }
-        .mention-box {
-            text-align: center;
-            background: #2ecc71;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            min-width: 180px;
-        }
+        .bulletin-section:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); }
+        .bulletin-header { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #3498db; position: relative; }
+        .bulletin-header h2 { font-size: 1.5rem; color: #2c3e50; margin-bottom: 5px; }
+        .bulletin-header h3 { font-size: 1rem; color: #666; font-weight: normal; }
+        .bulletin-header .school-year { position: absolute; top: 0; right: 0; font-size: 0.75rem; background: #3498db; color: white; padding: 3px 10px; border-radius: 20px; }
+        .student-info-card { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 12px; padding: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .student-detail { display: flex; flex-direction: column; gap: 5px; }
+        .student-detail p { margin: 0; font-size: 0.85rem; }
+        .student-detail strong { color: #2c3e50; min-width: 100px; display: inline-block; }
+        .average-box { text-align: center; background: #3498db; color: white; padding: 12px 20px; border-radius: 12px; min-width: 180px; }
+        .average-box .avg-value { font-size: 2rem; font-weight: bold; }
+        .average-box .avg-label { font-size: 0.7rem; opacity: 0.9; }
+        .mention-box { text-align: center; background: #2ecc71; color: white; padding: 12px 20px; border-radius: 12px; min-width: 180px; }
         .mention-box.mention-fail { background: #e74c3c; }
         .mention-box.mention-passable { background: #f39c12; }
         .mention-box.mention-bien { background: #3498db; }
         .mention-box.mention-tb { background: #2ecc71; }
         .mention-box.mention-exc { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2c3e50; }
         
-        .grades-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 0.8rem;
-        }
-        .grades-table th {
-            background: #2c3e50;
-            color: white;
-            padding: 12px;
-            text-align: center;
-        }
-        .grades-table td {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .grades-table tr:hover {
-            background: #f8f9fa;
-        }
-        .scientific-row {
-            background: #e3f2fd;
-        }
-        .literary-row {
-            background: #fce4ec;
-        }
+        .grades-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.8rem; }
+        .grades-table th { background: #2c3e50; color: white; padding: 12px; text-align: center; }
+        .grades-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e0e0e0; }
+        .grades-table tr:hover { background: #f8f9fa; }
+        .scientific-row { background: #e3f2fd; }
+        .literary-row { background: #fce4ec; }
         .grade-excellent { color: #2ecc71; font-weight: bold; }
-        .-grade-good { color: #3498db; font-weight: bold; }
-        .-grade-passable { color: #f39c12; font-weight: bold; }
-        .-grade-fail { color: #e74c3c; font-weight: bold; }
+        .grade-good { color: #3498db; font-weight: bold; }
+        .grade-passable { color: #f39c12; font-weight: bold; }
+        .grade-fail { color: #e74c3c; font-weight: bold; }
         
-        .category-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .category-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            border-left: 4px solid;
-        }
+        .category-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .category-card { background: #f8f9fa; border-radius: 10px; padding: 12px; text-align: center; border-left: 4px solid; }
         .category-card.scientific { border-left-color: #3498db; }
         .category-card.literary { border-left-color: #e91e63; }
-        .category-card h4 {
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-        .category-card .value {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-        .category-card .percentage {
-            font-size: 0.7rem;
-            color: #666;
-        }
+        .category-card h4 { font-size: 0.8rem; color: #666; margin-bottom: 8px; }
+        .category-card .value { font-size: 1.3rem; font-weight: bold; }
         
-        .stats-summary {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px dashed #ddd;
-        }
-        .stat-item {
-            text-align: center;
-            flex: 1;
-            min-width: 100px;
-        }
-        .stat-item .stat-label {
-            font-size: 0.7rem;
-            color: #666;
-        }
-        .stat-item .stat-number {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
+        .stats-summary { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ddd; }
+        .stat-item { text-align: center; flex: 1; min-width: 100px; }
+        .stat-item .stat-label { font-size: 0.7rem; color: #666; }
+        .stat-item .stat-number { font-size: 1.1rem; font-weight: bold; color: #2c3e50; }
         
-        .rank-badge {
-            display: inline-block;
-            background: #ffd700;
-            color: #2c3e50;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
+        .rank-badge { display: inline-block; background: #ffd700; color: #2c3e50; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
         .rank-badge.first { background: linear-gradient(135deg, #ffd700, #ffed4e); }
         .rank-badge.second { background: linear-gradient(135deg, #c0c0c0, #e0e0e0); }
         .rank-badge.third { background: linear-gradient(135deg, #cd7f32, #e8a87c); }
         
-        .print-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-        .print-btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
+        .print-btn { background: #3498db; color: white; border: none; padding: 8px 20px; border-radius: 25px; cursor: pointer; margin-top: 15px; font-size: 0.8rem; transition: all 0.3s; }
+        .print-btn:hover { background: #2980b9; transform: translateY(-2px); }
         
         .filter-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
         .filter-bar input, .filter-bar select { width: auto; min-width: 180px; flex: 1; }
@@ -440,6 +315,24 @@
         .subject-selector select { width: 100%; padding: 12px; font-size: 0.9rem; }
 
         .footer { text-align: center; margin-top: 20px; padding-top: 12px; border-top: 1px solid #ddd; color: #7f8c8d; font-size: 0.7rem; }
+
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .auto-save-indicator.show {
+            opacity: 1;
+        }
 
         @media (max-width: 768px) {
             .container { padding: 10px; }
@@ -465,7 +358,8 @@
         @media print {
             .session-info-bar, .exam-selector, .tabs, .header-buttons, 
             .generate-section, .logout-btn, .btn, .actions, .form-section, 
-            #alert, .footer, .filter-bar, .back-to-home-btn, .print-btn { display: none !important; }
+            #alert, .footer, .filter-bar, .back-to-home-btn, .print-btn,
+            .auto-save-indicator { display: none !important; }
             .bulletin-section { page-break-after: always; break-inside: avoid; box-shadow: none; margin: 0; padding: 20px; }
             body { background: white; }
         }
@@ -494,7 +388,9 @@
             <button class="back-home-btn" id="backToHomeFromAuth">
                 <i class="fas fa-arrow-left"></i> Retour à l'accueil
             </button>
-            <div class="expiry-info"><i class="fas fa-hourglass-half"></i> Identifiants valables 6 heures</div>
+            <div class="expiry-info" id="expiryInfoSection">
+                <i class="fas fa-hourglass-half"></i> Identifiants valables 6 heures
+            </div>
             <div class="auth-footer"><p><i class="fab fa-whatsapp"></i> +228 92 87 16 05</p></div>
         </div>
     </div>
@@ -506,7 +402,7 @@
                     <span class="session-badge"><i class="fas fa-user-check"></i> <span id="sessionUser"></span></span>
                     <span class="session-badge"><i class="fas fa-building"></i> <span id="sessionInstitution"></span></span>
                     <span class="countdown-timer" id="countdownTimer"><i class="fas fa-clock"></i> <span id="countdownDisplay"></span></span>
-                    <span class="session-badge"><i class="fas fa-hourglass-start"></i> <span id="loginTime"></span></span>
+                    <span class="session-badge"><i class="fas fa-calendar-alt"></i> Expire le: <span id="expiryDateTime"></span></span>
                 </div>
                 <div class="session-actions">
                     <button class="back-to-home-btn" id="backToHomeBtn"><i class="fas fa-home"></i> Accueil</button>
@@ -649,12 +545,20 @@
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-database"></i> Gestion des données</h2>
                     <div class="stats-grid">
-                        <div class="stat-card"><h3><i class="fas fa-users"></i> Élèves</h3><div class="stat-value" id="studentsCount">0</div><button class="btn btn-warning btn-sm" id="exportAllDataBtn"><i class="fas fa-download"></i> Sauvegarde</button></div>
+                        <div class="stat-card"><h3><i class="fas fa-users"></i> Élèves</h3><div class="stat-value" id="studentsCount">0</div></div>
                         <div class="stat-card"><h3><i class="fas fa-book"></i> Matières</h3><div class="stat-value" id="subjectsCount">0</div></div>
                         <div class="stat-card"><h3><i class="fas fa-chart-bar"></i> Notes</h3><div class="stat-value" id="gradesCount">0</div></div>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger" id="resetAllDataBtn"><i class="fas fa-trash-alt"></i> Réinitialiser tout</button>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button class="btn btn-warning" id="exportAllDataBtn"><i class="fas fa-download"></i> Exporter JSON</button>
+                        <label class="file-input-label" id="importFileLabel">
+                            <i class="fas fa-upload"></i> Importer JSON
+                            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                        </label>
+                        <button class="btn btn-danger" id="resetAllDataBtn"><i class="fas fa-trash-alt"></i> Réinitialiser</button>
+                    </div>
+                    <div class="info-box" style="margin-top: 15px; padding: 12px; background: #e8f4fd; border-radius: 8px; font-size: 0.75rem;">
+                        <i class="fas fa-info-circle"></i> Sauvegarde automatique activée toutes les 30 secondes
                     </div>
                 </div>
             </div>
@@ -662,19 +566,64 @@
             <div class="footer"><p>Application de Gestion des Bulletins d'Examen Blanc © 2025</p></div>
         </div>
     </div>
+    
+    <div id="autoSaveIndicator" class="auto-save-indicator">
+        <i class="fas fa-save"></i> Sauvegarde automatique...
+    </div>
 
     <script>
-        // === AUTHENTIFICATION ===
+        // === CONFIGURATION DES IDENTIFIANTS AVEC HEURE DE DÉSACTIVATION ===
+        // Structure: { username: { password, institution, activationTime, deactivationTime, isActive } }
+        let userCredentials = {
+            'ADMIN_001': { 
+                password: 'BULLETIN2025', 
+                institution: 'Administration',
+                activationTime: new Date('2025-01-01T00:00:00'),
+                deactivationTime: new Date('2026-12-31T23:59:59'),
+                isActive: true
+            },
+            'CEG_746529_1004': { 
+                password: 'e9N#cHM3$%Nc', 
+                institution: 'CEG Massedena',
+                activationTime: new Date('2025-01-01T00:00:00'),
+                deactivationTime: new Date('2025-12-31T23:59:59'),
+                isActive: true
+            },
+            'LYCEE_001': { 
+                password: 'TOKIN2025', 
+                institution: 'Lycée de Tokin',
+                activationTime: new Date('2025-01-01T00:00:00'),
+                deactivationTime: new Date('2025-12-31T23:59:59'),
+                isActive: true
+            }
+        };
+        
         let activeSession = null;
         let countdownInterval = null;
         let sessionExpiryWarningShown = false;
+        let autoSaveInterval = null;
         let charts = {};
 
-        const VALID_CREDENTIALS = {
-            'ADMIN_001': { password: 'BULLETIN2025', institution: 'Administration' },
-            'CEG_746529_1004': { password: 'e9N#cHM3$%Nc', institution: 'CEG Massedena' },
-            'LYCEE_001': { password: 'TOKIN2025', institution: 'Lycée de Tokin' }
-        };
+        // Vérifier si un utilisateur est autorisé à se connecter (selon la plage horaire)
+        function isUserAuthorized(username) {
+            const user = userCredentials[username];
+            if (!user) return false;
+            
+            const now = new Date();
+            const isInActivationPeriod = now >= user.activationTime && now <= user.deactivationTime;
+            const isActive = user.isActive === true;
+            
+            return isInActivationPeriod && isActive;
+        }
+        
+        // Obtenir le message d'expiration pour un utilisateur
+        function getExpiryMessage(username) {
+            const user = userCredentials[username];
+            if (!user) return "Compte inexistant";
+            
+            const deactivationDate = new Date(user.deactivationTime);
+            return `Compte valable jusqu'au ${deactivationDate.toLocaleDateString('fr-FR')} à ${deactivationDate.toLocaleTimeString('fr-FR')}`;
+        }
 
         function goBackToHome() {
             if (confirm('Voulez-vous vraiment quitter cette page et retourner à l\'accueil ?')) {
@@ -689,14 +638,29 @@
                 try {
                     const session = JSON.parse(saved);
                     if (Date.now() < session.expirationTime) {
-                        activeSession = session;
-                        if (!session.loginTimeDisplay) {
-                            session.loginTimeDisplay = new Date(session.loginTime).toLocaleString('fr-FR');
-                            localStorage.setItem('examAppActiveSession', JSON.stringify(session));
+                        // Vérifier aussi si l'utilisateur est toujours autorisé
+                        if (isUserAuthorized(session.username)) {
+                            activeSession = session;
+                            if (!session.loginTimeDisplay) {
+                                session.loginTimeDisplay = new Date(session.loginTime).toLocaleString('fr-FR');
+                                localStorage.setItem('examAppActiveSession', JSON.stringify(session));
+                            }
+                            if (!session.deactivationTimeDisplay) {
+                                const user = userCredentials[session.username];
+                                if (user) {
+                                    session.deactivationTimeDisplay = new Date(user.deactivationTime).toLocaleString('fr-FR');
+                                    session.permanentExpiryTime = user.deactivationTime.getTime();
+                                    localStorage.setItem('examAppActiveSession', JSON.stringify(session));
+                                }
+                            }
+                            startCountdown();
+                            showMainApp();
+                            return true;
+                        } else {
+                            // L'utilisateur n'est plus autorisé
+                            localStorage.removeItem('examAppActiveSession');
+                            showAuthAlert('❌ Votre compte a été désactivé. Contactez l\'administrateur.', 'error');
                         }
-                        startCountdown();
-                        showMainApp();
-                        return true;
                     } else {
                         localStorage.removeItem('examAppActiveSession');
                     }
@@ -713,29 +677,55 @@
         }
 
         function login(username, password) {
-            if (VALID_CREDENTIALS[username] && VALID_CREDENTIALS[username].password === password) {
-                activeSession = {
-                    username: username,
-                    institution: VALID_CREDENTIALS[username].institution,
-                    loginTime: Date.now(),
-                    loginTimeDisplay: new Date().toLocaleString('fr-FR'),
-                    expirationTime: Date.now() + (6 * 60 * 60 * 1000)
-                };
-                localStorage.setItem('examAppActiveSession', JSON.stringify(activeSession));
-                startCountdown();
-                showMainApp();
-                loadFromLocalStorage();
-                updateUI();
-                showAlert('✅ Connexion réussie! Session valable 6 heures.', 'success');
-                return true;
+            const user = userCredentials[username];
+            
+            if (!user || user.password !== password) {
+                showAuthAlert('❌ Identifiants incorrects', 'error');
+                return false;
             }
-            return false;
+            
+            if (!isUserAuthorized(username)) {
+                const now = new Date();
+                const deactivationDate = new Date(user.deactivationTime);
+                if (now > deactivationDate) {
+                    showAuthAlert(`❌ Ce compte a expiré le ${deactivationDate.toLocaleDateString('fr-FR')}. Contactez l'administrateur.`, 'error');
+                } else if (now < user.activationTime) {
+                    showAuthAlert(`❌ Ce compte sera actif à partir du ${new Date(user.activationTime).toLocaleDateString('fr-FR')}.`, 'error');
+                } else {
+                    showAuthAlert('❌ Ce compte a été désactivé. Contactez l\'administrateur.', 'error');
+                }
+                return false;
+            }
+            
+            // Session de 6 heures
+            const expirationTime = Date.now() + (6 * 60 * 60 * 1000);
+            const permanentExpiryTime = user.deactivationTime.getTime();
+            
+            activeSession = {
+                username: username,
+                institution: user.institution,
+                loginTime: Date.now(),
+                loginTimeDisplay: new Date().toLocaleString('fr-FR'),
+                expirationTime: Math.min(expirationTime, permanentExpiryTime), // Prendre la date la plus proche
+                permanentExpiryTime: permanentExpiryTime,
+                deactivationTimeDisplay: new Date(user.deactivationTime).toLocaleString('fr-FR')
+            };
+            
+            localStorage.setItem('examAppActiveSession', JSON.stringify(activeSession));
+            startCountdown();
+            showMainApp();
+            loadFromLocalStorage();
+            updateUI();
+            startAutoSave();
+            showAlert(`✅ Connexion réussie! ${getExpiryMessage(username)}`, 'success');
+            return true;
         }
 
         function logout() {
             if (confirm('⚠️ Voulez-vous vraiment vous déconnecter ?')) {
                 saveToLocalStorage();
                 localStorage.removeItem('examAppActiveSession');
+                if (autoSaveInterval) clearInterval(autoSaveInterval);
                 activeSession = null;
                 if (countdownInterval) clearInterval(countdownInterval);
                 document.getElementById('authOverlay').style.display = 'flex';
@@ -746,9 +736,20 @@
 
         function startCountdown() {
             if (countdownInterval) clearInterval(countdownInterval);
+            
             countdownInterval = setInterval(() => {
                 if (!activeSession) return;
-                const remaining = activeSession.expirationTime - Date.now();
+                
+                const now = Date.now();
+                let remaining = activeSession.expirationTime - now;
+                
+                // Vérifier aussi l'expiration permanente du compte
+                if (activeSession.permanentExpiryTime && now >= activeSession.permanentExpiryTime) {
+                    showAlert('⏰ La période de validité de votre compte est expirée! Déconnexion...', 'warning');
+                    logout();
+                    return;
+                }
+                
                 if (remaining <= 0) {
                     clearInterval(countdownInterval);
                     saveToLocalStorage();
@@ -761,15 +762,17 @@
                     }, 2000);
                     return;
                 }
+                
                 const display = document.getElementById('countdownDisplay');
                 const timerElement = document.getElementById('countdownTimer');
                 if (display) {
                     display.textContent = formatTimeRemaining(remaining);
+                    
                     if (remaining < 300000) {
                         timerElement.classList.add('danger');
                         timerElement.classList.remove('warning');
                         if (!sessionExpiryWarningShown) {
-                            showAlert('⚠️ Attention! Moins de 5 minutes restantes!', 'warning');
+                            showAlert('⚠️ Attention! Il vous reste moins de 5 minutes avant expiration de la session!', 'warning');
                             sessionExpiryWarningShown = true;
                         }
                     } else if (remaining < 600000) {
@@ -779,6 +782,12 @@
                         timerElement.classList.remove('warning', 'danger');
                     }
                 }
+                
+                // Afficher la date d'expiration permanente
+                const expiryDateSpan = document.getElementById('expiryDateTime');
+                if (expiryDateSpan && activeSession.deactivationTimeDisplay) {
+                    expiryDateSpan.textContent = activeSession.deactivationTimeDisplay;
+                }
             }, 1000);
         }
 
@@ -787,20 +796,33 @@
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('sessionUser').textContent = activeSession.username;
             document.getElementById('sessionInstitution').textContent = activeSession.institution;
-            document.getElementById('loginTime').textContent = activeSession.loginTimeDisplay;
+            const expiryDateSpan = document.getElementById('expiryDateTime');
+            if (expiryDateSpan && activeSession.deactivationTimeDisplay) {
+                expiryDateSpan.textContent = activeSession.deactivationTimeDisplay;
+            }
         }
 
         function showAuthAlert(msg, type) {
             const div = document.getElementById('authAlert');
-            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 4000); }
+            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 5000); }
         }
 
         function showAlert(msg, type) {
             const div = document.getElementById('alert');
-            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 4000); }
+            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 5000); }
+        }
+        
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            if (indicator) {
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }
         }
 
-        // === DONNÉES ===
+        // === DONNÉES AVEC SAUVEGARDE AUTOMATIQUE ===
         let appData = { 
             currentExam: 'BEPC', 
             students: [], 
@@ -810,7 +832,6 @@
             nextSubjectId: 1, 
             nextGradeId: 1 
         };
-        let autoSaveInterval = null;
 
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('examData_' + (activeSession?.username || 'default'));
@@ -818,20 +839,83 @@
                 try { 
                     const data = JSON.parse(saved); 
                     appData = { ...appData, ...data }; 
-                } catch(e) {} 
+                    showAlert('📂 Données chargées avec succès', 'success');
+                } catch(e) { console.error('Erreur chargement:', e); }
             }
         }
 
         function saveToLocalStorage() {
-            if (activeSession) localStorage.setItem('examData_' + activeSession.username, JSON.stringify(appData));
+            if (activeSession) {
+                localStorage.setItem('examData_' + activeSession.username, JSON.stringify(appData));
+            }
         }
 
         function startAutoSave() {
             if (autoSaveInterval) clearInterval(autoSaveInterval);
-            autoSaveInterval = setInterval(() => { if (activeSession) saveToLocalStorage(); }, 30000);
+            autoSaveInterval = setInterval(() => { 
+                if (activeSession) {
+                    saveToLocalStorage();
+                    showAutoSaveIndicator();
+                    console.log('💾 Sauvegarde automatique effectuée à', new Date().toLocaleTimeString());
+                }
+            }, 30000); // Toutes les 30 secondes
+        }
+        
+        // === IMPORT/EXPORT JSON ===
+        function exportAllData() {
+            const exportData = {
+                exportDate: new Date().toISOString(),
+                username: activeSession?.username,
+                data: appData
+            };
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_${activeSession?.username || 'data'}_${new Date().toISOString().slice(0,19)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showAlert('📥 Export effectué avec succès', 'success');
+        }
+        
+        function importJsonFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    let newData;
+                    
+                    // Vérifier le format du fichier importé
+                    if (importedData.data && (importedData.data.students !== undefined)) {
+                        newData = importedData.data;
+                    } else if (importedData.students !== undefined) {
+                        newData = importedData;
+                    } else {
+                        throw new Error('Format de fichier invalide');
+                    }
+                    
+                    // Conserver l'examen courant
+                    const currentExam = appData.currentExam;
+                    appData = { ...appData, ...newData, currentExam: currentExam };
+                    
+                    // S'assurer que les IDs sont corrects
+                    if (!appData.nextStudentId) appData.nextStudentId = (Math.max(...appData.students.map(s => s.id), 0) + 1) || 1;
+                    if (!appData.nextSubjectId) appData.nextSubjectId = (Math.max(...appData.subjects.map(s => s.id), 0) + 1) || 1;
+                    if (!appData.nextGradeId) appData.nextGradeId = (Math.max(...appData.grades.map(g => g.id), 0) + 1) || 1;
+                    
+                    saveToLocalStorage();
+                    updateUI();
+                    showAlert(`📤 Import réussi! ${appData.students.length} élèves, ${appData.subjects.length} matières, ${appData.grades.length} notes chargées.`, 'success');
+                } catch(error) {
+                    console.error('Erreur import:', error);
+                    showAlert('❌ Erreur lors de l\'import du fichier. Format invalide.', 'error');
+                }
+            };
+            reader.readAsText(file);
         }
 
-        // === CRUD ===
+        // === CRUD (version simplifiée mais complète) ===
         function updateUI() { 
             renderStudents(); 
             renderSubjects(); 
@@ -982,23 +1066,13 @@
             return "grade-fail";
         }
 
-        function getPercentage(value, total) {
-            if (total === 0) return 0;
-            return ((value / total) * 100).toFixed(1);
-        }
-
-        function getStudentGradesDetailed(studentId) {
-            const grades = appData.grades.filter(g => g.studentId === studentId);
-            return grades.map(g => { 
-                const subj = appData.subjects.find(s => s.id === g.subjectId); 
-                return { 
-                    subjectName: subj ? subj.name : 'Inconnu', 
-                    coefficient: subj ? subj.coefficient : 1, 
-                    grade: g.value,
-                    category: subj ? subj.category : 'literary',
-                    teacher: g.teacher
-                }; 
-            });
+        function getAppreciation(avg) {
+            if (avg >= 16) return "Excellent travail ! Félicitations pour ces résultats exceptionnels. Continuez sur cette lancée !";
+            if (avg >= 14) return "Très bon travail ! Vous maîtrisez bien les connaissances. Quelques améliorations possibles pour exceller.";
+            if (avg >= 12) return "Bon travail ! Des progrès notables. Continuez vos efforts pour atteindre l'excellence.";
+            if (avg >= 10) return "Travail satisfaisant. Vous avez les bases, mais des révisions supplémentaires sont nécessaires.";
+            if (avg >= 8) return "Travail insuffisant. Une révision sérieuse s'impose. Concentrez-vous sur les matières où vous avez des difficultés.";
+            return "Travail très insuffisant. Un rattrapage intensif est nécessaire. Contactez vos enseignants pour un soutien supplémentaire.";
         }
 
         function generateBulletins() {
@@ -1009,18 +1083,18 @@
             let students = appData.students.filter(s => s.exam === appData.currentExam);
             if (students.length === 0) { showAlert('Aucun élève pour cet examen', 'error'); return; }
             
-            // Calculer les moyennes et rangs
             const studentsWithAvg = students.map(s => ({
                 ...s,
                 average: getStudentAverage(s.id),
                 scientificAvg: getStudentAverageByCategory(s.id, 'scientific'),
                 literaryAvg: getStudentAverageByCategory(s.id, 'literary'),
-                grades: getStudentGradesDetailed(s.id)
+                grades: (appData.grades.filter(g => g.studentId === s.id).map(g => {
+                    const subj = appData.subjects.find(sub => sub.id === g.subjectId);
+                    return { subjectName: subj ? subj.name : 'Inconnu', coefficient: subj ? subj.coefficient : 1, grade: g.value, category: subj ? subj.category : 'literary', teacher: g.teacher };
+                }))
             }));
             
             studentsWithAvg.sort((a, b) => b.average - a.average);
-            
-            // Calculer les statistiques globales
             const classAvg = studentsWithAvg.reduce((sum, s) => sum + s.average, 0) / studentsWithAvg.length;
             const passCount = studentsWithAvg.filter(s => s.average >= 10).length;
             const successRate = (passCount / studentsWithAvg.length) * 100;
@@ -1028,7 +1102,7 @@
             studentsWithAvg.forEach((student, idx) => {
                 const rank = idx + 1;
                 const totalStudents = studentsWithAvg.length;
-                const percentage = getPercentage(rank, totalStudents);
+                const percentage = ((rank / totalStudents) * 100).toFixed(1);
                 const mention = getMention(student.average);
                 const isTop3 = rank <= 3;
                 
@@ -1037,10 +1111,6 @@
                 else if (rank === 2) rankClass = 'second';
                 else if (rank === 3) rankClass = 'third';
                 
-                const bulletin = document.createElement('div');
-                bulletin.className = 'bulletin-section';
-                
-                // Générer le tableau des notes
                 let gradesHtml = '';
                 let scientificPoints = 0, scientificCoeffs = 0;
                 let literaryPoints = 0, literaryCoeffs = 0;
@@ -1048,15 +1118,7 @@
                 student.grades.forEach(g => {
                     const gradeClass = getGradeClass(g.grade);
                     const rowClass = g.category === 'scientific' ? 'scientific-row' : 'literary-row';
-                    gradesHtml += `
-                        <tr class="${rowClass}">
-                            <td><strong>${g.subjectName}</strong></td>
-                            <td>${g.coefficient}</td>
-                            <td class="${gradeClass}">${g.grade}/20</td>
-                            <td>${(g.grade * g.coefficient).toFixed(1)}</td>
-                            <td>${g.teacher || '-'}</td>
-                        </tr>
-                    `;
+                    gradesHtml += `<tr class="${rowClass}"><td><strong>${g.subjectName}</strong></td><td>${g.coefficient}</td><td class="${gradeClass}">${g.grade}/20</td><td>${(g.grade * g.coefficient).toFixed(1)}</td><td>${g.teacher || '-'}</td></tr>`;
                     
                     if (g.category === 'scientific') {
                         scientificPoints += g.grade * g.coefficient;
@@ -1070,6 +1132,8 @@
                 const scientificTotal = scientificCoeffs > 0 ? (scientificPoints / scientificCoeffs).toFixed(2) : 0;
                 const literaryTotal = literaryCoeffs > 0 ? (literaryPoints / literaryCoeffs).toFixed(2) : 0;
                 
+                const bulletin = document.createElement('div');
+                bulletin.className = 'bulletin-section';
                 bulletin.innerHTML = `
                     <div class="bulletin-header">
                         <div class="school-year">Année 2025-2026</div>
@@ -1077,7 +1141,6 @@
                         <h3>${student.exam === 'BEPC' ? 'Brevet d\'Études du Premier Cycle' : student.exam === 'BAC1' ? 'Baccalauréat Première Partie' : 'Baccalauréat Terminale'}</h3>
                         <h3>${student.exam}</h3>
                     </div>
-                    
                     <div class="student-info-card">
                         <div class="student-detail">
                             <p><strong>Nom :</strong> ${student.lastName}</p>
@@ -1093,7 +1156,6 @@
                             <div class="avg-label">Mention</div>
                         </div>
                     </div>
-                    
                     <div class="category-summary">
                         <div class="category-card scientific">
                             <h4><i class="fas fa-flask"></i> Matières Scientifiques</h4>
@@ -1106,140 +1168,33 @@
                             <div class="percentage">Moyenne Littéraire</div>
                         </div>
                     </div>
-                    
                     <table class="grades-table">
-                        <thead>
-                            <tr>
-                                <th>Matières</th>
-                                <th>Coeff.</th>
-                                <th>Note /20</th>
-                                <th>Points</th>
-                                <th>Enseignant</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${gradesHtml}
-                        </tbody>
-                        <tfoot>
-                            <tr style="background: #f8f9fa; font-weight: bold;">
-                                <td colspan="2"><strong>Totaux</strong></td>
-                                <td><strong>${student.average.toFixed(2)}/20</strong></td>
-                                <td><strong>${(student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1)}</strong></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
+                        <thead><tr><th>Matières</th><th>Coeff.</th><th>Note /20</th><th>Points</th><th>Enseignant</th></tr></thead>
+                        <tbody>${gradesHtml}</tbody>
+                        <tfoot><tr style="background: #f8f9fa; font-weight: bold;"><td colspan="2"><strong>Totaux</strong></td><td><strong>${student.average.toFixed(2)}/20</strong></td><td><strong>${(student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1)}</strong></td><td></td></tr></tfoot>
                     </table>
-                    
                     <div class="stats-summary">
-                        <div class="stat-item">
-                            <div class="stat-label">Rang</div>
-                            <div class="stat-number rank-badge ${rankClass}">${rank}/${totalStudents}</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Pourcentage</div>
-                            <div class="stat-number">${percentage}%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Moyenne Classe</div>
-                            <div class="stat-number">${classAvg.toFixed(2)}/20</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Écart</div>
-                            <div class="stat-number ${student.average >= classAvg ? 'grade-good' : 'grade-fail'}">${(student.average - classAvg).toFixed(2)}</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Taux Réussite</div>
-                            <div class="stat-number">${successRate.toFixed(1)}%</div>
-                        </div>
+                        <div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ${rankClass}">${rank}/${totalStudents}</div></div>
+                        <div class="stat-item"><div class="stat-label">Pourcentage</div><div class="stat-number">${percentage}%</div></div>
+                        <div class="stat-item"><div class="stat-label">Moyenne Classe</div><div class="stat-number">${classAvg.toFixed(2)}/20</div></div>
+                        <div class="stat-item"><div class="stat-label">Écart</div><div class="stat-number ${student.average >= classAvg ? 'grade-good' : 'grade-fail'}">${(student.average - classAvg).toFixed(2)}</div></div>
+                        <div class="stat-item"><div class="stat-label">Taux Réussite</div><div class="stat-number">${successRate.toFixed(1)}%</div></div>
                     </div>
-                    
                     <div style="margin-top: 20px; text-align: center;">
                         <p><strong>Appréciation :</strong> ${getAppreciation(student.average)}</p>
-                        <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">
-                            ${student.average >= 10 ? 
-                                '<i class="fas fa-check-circle" style="color:#2ecc71"></i> Félicitations ! Vous êtes admis(e) à l\'examen blanc.' : 
-                                '<i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Des efforts supplémentaires sont nécessaires pour réussir.'}
-                        </p>
+                        <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">${student.average >= 10 ? '<i class="fas fa-check-circle" style="color:#2ecc71"></i> Félicitations ! Vous êtes admis(e) à l\'examen blanc.' : '<i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Des efforts supplémentaires sont nécessaires pour réussir.'}</p>
                     </div>
-                    
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button class="print-btn" onclick="printBulletin(this)"><i class="fas fa-print"></i> Imprimer le bulletin</button>
-                    </div>
+                    <div style="text-align: center; margin-top: 20px;"><button class="print-btn" onclick="printBulletin(this)"><i class="fas fa-print"></i> Imprimer le bulletin</button></div>
                 `;
                 container.appendChild(bulletin);
             });
-            
             showAlert(`${students.length} bulletin(s) généré(s) avec succès`, 'success');
-        }
-
-        function getAppreciation(avg) {
-            if (avg >= 16) return "Excellent travail ! Félicitations pour ces résultats exceptionnels. Continuez sur cette lancée !";
-            if (avg >= 14) return "Très bon travail ! Vous maîtrisez bien les connaissances. Quelques améliorations possibles pour exceller.";
-            if (avg >= 12) return "Bon travail ! Des progrès notables. Continuez vos efforts pour atteindre l'excellence.";
-            if (avg >= 10) return "Travail satisfaisant. Vous avez les bases, mais des révisions supplémentaires sont nécessaires.";
-            if (avg >= 8) return "Travail insuffisant. Une révision sérieuse s'impose. Concentrez-vous sur les matières où vous avez des difficultés.";
-            return "Travail très insuffisant. Un rattrapage intensif est nécessaire. Contactez vos enseignants pour un soutien supplémentaire.";
         }
 
         window.printBulletin = function(btn) {
             const bulletin = btn.closest('.bulletin-section').cloneNode(true);
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Bulletin - ${bulletin.querySelector('.student-detail p:first-child')?.innerText || 'Élève'}</title>
-                    <meta charset="UTF-8">
-                    <style>
-                        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-                        body { padding: 20px; background: white; }
-                        .bulletin-section { max-width: 1000px; margin: 0 auto; background: white; }
-                        .bulletin-header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 15px; position: relative; }
-                        .bulletin-header h2 { font-size: 1.5rem; color: #2c3e50; }
-                        .bulletin-header h3 { font-size: 0.9rem; color: #666; }
-                        .school-year { position: absolute; top: 0; right: 0; font-size: 0.7rem; background: #3498db; color: white; padding: 2px 8px; border-radius: 20px; }
-                        .student-info-card { background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-                        .student-detail p { margin: 5px 0; font-size: 0.9rem; }
-                        .average-box, .mention-box { text-align: center; padding: 10px 20px; border-radius: 12px; min-width: 150px; }
-                        .average-box { background: #3498db; color: white; }
-                        .avg-value { font-size: 1.8rem; font-weight: bold; }
-                        .mention-box { background: #2ecc71; color: white; }
-                        .mention-box.mention-fail { background: #e74c3c; }
-                        .mention-box.mention-passable { background: #f39c12; }
-                        .mention-box.mention-bien { background: #3498db; }
-                        .mention-box.mention-tb { background: #2ecc71; }
-                        .mention-box.mention-exc { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2c3e50; }
-                        .category-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
-                        .category-card { background: #f8f9fa; border-radius: 10px; padding: 12px; text-align: center; border-left: 4px solid; }
-                        .category-card.scientific { border-left-color: #3498db; }
-                        .category-card.literary { border-left-color: #e91e63; }
-                        .category-card .value { font-size: 1.3rem; font-weight: bold; }
-                        .grades-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                        .grades-table th { background: #2c3e50; color: white; padding: 10px; font-size: 0.85rem; }
-                        .grades-table td { padding: 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 0.8rem; }
-                        .scientific-row { background: #e3f2fd; }
-                        .literary-row { background: #fce4ec; }
-                        .grade-excellent { color: #2ecc71; font-weight: bold; }
-                        .grade-fail { color: #e74c3c; font-weight: bold; }
-                        .stats-summary { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ddd; }
-                        .stat-item { text-align: center; flex: 1; }
-                        .stat-label { font-size: 0.7rem; color: #666; }
-                        .stat-number { font-size: 1rem; font-weight: bold; }
-                        .rank-badge { background: #ffd700; color: #2c3e50; padding: 3px 10px; border-radius: 20px; display: inline-block; }
-                        .rank-badge.first { background: linear-gradient(135deg, #ffd700, #ffed4e); }
-                        .rank-badge.second { background: linear-gradient(135deg, #c0c0c0, #e0e0e0); }
-                        .rank-badge.third { background: linear-gradient(135deg, #cd7f32, #e8a87c); }
-                        .print-btn, .btn, button { display: none !important; }
-                        @media print {
-                            .print-btn, button { display: none; }
-                            body { padding: 0; }
-                            .bulletin-section { page-break-after: always; }
-                        }
-                    </style>
-                </head>
-                <body>${bulletin.outerHTML}</body>
-                </html>
-            `);
+            printWindow.document.write(`<!DOCTYPE html><html><head><title>Bulletin</title><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}body{padding:20px;background:white;}.bulletin-section{max-width:1000px;margin:0 auto;}.bulletin-header{text-align:center;margin-bottom:20px;border-bottom:3px solid #3498db;padding-bottom:15px;position:relative;}.bulletin-header h2{font-size:1.5rem;color:#2c3e50;}.bulletin-header h3{font-size:0.9rem;color:#666;}.school-year{position:absolute;top:0;right:0;font-size:0.7rem;background:#3498db;color:white;padding:2px 8px;border-radius:20px;}.student-info-card{background:#f8f9fa;border-radius:12px;padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;}.student-detail p{margin:5px 0;font-size:0.9rem;}.average-box,.mention-box{text-align:center;padding:10px 20px;border-radius:12px;min-width:150px;}.average-box{background:#3498db;color:white;}.avg-value{font-size:1.8rem;font-weight:bold;}.mention-box{background:#2ecc71;color:white;}.mention-box.mention-fail{background:#e74c3c;}.mention-box.mention-passable{background:#f39c12;}.category-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:20px 0;}.category-card{background:#f8f9fa;border-radius:10px;padding:12px;text-align:center;border-left:4px solid;}.category-card.scientific{border-left-color:#3498db;}.category-card.literary{border-left-color:#e91e63;}.category-card .value{font-size:1.3rem;font-weight:bold;}.grades-table{width:100%;border-collapse:collapse;margin:20px 0;}.grades-table th{background:#2c3e50;color:white;padding:10px;font-size:0.85rem;}.grades-table td{padding:8px;border-bottom:1px solid #ddd;text-align:center;font-size:0.8rem;}.scientific-row{background:#e3f2fd;}.literary-row{background:#fce4ec;}.grade-excellent{color:#2ecc71;font-weight:bold;}.grade-fail{color:#e74c3c;font-weight:bold;}.stats-summary{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-top:20px;padding-top:20px;border-top:2px dashed #ddd;}.stat-item{text-align:center;flex:1;}.stat-label{font-size:0.7rem;color:#666;}.stat-number{font-size:1rem;font-weight:bold;}.rank-badge{background:#ffd700;color:#2c3e50;padding:3px 10px;border-radius:20px;display:inline-block;}.rank-badge.first{background:linear-gradient(135deg,#ffd700,#ffed4e);}.rank-badge.second{background:linear-gradient(135deg,#c0c0c0,#e0e0e0);}.rank-badge.third{background:linear-gradient(135deg,#cd7f32,#e8a87c);}.print-btn,button{display:none !important;}@media print{.print-btn,button{display:none;}}</style></head><body>${bulletin.outerHTML}</body></html>`);
             printWindow.document.close();
             printWindow.print();
         };
@@ -1254,7 +1209,10 @@
             let totalAvg = 0, studentsWithGrades = 0, studentsWithDifficulty = 0, passingStudents = 0;
             const studentsData = students.map(s => {
                 const avg = getStudentAverage(s.id);
-                const details = getStudentGradesDetailed(s.id);
+                const details = (appData.grades.filter(g => g.studentId === s.id).map(g => {
+                    const subj = appData.subjects.find(sub => sub.id === g.subjectId);
+                    return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value };
+                }));
                 const hasDiff = details.some(g => g.grade < 10);
                 if (details.length > 0) { totalAvg += avg; studentsWithGrades++; if (hasDiff) studentsWithDifficulty++; if (avg >= 10) passingStudents++; }
                 return { ...s, average: avg, gradesDetails: details, hasDifficulty: hasDiff, isPassing: avg >= 10, hasGrades: details.length > 0 };
@@ -1274,15 +1232,10 @@
 
         function exportAnalysis() {
             const students = appData.students.filter(s => s.exam === appData.currentExam);
-            const data = students.map(s => ({ 
-                nom: s.lastName, 
-                prenom: s.firstName, 
-                matricule: s.matricule, 
-                moyenne: getStudentAverage(s.id).toFixed(2), 
-                statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' 
-            }));
+            const data = students.map(s => ({ nom: s.lastName, prenom: s.firstName, matricule: s.matricule, moyenne: getStudentAverage(s.id).toFixed(2), statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' }));
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `analyse_${appData.currentExam}_${Date.now()}.json`; a.click(); URL.revokeObjectURL(a.href);
+            showAlert('Analyse exportée', 'success');
         }
 
         function updateGeneralStats() {
@@ -1294,11 +1247,7 @@
             students.forEach(s => { const a = getStudentAverage(s.id); if (a > 0) { total += a; count++; if (a >= 10) pass++; } });
             const avg = count > 0 ? (total / count).toFixed(2) : 0;
             const rate = count > 0 ? Math.round(pass / count * 100) : 0;
-            container.innerHTML = `
-                <div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div><p>${count} avec notes</p></div>
-                <div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div><p>${subjects.filter(s => s.category === 'scientific').length} scientifiques, ${subjects.filter(s => s.category === 'literary').length} littéraires</p></div>
-                <div class="stat-card"><h3>Performance</h3><div class="stat-value">${avg}/20</div><div class="progress-bar"><div class="progress-fill ${rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${rate}%"></div></div><p>Taux réussite: ${rate}% (${pass}/${count})</p></div>
-            `;
+            container.innerHTML = `<div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div><p>${count} avec notes</p></div><div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div><p>${subjects.filter(s => s.category === 'scientific').length} scientifiques, ${subjects.filter(s => s.category === 'literary').length} littéraires</p></div><div class="stat-card"><h3>Performance</h3><div class="stat-value">${avg}/20</div><div class="progress-bar"><div class="progress-fill ${rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${rate}%"></div></div><p>Taux réussite: ${rate}% (${pass}/${count})</p></div>`;
         }
 
         function showSubjectStats(subjectId) {
@@ -1311,7 +1260,7 @@
             const avg = studentsWithGrades.length > 0 ? studentsWithGrades.reduce((s, g) => s + g.grade, 0) / studentsWithGrades.length : 0;
             const container = document.getElementById('subjectDetailedStats');
             container.style.display = 'block';
-            container.innerHTML = `<div style="background:white;border-radius:12px;padding:16px;"><h3>${subject.name}</h3><div class="stat-value">${avg.toFixed(2)}/20</div></div>`;
+            container.innerHTML = `<div style="background:white;border-radius:12px;padding:16px;"><h3>${subject.name}</h3><div class="stat-value">${avg.toFixed(2)}/20</div><p>Total notes: ${studentsWithGrades.length}</p></div>`;
         }
 
         function updateCounters() {
@@ -1320,14 +1269,8 @@
             if (document.getElementById('gradesCount')) document.getElementById('gradesCount').textContent = appData.grades.length;
         }
 
-        function exportAllData() {
-            const data = JSON.stringify(appData, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_${Date.now()}.json`; a.click(); URL.revokeObjectURL(a.href);
-        }
-
         function resetAllData() {
-            if (confirm('⚠️ Supprimer TOUTES les données ?')) {
+            if (confirm('⚠️ Supprimer TOUTES les données ? Cette action est irréversible.')) {
                 appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
                 saveToLocalStorage(); updateUI(); showAlert('Données réinitialisées', 'success');
             }
@@ -1340,7 +1283,7 @@
             
             document.getElementById('backToHomeFromAuth')?.addEventListener('click', goBackToHome);
             document.getElementById('backToHomeBtn')?.addEventListener('click', goBackToHome);
-            document.getElementById('authForm')?.addEventListener('submit', (e) => { e.preventDefault(); const u = document.getElementById('authUsername').value.trim(); const p = document.getElementById('authPassword').value.trim(); if (login(u, p)) startAutoSave(); else showAuthAlert('Identifiants incorrects', 'error'); });
+            document.getElementById('authForm')?.addEventListener('submit', (e) => { e.preventDefault(); const u = document.getElementById('authUsername').value.trim(); const p = document.getElementById('authPassword').value.trim(); if (login(u, p)) { startAutoSave(); } });
             document.getElementById('logoutBtn')?.addEventListener('click', logout);
             document.getElementById('closeBtn')?.addEventListener('click', () => window.close());
             document.getElementById('addStudentBtn')?.addEventListener('click', addStudent);
@@ -1350,6 +1293,7 @@
             document.getElementById('exportAllDataBtn')?.addEventListener('click', exportAllData);
             document.getElementById('resetAllDataBtn')?.addEventListener('click', resetAllData);
             document.getElementById('exportAnalysisBtn')?.addEventListener('click', exportAnalysis);
+            document.getElementById('importFileInput')?.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) importJsonFile(e.target.files[0]); e.target.value = ''; });
             document.getElementById('searchStudentInput')?.addEventListener('input', () => updateAnalysisTab());
             document.getElementById('filterDifficultySelect')?.addEventListener('change', () => updateAnalysisTab());
             document.getElementById('subjectStatsSelect')?.addEventListener('change', function() { if (this.value) showSubjectStats(parseInt(this.value)); else document.getElementById('subjectDetailedStats').style.display = 'none'; });
