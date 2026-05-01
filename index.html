@@ -486,12 +486,19 @@
             background: #f57c00;
         }
 
-        .access-blocked {
+        .session-info {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
             text-align: center;
-            padding: 30px;
-            background: rgba(231, 76, 60, 0.9);
-            border-radius: 15px;
-            margin: 20px;
+        }
+
+        .session-timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 10px 0;
         }
 
         @media (max-width: 768px) {
@@ -759,6 +766,9 @@
         
         // Stockage des demandes d'inscription
         let registrationRequests = {};
+        
+        // Timer pour la vérification de session
+        let sessionCheckInterval = null;
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
@@ -769,6 +779,9 @@
             // Vérifier l'expiration des identifiants toutes les minutes
             setInterval(checkCredentialsExpiration, 60000);
             setInterval(cleanExpiredRegistrations, 60000);
+            
+            // Vérifier et restaurer la session existante
+            restoreExistingSession();
             
             // Gestion du formulaire de demande d'accès
             document.getElementById('accessRequestForm').addEventListener('submit', function(e) {
@@ -797,6 +810,44 @@
                 closePage();
             });
         });
+
+        // Fonction pour restaurer une session existante
+        function restoreExistingSession() {
+            const savedSession = localStorage.getItem('activeUserSession');
+            if (savedSession) {
+                try {
+                    const sessionData = JSON.parse(savedSession);
+                    const now = Date.now();
+                    
+                    if (now < sessionData.expirationTime) {
+                        // Session encore valide
+                        const remainingTime = sessionData.expirationTime - now;
+                        showAlert(`🔄 Session restaurée! Temps restant: ${formatTimeRemaining(remainingTime)}`, 'success');
+                        
+                        // Rediriger vers l'application si la session est active
+                        setTimeout(() => {
+                            window.location.href = APP_URL;
+                        }, 2000);
+                    } else {
+                        // Session expirée
+                        localStorage.removeItem('activeUserSession');
+                        localStorage.removeItem('examAppSession');
+                        localStorage.removeItem('currentExamSession');
+                        showAlert('⏰ Session précédente expirée. Veuillez vous reconnecter.', 'warning');
+                    }
+                } catch (e) {
+                    console.error('Erreur lors de la restauration:', e);
+                }
+            }
+        }
+
+        // Fonction pour formater le temps restant
+        function formatTimeRemaining(milliseconds) {
+            const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+            const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+            const seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
+            return `${hours}h ${minutes}m ${seconds}s`;
+        }
 
         // Fonction pour générer un identifiant unique
         function generateUsername(institutionName) {
@@ -840,7 +891,9 @@
                 message: message,
                 createdAt: new Date().toISOString(),
                 requestId: requestId,
-                isActive: true
+                isActive: true,
+                lastAccess: null,
+                totalAccessTime: 0
             };
             
             // Sauvegarder les identifiants
@@ -1027,7 +1080,14 @@
                     if (sessionData.username === username) {
                         localStorage.removeItem('examAppSession');
                         localStorage.removeItem('currentExamSession');
+                        localStorage.removeItem('activeUserSession');
                         showAlert('⏰ Votre session a expiré après 6 heures. Veuillez faire une nouvelle inscription.', 'warning');
+                        
+                        // Arrêter le timer de vérification
+                        if (sessionCheckInterval) {
+                            clearInterval(sessionCheckInterval);
+                            sessionCheckInterval = null;
+                        }
                     }
                 } catch (e) {
                     console.error('Erreur:', e);
@@ -1103,26 +1163,72 @@
                     return;
                 }
                 
+                // Mettre à jour la dernière connexion
+                credentials.lastAccess = Date.now();
+                saveCredentialsToStorage();
+                
                 // Connexion réussie
                 const sessionData = {
                     username: username,
                     exam: examAccess,
                     institutionName: credentials.institutionName,
-                    loginTime: new Date().toISOString(),
+                    loginTime: Date.now(),
                     expirationTime: credentials.expirationTime,
-                    requestId: credentials.requestId
+                    requestId: credentials.requestId,
+                    remainingTime: credentials.expirationTime - Date.now()
                 };
                 
+                // Sauvegarder la session active
                 localStorage.setItem('examAppSession', JSON.stringify(sessionData));
+                localStorage.setItem('activeUserSession', JSON.stringify(sessionData));
+                
+                // Démarrer la vérification de session
+                startSessionMonitoring(sessionData.expirationTime);
                 
                 // Mettre à jour l'indicateur d'étape
                 updateStepIndicator(3);
                 
                 // Rediriger vers l'application
-                redirectToApp(examAccess);
+                redirectToApp(examAccess, sessionData);
             } else {
                 showAlert('❌ Identifiants incorrects ou expirés. Veuillez vérifier ou faire une nouvelle inscription.', 'error');
             }
+        }
+        
+        // Fonction pour démarrer la surveillance de session
+        function startSessionMonitoring(expirationTime) {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
+            }
+            
+            sessionCheckInterval = setInterval(() => {
+                const now = Date.now();
+                const remaining = expirationTime - now;
+                
+                if (remaining <= 0) {
+                    // Session expirée
+                    clearInterval(sessionCheckInterval);
+                    sessionCheckInterval = null;
+                    
+                    // Supprimer toutes les données de session
+                    localStorage.removeItem('examAppSession');
+                    localStorage.removeItem('currentExamSession');
+                    localStorage.removeItem('activeUserSession');
+                    
+                    showAlert('⏰ Votre session a expiré! Vous allez être redirigé.', 'warning');
+                    
+                    // Rediriger vers la page d'accueil après 3 secondes
+                    setTimeout(() => {
+                        window.location.href = window.location.href;
+                    }, 3000);
+                } else if (remaining < 300000) { // Moins de 5 minutes restantes
+                    // Afficher un avertissement
+                    const minutesLeft = Math.floor(remaining / 60000);
+                    if (minutesLeft === 5 || minutesLeft === 2 || minutesLeft === 1) {
+                        showAlert(`⚠️ Attention: Il vous reste ${minutesLeft} minute(s) avant expiration de la session.`, 'warning');
+                    }
+                }
+            }, 10000); // Vérifier toutes les 10 secondes
         }
 
         // Fonction pour vérifier l'expiration des identifiants
@@ -1166,9 +1272,16 @@
                        'Vous pourrez générer de nouveaux identifiants valables 6 heures.\n\n' +
                        'Souhaitez-vous continuer ?')) {
                 
+                // Arrêter la surveillance de session
+                if (sessionCheckInterval) {
+                    clearInterval(sessionCheckInterval);
+                    sessionCheckInterval = null;
+                }
+                
                 // Effacer toutes les sessions et identifiants
                 localStorage.removeItem('examAppSession');
                 localStorage.removeItem('currentExamSession');
+                localStorage.removeItem('activeUserSession');
                 
                 // Réinitialiser les stockages
                 temporaryCredentials = {};
@@ -1229,7 +1342,7 @@
         }
 
         // Fonction pour rediriger vers l'application
-        function redirectToApp(examType) {
+        function redirectToApp(examType, sessionData) {
             showAlert('✅ Connexion réussie! Redirection vers l\'application...', 'success');
 
             setTimeout(() => {
@@ -1237,7 +1350,9 @@
                 const sessionInfo = {
                     examType: examType,
                     timestamp: Date.now(),
-                    valid: true
+                    valid: true,
+                    expirationTime: sessionData.expirationTime,
+                    remainingTime: sessionData.remainingTime
                 };
                 
                 localStorage.setItem('currentExamSession', JSON.stringify(sessionInfo));
@@ -1329,6 +1444,7 @@
                     if (Date.now() > sessionData.expirationTime) {
                         localStorage.removeItem('examAppSession');
                         localStorage.removeItem('currentExamSession');
+                        localStorage.removeItem('activeUserSession');
                     }
                 } catch (e) {
                     console.error('Erreur:', e);
