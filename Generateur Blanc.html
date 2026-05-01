@@ -66,8 +66,6 @@
             border: 2px solid #e0e0e0; 
             border-radius: 10px; 
             font-size: 0.95rem;
-            -webkit-appearance: none;
-            appearance: none;
         }
         .auth-form input:focus { border-color: #3498db; outline: none; }
         .auth-btn { 
@@ -111,10 +109,6 @@
             font-size: 0.75rem; 
             text-align: center; 
         }
-        .expiry-warning {
-            background: #fff3cd;
-            border-left: 4px solid #f39c12;
-        }
         .auth-footer { text-align: center; margin-top: 15px; font-size: 0.75rem; color: #7f8c8d; }
 
         .alert { 
@@ -150,17 +144,15 @@
         .countdown-timer { background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 20px; font-family: monospace; font-weight: bold; font-size: 0.8rem; }
         .countdown-timer.warning { background: #f39c12; color: #2c3e50; animation: pulse 1s infinite; }
         .countdown-timer.danger { background: #e74c3c; color: white; animation: pulse 0.5s infinite; }
-        .countdown-timer.expired { background: #2c3e50; color: #95a5a6; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
         .session-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .logout-btn, .back-to-home-btn { padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.8rem; border: none; }
+        .logout-btn, .back-to-home-main-btn { padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.8rem; border: none; }
         .logout-btn { background: #e74c3c; color: white; }
         .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
-        .back-to-home-btn { background: #95a5a6; color: white; }
-        .back-to-home-btn:hover { background: #7f8c8d; transform: translateY(-2px); }
+        .back-to-home-main-btn { background: #95a5a6; color: white; }
+        .back-to-home-main-btn:hover { background: #7f8c8d; transform: translateY(-2px); }
 
-        /* Modal de déconnexion automatique */
         .auto-logout-modal {
             position: fixed;
             top: 0;
@@ -246,7 +238,7 @@
         .exam-btn.active { background: #e74c3c; color: white; transform: scale(1.05); }
         .exam-btn:hover { transform: translateY(-2px); }
 
-        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; overflow-x: auto; gap: 3px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; overflow-x: auto; gap: 3px; }
         .tab { padding: 8px 12px; cursor: pointer; background: #f8f9fa; border: 1px solid #ddd; border-bottom: none; border-radius: 8px 8px 0 0; font-weight: 600; white-space: nowrap; font-size: 0.7rem; transition: all 0.3s; }
         .tab.active { background: white; color: #3498db; border-top: 3px solid #3498db; }
         .tab-content { display: none; }
@@ -258,7 +250,7 @@
         .form-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
         .form-group { flex: 1; min-width: 150px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.8rem; color: #2c3e50; }
-        input, select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; -webkit-appearance: none; appearance: none; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; }
         input:focus, select:focus { border-color: #3498db; outline: none; }
 
         .btn { background: #3498db; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; }
@@ -291,7 +283,7 @@
         }
         input[type="file"] { display: none; }
 
-        .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 400px; }
         th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 0.75rem; }
         th { background: #f8f9fa; font-weight: 700; color: #2c3e50; }
@@ -422,9 +414,9 @@
         @media print {
             .session-info-bar, .exam-selector, .tabs, .header-buttons, 
             .generate-section, .logout-btn, .btn, .actions, .form-section, 
-            #alert, .footer, .filter-bar, .back-to-home-btn, .print-btn,
+            #alert, .footer, .filter-bar, .back-to-home-main-btn, .print-btn,
             .auto-save-indicator, .auto-logout-modal { display: none !important; }
-            .bulletin-section { page-break-after: always; break-inside: avoid; box-shadow: none; margin: 0; padding: 20px; }
+            .bulletin-section { page-break-after: always; box-shadow: none; margin: 0; padding: 20px; }
             body { background: white; }
         }
     </style>
@@ -452,14 +444,13 @@
             <button class="back-home-btn" id="backToHomeFromAuth">
                 <i class="fas fa-arrow-left"></i> Retour à l'accueil
             </button>
-            <div class="expiry-info" id="expiryInfoSection">
+            <div class="expiry-info">
                 <i class="fas fa-hourglass-half"></i> Session valable 6 heures
             </div>
             <div class="auth-footer"><p><i class="fab fa-whatsapp"></i> +228 92 87 16 05</p></div>
         </div>
     </div>
 
-    <!-- Modal de déconnexion automatique -->
     <div id="autoLogoutModal" class="auto-logout-modal">
         <div class="auto-logout-content">
             <i class="fas fa-clock"></i>
@@ -478,10 +469,10 @@
                     <span class="session-badge"><i class="fas fa-user-check"></i> <span id="sessionUser"></span></span>
                     <span class="session-badge"><i class="fas fa-building"></i> <span id="sessionInstitution"></span></span>
                     <span class="countdown-timer" id="countdownTimer"><i class="fas fa-clock"></i> <span id="countdownDisplay"></span></span>
-                    <span class="session-badge"><i class="fas fa-calendar-alt"></i> Début: <span id="loginTime"></span></span>
+                    <span class="session-badge"><i class="fas fa-calendar-alt"></i> Début: <span id="loginTimeDisplay"></span></span>
                 </div>
                 <div class="session-actions">
-                    <button class="back-to-home-btn" id="backToHomeBtn"><i class="fas fa-home"></i> Accueil</button>
+                    <button class="back-to-home-main-btn" id="backToHomeBtn"><i class="fas fa-home"></i> Accueil</button>
                     <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
                 </div>
             </div>
@@ -549,7 +540,7 @@
                 </div>
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-list"></i> Liste des matières</h2>
-                    <div class="table-container"><table id="subjectsTable"><thead><tr><th>ID</th><th>Matière</th><th>Coeff</th><th>Catégorie</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="subjectsList"></tbody></td></div>
+                    <div class="table-container"><table id="subjectsTable"><thead><tr><th>ID</th><th>Matière</th><th>Coeff</th><th>Catégorie</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="subjectsList"></tbody></table></div>
                 </div>
             </div>
 
@@ -629,7 +620,7 @@
                         <button class="btn btn-warning" id="exportAllDataBtn"><i class="fas fa-download"></i> Exporter JSON</button>
                         <label class="file-input-label" id="importFileLabel">
                             <i class="fas fa-upload"></i> Importer JSON
-                            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                            <input type="file" id="importFileInput" accept=".json">
                         </label>
                         <button class="btn btn-danger" id="resetAllDataBtn"><i class="fas fa-trash-alt"></i> Réinitialiser</button>
                     </div>
@@ -648,32 +639,33 @@
     </div>
 
     <script>
-        // === CONFIGURATION DES IDENTIFIANTS ===
-        let userCredentials = {
-            'ADMIN_001': { 
-                password: 'BULLETIN2025', 
-                institution: 'Administration',
-                isActive: true
-            },
-            'CEG_746529_1004': { 
-                password: 'e9N#cHM3$%Nc', 
-                institution: 'CEG Massedena',
-                isActive: true
-            },
-            'LYCEE_001': { 
-                password: 'TOKIN2025', 
-                institution: 'Lycée de Tokin',
-                isActive: true
-            }
-        };
-        
+        // ==================== CONFIGURATION ====================
         let activeSession = null;
         let countdownInterval = null;
         let sessionExpiryWarningShown = false;
         let autoSaveInterval = null;
-        let charts = {};
         let redirectTimeout = null;
+        let charts = {};
 
+        // Identifiants valides
+        const VALID_CREDENTIALS = {
+            'ADMIN_001': { password: 'BULLETIN2025', institution: 'Administration' },
+            'CEG_746529_1004': { password: 'e9N#cHM3$%Nc', institution: 'CEG Massedena' },
+            'LYCEE_001': { password: 'TOKIN2025', institution: 'Lycée de Tokin' }
+        };
+
+        // Données de l'application
+        let appData = { 
+            currentExam: 'BEPC', 
+            students: [], 
+            subjects: [], 
+            grades: [], 
+            nextStudentId: 1, 
+            nextSubjectId: 1, 
+            nextGradeId: 1 
+        };
+
+        // ==================== FONCTIONS DE SESSION ====================
         function goBackToHome() {
             if (confirm('Voulez-vous vraiment quitter cette page et retourner à l\'accueil ?')) {
                 if (activeSession) saveToLocalStorage();
@@ -681,7 +673,6 @@
             }
         }
 
-        // Fonction pour afficher le modal de redirection automatique
         function showAutoRedirectModal() {
             const modal = document.getElementById('autoLogoutModal');
             const countdownSpan = document.getElementById('redirectCountdown');
@@ -694,7 +685,7 @@
             
             redirectTimeout = setInterval(() => {
                 countdown--;
-                countdownSpan.textContent = countdown;
+                if (countdownSpan) countdownSpan.textContent = countdown;
                 
                 if (countdown <= 0) {
                     clearInterval(redirectTimeout);
@@ -707,7 +698,7 @@
         
         function closeAutoRedirectModal() {
             const modal = document.getElementById('autoLogoutModal');
-            modal.style.display = 'none';
+            if (modal) modal.style.display = 'none';
             if (redirectTimeout) {
                 clearInterval(redirectTimeout);
                 redirectTimeout = null;
@@ -730,10 +721,11 @@
                         return true;
                     } else {
                         localStorage.removeItem('examAppActiveSession');
-                        // Session expirée -> retour à l'accueil
                         showAutoRedirectModal();
                     }
-                } catch(e) {}
+                } catch(e) {
+                    console.error('Erreur restauration session:', e);
+                }
             }
             return false;
         }
@@ -747,49 +739,40 @@
         }
 
         function login(username, password) {
-            const user = userCredentials[username];
-            
-            if (!user || user.password !== password) {
-                showAuthAlert('❌ Identifiants incorrects', 'error');
-                return false;
+            if (VALID_CREDENTIALS[username] && VALID_CREDENTIALS[username].password === password) {
+                const expirationTime = Date.now() + (6 * 60 * 60 * 1000);
+                
+                activeSession = {
+                    username: username,
+                    institution: VALID_CREDENTIALS[username].institution,
+                    loginTime: Date.now(),
+                    loginTimeDisplay: new Date().toLocaleString('fr-FR'),
+                    expirationTime: expirationTime
+                };
+                
+                localStorage.setItem('examAppActiveSession', JSON.stringify(activeSession));
+                startCountdown();
+                showMainApp();
+                loadFromLocalStorage();
+                updateUI();
+                startAutoSave();
+                showAlert('✅ Connexion réussie! Session valable 6 heures.', 'success');
+                return true;
             }
-            
-            // Session de 6 heures
-            const expirationTime = Date.now() + (6 * 60 * 60 * 1000);
-            
-            activeSession = {
-                username: username,
-                institution: user.institution,
-                loginTime: Date.now(),
-                loginTimeDisplay: new Date().toLocaleString('fr-FR'),
-                expirationTime: expirationTime
-            };
-            
-            localStorage.setItem('examAppActiveSession', JSON.stringify(activeSession));
-            startCountdown();
-            showMainApp();
-            loadFromLocalStorage();
-            updateUI();
-            startAutoSave();
-            showAlert(`✅ Connexion réussie! Session valable 6 heures.`, 'success');
-            return true;
+            showAuthAlert('❌ Identifiants incorrects', 'error');
+            return false;
         }
 
-        function logout(redirectToHome = false) {
-            if (redirectToHome || confirm('⚠️ Voulez-vous vraiment vous déconnecter ?')) {
+        function logout() {
+            if (confirm('⚠️ Voulez-vous vraiment vous déconnecter ?')) {
                 saveToLocalStorage();
                 localStorage.removeItem('examAppActiveSession');
                 if (autoSaveInterval) clearInterval(autoSaveInterval);
                 activeSession = null;
                 if (countdownInterval) clearInterval(countdownInterval);
-                
-                if (redirectToHome) {
-                    window.location.href = 'index.html';
-                } else {
-                    document.getElementById('authOverlay').style.display = 'flex';
-                    document.getElementById('mainApp').style.display = 'none';
-                    showAuthAlert('Déconnecté avec succès', 'success');
-                }
+                document.getElementById('authOverlay').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                showAuthAlert('Déconnecté avec succès', 'success');
             }
         }
 
@@ -799,19 +782,14 @@
             countdownInterval = setInterval(() => {
                 if (!activeSession) return;
                 
-                const now = Date.now();
-                let remaining = activeSession.expirationTime - now;
+                const remaining = activeSession.expirationTime - Date.now();
                 
                 if (remaining <= 0) {
                     clearInterval(countdownInterval);
                     countdownInterval = null;
-                    
-                    // Sauvegarder les données avant déconnexion
                     saveToLocalStorage();
                     localStorage.removeItem('examAppActiveSession');
                     activeSession = null;
-                    
-                    // Afficher le modal et rediriger vers l'accueil
                     showAutoRedirectModal();
                     return;
                 }
@@ -821,68 +799,67 @@
                 if (display) {
                     display.textContent = formatTimeRemaining(remaining);
                     
-                    if (remaining < 300000) { // Moins de 5 minutes
+                    if (remaining < 300000) {
                         timerElement.classList.add('danger');
                         timerElement.classList.remove('warning');
                         if (!sessionExpiryWarningShown) {
-                            showAlert('⚠️ Attention! Il vous reste moins de 5 minutes! Déconnexion automatique imminente.', 'warning');
+                            showAlert('⚠️ Attention! Il vous reste moins de 5 minutes!', 'warning');
                             sessionExpiryWarningShown = true;
                         }
-                    } else if (remaining < 600000) { // Moins de 10 minutes
+                    } else if (remaining < 600000) {
                         timerElement.classList.add('warning');
                         timerElement.classList.remove('danger');
                     } else {
                         timerElement.classList.remove('warning', 'danger');
                     }
                 }
-                
-                // Sauvegarder périodiquement le temps restant
-                if (remaining % 60000 < 1000) {
-                    const updatedSession = { ...activeSession, lastSaved: now };
-                    localStorage.setItem('examAppActiveSession', JSON.stringify(updatedSession));
-                }
             }, 1000);
         }
 
         function showMainApp() {
-            document.getElementById('authOverlay').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('sessionUser').textContent = activeSession.username;
-            document.getElementById('sessionInstitution').textContent = activeSession.institution;
-            document.getElementById('loginTime').textContent = activeSession.loginTimeDisplay;
+            const authOverlay = document.getElementById('authOverlay');
+            const mainApp = document.getElementById('mainApp');
+            if (authOverlay) authOverlay.style.display = 'none';
+            if (mainApp) mainApp.style.display = 'block';
+            
+            const sessionUser = document.getElementById('sessionUser');
+            const sessionInstitution = document.getElementById('sessionInstitution');
+            const loginTimeDisplay = document.getElementById('loginTimeDisplay');
+            
+            if (sessionUser) sessionUser.textContent = activeSession.username;
+            if (sessionInstitution) sessionInstitution.textContent = activeSession.institution;
+            if (loginTimeDisplay) loginTimeDisplay.textContent = activeSession.loginTimeDisplay;
         }
 
         function showAuthAlert(msg, type) {
             const div = document.getElementById('authAlert');
-            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 5000); }
+            if (div) {
+                div.textContent = msg;
+                div.className = `alert alert-${type}`;
+                div.style.display = 'block';
+                setTimeout(() => div.style.display = 'none', 5000);
+            }
         }
 
         function showAlert(msg, type) {
             const div = document.getElementById('alert');
-            if (div) { div.textContent = msg; div.className = `alert alert-${type}`; div.style.display = 'block'; setTimeout(() => div.style.display = 'none', 5000); }
+            if (div) {
+                div.textContent = msg;
+                div.className = `alert alert-${type}`;
+                div.style.display = 'block';
+                setTimeout(() => div.style.display = 'none', 5000);
+            }
         }
         
         function showAutoSaveIndicator() {
             const indicator = document.getElementById('autoSaveIndicator');
             if (indicator) {
                 indicator.classList.add('show');
-                setTimeout(() => {
-                    indicator.classList.remove('show');
-                }, 2000);
+                setTimeout(() => indicator.classList.remove('show'), 2000);
             }
         }
 
-        // === DONNÉES AVEC SAUVEGARDE AUTOMATIQUE ===
-        let appData = { 
-            currentExam: 'BEPC', 
-            students: [], 
-            subjects: [], 
-            grades: [], 
-            nextStudentId: 1, 
-            nextSubjectId: 1, 
-            nextGradeId: 1 
-        };
-
+        // ==================== GESTION DES DONNÉES ====================
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('examData_' + (activeSession?.username || 'default'));
             if (saved) { 
@@ -906,12 +883,11 @@
                 if (activeSession) {
                     saveToLocalStorage();
                     showAutoSaveIndicator();
-                    console.log('💾 Sauvegarde automatique effectuée à', new Date().toLocaleTimeString());
                 }
             }, 30000);
         }
         
-        // === IMPORT/EXPORT JSON ===
+        // ==================== IMPORT/EXPORT ====================
         function exportAllData() {
             const exportData = {
                 exportDate: new Date().toISOString(),
@@ -936,7 +912,7 @@
                     const importedData = JSON.parse(e.target.result);
                     let newData;
                     
-                    if (importedData.data && (importedData.data.students !== undefined)) {
+                    if (importedData.data && importedData.data.students !== undefined) {
                         newData = importedData.data;
                     } else if (importedData.students !== undefined) {
                         newData = importedData;
@@ -953,135 +929,25 @@
                     
                     saveToLocalStorage();
                     updateUI();
-                    showAlert(`📤 Import réussi! ${appData.students.length} élèves, ${appData.subjects.length} matières, ${appData.grades.length} notes chargées.`, 'success');
+                    showAlert(`📤 Import réussi! ${appData.students.length} élèves, ${appData.subjects.length} matières, ${appData.grades.length} notes.`, 'success');
                 } catch(error) {
-                    console.error('Erreur import:', error);
                     showAlert('❌ Erreur lors de l\'import du fichier. Format invalide.', 'error');
                 }
             };
             reader.readAsText(file);
         }
 
-        // === CRUD ===
-        function updateUI() { 
-            renderStudents(); 
-            renderSubjects(); 
-            renderGrades(); 
-            updateSelects(); 
-            updateGeneralStats(); 
-            updateAnalysisTab(); 
-            updateCounters(); 
-            saveToLocalStorage(); 
-        }
-
-        function renderStudents() {
-            const tbody = document.getElementById('studentsList');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const filtered = appData.students.filter(s => s.exam === appData.currentExam);
-            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucun élève</td></tr>'; return; }
-            filtered.forEach(s => { tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.lastName}</td><td>${s.firstName}</td><td>${s.matricule}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteStudent(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; });
-        }
-
-        function renderSubjects() {
-            const tbody = document.getElementById('subjectsList');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const filtered = appData.subjects.filter(s => s.exam === appData.currentExam);
-            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune matière</td></tr>'; return; }
-            filtered.forEach(s => { 
-                const categoryLabel = s.category === 'scientific' ? '🔬 Scientifique' : '📖 Littéraire';
-                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.coefficient}</td><td>${categoryLabel}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
-            });
-        }
-
-        function renderGrades() {
-            const tbody = document.getElementById('gradesList');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const filtered = appData.grades.filter(g => { const s = appData.students.find(st => st.id === g.studentId); return s && s.exam === appData.currentExam; });
-            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune note</td></tr>'; return; }
-            filtered.forEach(g => { 
-                const student = appData.students.find(s => s.id === g.studentId); 
-                const subject = appData.subjects.find(s => s.id === g.subjectId); 
-                if (student && subject) { 
-                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
-                } 
-            });
-        }
-
-        function updateSelects() {
-            const studentSelect = document.getElementById('gradeStudent');
-            if (studentSelect) {
-                studentSelect.innerHTML = '<option value="">Choisir</option>';
-                appData.students.filter(s => s.exam === appData.currentExam).forEach(s => { studentSelect.innerHTML += `<option value="${s.id}">${s.firstName} ${s.lastName}</option>`; });
-            }
-            const subjectSelect = document.getElementById('gradeSubject');
-            if (subjectSelect) {
-                subjectSelect.innerHTML = '<option value="">Choisir</option>';
-                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { subjectSelect.innerHTML += `<option value="${s.id}">${s.name} (${s.category === 'scientific' ? 'Scientifique' : 'Littéraire'})</option>`; });
-            }
-            const statSelect = document.getElementById('subjectStatsSelect');
-            if (statSelect) {
-                statSelect.innerHTML = '<option value="">-- Choisir une matière --</option>';
-                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { statSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
-            }
-        }
-
-        function addStudent() {
-            const lastName = document.getElementById('lastName').value.trim();
-            const firstName = document.getElementById('firstName').value.trim();
-            const matricule = document.getElementById('matricule').value.trim();
-            const exam = document.getElementById('studentExam').value;
-            if (!lastName || !firstName || !matricule) { showAlert('Remplissez tous les champs', 'error'); return; }
-            appData.students.push({ id: appData.nextStudentId++, lastName, firstName, matricule, exam });
-            updateUI();
-            document.getElementById('lastName').value = ''; document.getElementById('firstName').value = ''; document.getElementById('matricule').value = '';
-            showAlert('Élève ajouté', 'success');
-        }
-
-        window.deleteStudent = function(id) {
-            if (confirm('Supprimer cet élève ?')) { appData.students = appData.students.filter(s => s.id !== id); appData.grades = appData.grades.filter(g => g.studentId !== id); updateUI(); showAlert('Élève supprimé', 'success'); }
-        };
-
-        function addSubject() {
-            const name = document.getElementById('subjectName').value.trim();
-            const coeff = parseInt(document.getElementById('coefficient').value);
-            const exam = document.getElementById('subjectExam').value;
-            const category = document.getElementById('subjectCategory').value;
-            if (!name || coeff < 1) { showAlert('Nom et coefficient valides', 'error'); return; }
-            appData.subjects.push({ id: appData.nextSubjectId++, name, coefficient: coeff, exam, category });
-            updateUI(); 
-            document.getElementById('subjectName').value = ''; 
-            showAlert('Matière ajoutée', 'success');
-        }
-
-        window.deleteSubject = function(id) {
-            if (confirm('Supprimer cette matière ?')) { appData.subjects = appData.subjects.filter(s => s.id !== id); appData.grades = appData.grades.filter(g => g.subjectId !== id); updateUI(); showAlert('Matière supprimée', 'success'); }
-        };
-
-        function addGrade() {
-            const studentId = parseInt(document.getElementById('gradeStudent').value);
-            const subjectId = parseInt(document.getElementById('gradeSubject').value);
-            const value = parseFloat(document.getElementById('gradeValue').value);
-            const teacher = document.getElementById('gradeTeacher').value.trim();
-            if (!studentId || !subjectId || isNaN(value) || value < 0 || value > 20 || !teacher) { showAlert('Tous les champs sont requis', 'error'); return; }
-            const existing = appData.grades.findIndex(g => g.studentId === studentId && g.subjectId === subjectId);
-            if (existing !== -1) { appData.grades[existing] = { ...appData.grades[existing], value, teacher }; showAlert('Note mise à jour', 'success'); }
-            else { appData.grades.push({ id: appData.nextGradeId++, studentId, subjectId, value, teacher }); showAlert('Note ajoutée', 'success'); }
-            updateUI(); 
-            document.getElementById('gradeValue').value = ''; 
-            document.getElementById('gradeTeacher').value = '';
-        }
-
-        window.deleteGrade = function(id) {
-            if (confirm('Supprimer cette note ?')) { appData.grades = appData.grades.filter(g => g.id !== id); updateUI(); showAlert('Note supprimée', 'success'); }
-        };
-
+        // ==================== FONCTIONS DE CALCUL ====================
         function getStudentAverage(studentId) {
             const grades = appData.grades.filter(g => g.studentId === studentId);
             let points = 0, coeffs = 0;
-            grades.forEach(g => { const subj = appData.subjects.find(s => s.id === g.subjectId); if (subj) { points += g.value * subj.coefficient; coeffs += subj.coefficient; } });
+            grades.forEach(g => { 
+                const subj = appData.subjects.find(s => s.id === g.subjectId); 
+                if (subj) { 
+                    points += g.value * subj.coefficient; 
+                    coeffs += subj.coefficient; 
+                } 
+            });
             return coeffs > 0 ? points / coeffs : 0;
         }
 
@@ -1114,12 +980,280 @@
         }
 
         function getAppreciation(avg) {
-            if (avg >= 16) return "Excellent travail ! Félicitations pour ces résultats exceptionnels. Continuez sur cette lancée !";
-            if (avg >= 14) return "Très bon travail ! Vous maîtrisez bien les connaissances. Quelques améliorations possibles pour exceller.";
-            if (avg >= 12) return "Bon travail ! Des progrès notables. Continuez vos efforts pour atteindre l'excellence.";
-            if (avg >= 10) return "Travail satisfaisant. Vous avez les bases, mais des révisions supplémentaires sont nécessaires.";
-            if (avg >= 8) return "Travail insuffisant. Une révision sérieuse s'impose. Concentrez-vous sur les matières où vous avez des difficultés.";
-            return "Travail très insuffisant. Un rattrapage intensif est nécessaire. Contactez vos enseignants pour un soutien supplémentaire.";
+            if (avg >= 16) return "Excellent travail ! Félicitations !";
+            if (avg >= 14) return "Très bon travail, continuez ainsi !";
+            if (avg >= 12) return "Bon travail, quelques progrès possibles.";
+            if (avg >= 10) return "Satisfaisant, des efforts sont nécessaires.";
+            if (avg >= 8) return "Insuffisant, doit travailler davantage.";
+            return "Très insuffisant, un rattrapage est nécessaire.";
+        }
+
+        // ==================== AFFICHAGE DES DONNÉES ====================
+        function renderStudents() {
+            const tbody = document.getElementById('studentsList');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = appData.students.filter(s => s.exam === appData.currentExam);
+            if (filtered.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucun élève</td></tr>'; 
+                return; 
+            }
+            filtered.forEach(s => { 
+                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.lastName}</td><td>${s.firstName}</td><td>${s.matricule}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteStudent(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+            });
+        }
+
+        function renderSubjects() {
+            const tbody = document.getElementById('subjectsList');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = appData.subjects.filter(s => s.exam === appData.currentExam);
+            if (filtered.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune matière</td></tr>'; 
+                return; 
+            }
+            filtered.forEach(s => { 
+                const categoryLabel = s.category === 'scientific' ? '🔬 Scientifique' : '📖 Littéraire';
+                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.coefficient}</td><td>${categoryLabel}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+            });
+        }
+
+        function renderGrades() {
+            const tbody = document.getElementById('gradesList');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const filtered = appData.grades.filter(g => { 
+                const s = appData.students.find(st => st.id === g.studentId); 
+                return s && s.exam === appData.currentExam; 
+            });
+            if (filtered.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucune note</td></tr>'; 
+                return; 
+            }
+            filtered.forEach(g => { 
+                const student = appData.students.find(s => s.id === g.studentId); 
+                const subject = appData.subjects.find(s => s.id === g.subjectId); 
+                if (student && subject) { 
+                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+                } 
+            });
+        }
+
+        function updateCounters() {
+            const studentsCount = document.getElementById('studentsCount');
+            const subjectsCount = document.getElementById('subjectsCount');
+            const gradesCount = document.getElementById('gradesCount');
+            if (studentsCount) studentsCount.textContent = appData.students.length;
+            if (subjectsCount) subjectsCount.textContent = appData.subjects.length;
+            if (gradesCount) gradesCount.textContent = appData.grades.length;
+        }
+
+        function updateSelects() {
+            const studentSelect = document.getElementById('gradeStudent');
+            if (studentSelect) {
+                studentSelect.innerHTML = '<option value="">Choisir</option>';
+                appData.students.filter(s => s.exam === appData.currentExam).forEach(s => { 
+                    studentSelect.innerHTML += `<option value="${s.id}">${s.firstName} ${s.lastName}</option>`; 
+                });
+            }
+            const subjectSelect = document.getElementById('gradeSubject');
+            if (subjectSelect) {
+                subjectSelect.innerHTML = '<option value="">Choisir</option>';
+                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { 
+                    subjectSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`; 
+                });
+            }
+            const statSelect = document.getElementById('subjectStatsSelect');
+            if (statSelect) {
+                statSelect.innerHTML = '<option value="">-- Choisir une matière --</option>';
+                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => { 
+                    statSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`; 
+                });
+            }
+        }
+
+        // ==================== CRUD ====================
+        function addStudent() {
+            const lastName = document.getElementById('lastName').value.trim();
+            const firstName = document.getElementById('firstName').value.trim();
+            const matricule = document.getElementById('matricule').value.trim();
+            const exam = document.getElementById('studentExam').value;
+            if (!lastName || !firstName || !matricule) { 
+                showAlert('Remplissez tous les champs', 'error'); 
+                return; 
+            }
+            appData.students.push({ id: appData.nextStudentId++, lastName, firstName, matricule, exam });
+            updateUI();
+            document.getElementById('lastName').value = '';
+            document.getElementById('firstName').value = '';
+            document.getElementById('matricule').value = '';
+            showAlert('Élève ajouté', 'success');
+        }
+
+        window.deleteStudent = function(id) {
+            if (confirm('Supprimer cet élève ?')) { 
+                appData.students = appData.students.filter(s => s.id !== id); 
+                appData.grades = appData.grades.filter(g => g.studentId !== id); 
+                updateUI(); 
+                showAlert('Élève supprimé', 'success'); 
+            }
+        };
+
+        function addSubject() {
+            const name = document.getElementById('subjectName').value.trim();
+            const coeff = parseInt(document.getElementById('coefficient').value);
+            const exam = document.getElementById('subjectExam').value;
+            const category = document.getElementById('subjectCategory').value;
+            if (!name || coeff < 1) { 
+                showAlert('Nom et coefficient valides', 'error'); 
+                return; 
+            }
+            appData.subjects.push({ id: appData.nextSubjectId++, name, coefficient: coeff, exam, category });
+            updateUI(); 
+            document.getElementById('subjectName').value = ''; 
+            showAlert('Matière ajoutée', 'success');
+        }
+
+        window.deleteSubject = function(id) {
+            if (confirm('Supprimer cette matière ?')) { 
+                appData.subjects = appData.subjects.filter(s => s.id !== id); 
+                appData.grades = appData.grades.filter(g => g.subjectId !== id); 
+                updateUI(); 
+                showAlert('Matière supprimée', 'success'); 
+            }
+        };
+
+        function addGrade() {
+            const studentId = parseInt(document.getElementById('gradeStudent').value);
+            const subjectId = parseInt(document.getElementById('gradeSubject').value);
+            const value = parseFloat(document.getElementById('gradeValue').value);
+            const teacher = document.getElementById('gradeTeacher').value.trim();
+            if (!studentId || !subjectId || isNaN(value) || value < 0 || value > 20 || !teacher) { 
+                showAlert('Tous les champs sont requis', 'error'); 
+                return; 
+            }
+            const existing = appData.grades.findIndex(g => g.studentId === studentId && g.subjectId === subjectId);
+            if (existing !== -1) { 
+                appData.grades[existing] = { ...appData.grades[existing], value, teacher }; 
+                showAlert('Note mise à jour', 'success'); 
+            } else { 
+                appData.grades.push({ id: appData.nextGradeId++, studentId, subjectId, value, teacher }); 
+                showAlert('Note ajoutée', 'success'); 
+            }
+            updateUI(); 
+            document.getElementById('gradeValue').value = ''; 
+            document.getElementById('gradeTeacher').value = '';
+        }
+
+        window.deleteGrade = function(id) {
+            if (confirm('Supprimer cette note ?')) { 
+                appData.grades = appData.grades.filter(g => g.id !== id); 
+                updateUI(); 
+                showAlert('Note supprimée', 'success'); 
+            }
+        };
+
+        // ==================== STATISTIQUES ====================
+        function updateGeneralStats() {
+            const container = document.getElementById('generalStats');
+            if (!container) return;
+            const students = appData.students.filter(s => s.exam === appData.currentExam);
+            const subjects = appData.subjects.filter(s => s.exam === appData.currentExam);
+            let total = 0, count = 0, pass = 0;
+            students.forEach(s => { 
+                const a = getStudentAverage(s.id); 
+                if (a > 0) { 
+                    total += a; 
+                    count++; 
+                    if (a >= 10) pass++; 
+                } 
+            });
+            const avg = count > 0 ? (total / count).toFixed(2) : 0;
+            const rate = count > 0 ? Math.round(pass / count * 100) : 0;
+            container.innerHTML = `
+                <div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div><p>${count} avec notes</p></div>
+                <div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div><p>${subjects.filter(s => s.category === 'scientific').length} scientifiques, ${subjects.filter(s => s.category === 'literary').length} littéraires</p></div>
+                <div class="stat-card"><h3>Performance</h3><div class="stat-value">${avg}/20</div><div class="progress-bar"><div class="progress-fill ${rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${rate}%"></div></div><p>Taux réussite: ${rate}% (${pass}/${count})</p></div>
+            `;
+        }
+
+        function showSubjectStats(subjectId) {
+            const subject = appData.subjects.find(s => s.id === subjectId);
+            if (!subject) return;
+            const grades = appData.grades.filter(g => g.subjectId === subjectId);
+            const studentsWithGrades = grades.filter(g => {
+                const s = appData.students.find(st => st.id === g.studentId);
+                return s && s.exam === appData.currentExam;
+            });
+            const avg = studentsWithGrades.length > 0 ? 
+                studentsWithGrades.reduce((s, g) => s + g.value, 0) / studentsWithGrades.length : 0;
+            const container = document.getElementById('subjectDetailedStats');
+            container.style.display = 'block';
+            container.innerHTML = `<div style="background:white;border-radius:12px;padding:16px;"><h3>${subject.name}</h3><div class="stat-value">${avg.toFixed(2)}/20</div><p>Total notes: ${studentsWithGrades.length}</p></div>`;
+        }
+
+        function updateAnalysisTab() {
+            const students = appData.students.filter(s => s.exam === appData.currentExam);
+            const container = document.getElementById('studentsAnalysisContainer');
+            if (!container) return;
+            
+            if (students.length === 0) { 
+                container.innerHTML = '<div class="form-section" style="text-align:center">Aucun élève</div>'; 
+                return; 
+            }
+            
+            const studentsData = students.map(s => {
+                const avg = getStudentAverage(s.id);
+                const gradesDetails = appData.grades.filter(g => g.studentId === s.id).map(g => {
+                    const subj = appData.subjects.find(sub => sub.id === g.subjectId);
+                    return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value };
+                });
+                const hasDifficulty = gradesDetails.some(g => g.grade < 10);
+                return { ...s, average: avg, gradesDetails: gradesDetails, hasDifficulty: hasDifficulty, isPassing: avg >= 10 };
+            });
+            
+            const totalAvg = studentsData.reduce((sum, s) => sum + s.average, 0);
+            const avgGeneral = (totalAvg / studentsData.length).toFixed(2);
+            const studentsWithDifficulty = studentsData.filter(s => s.hasDifficulty).length;
+            const successRate = Math.round((studentsData.filter(s => s.isPassing).length / studentsData.length) * 100);
+            
+            const totalStat = document.getElementById('totalStudentsStat');
+            const diffStat = document.getElementById('studentsWithDiffStat');
+            const globalStat = document.getElementById('globalAvgStat');
+            const successStat = document.getElementById('successRateStat');
+            if (totalStat) totalStat.textContent = students.length;
+            if (diffStat) diffStat.textContent = studentsWithDifficulty;
+            if (globalStat) globalStat.textContent = `${avgGeneral}/20`;
+            if (successStat) successStat.textContent = `${successRate}%`;
+            
+            studentsData.sort((a, b) => b.average - a.average);
+            container.innerHTML = studentsData.map((s, idx) => `
+                <div class="student-card">
+                    <div class="student-header">
+                        <div><span class="student-name">${s.firstName} ${s.lastName}</span></div>
+                        <div><span class="student-average ${s.isPassing ? 'average-pass' : 'average-fail'}">${s.average.toFixed(2)}/20</span><span style="margin-left:8px">Rang: ${idx+1}</span></div>
+                    </div>
+                    <div class="subjects-grid">${s.gradesDetails.map(g => `<div class="subject-item ${g.grade < 10 ? 'subject-difficulty' : 'subject-good'}"><span class="subject-name">${g.subjectName}</span><span class="subject-grade ${g.grade < 10 ? 'grade-low' : 'grade-high'}">${g.grade}/20</span></div>`).join('')}</div>
+                </div>`).join('');
+        }
+
+        function exportAnalysis() {
+            const students = appData.students.filter(s => s.exam === appData.currentExam);
+            const data = students.map(s => ({ 
+                nom: s.lastName, 
+                prenom: s.firstName, 
+                matricule: s.matricule, 
+                moyenne: getStudentAverage(s.id).toFixed(2), 
+                statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' 
+            }));
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `analyse_${appData.currentExam}_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showAlert('Analyse exportée', 'success');
         }
 
         function generateBulletins() {
@@ -1128,28 +1262,36 @@
             container.innerHTML = '';
             
             let students = appData.students.filter(s => s.exam === appData.currentExam);
-            if (students.length === 0) { showAlert('Aucun élève pour cet examen', 'error'); return; }
+            if (students.length === 0) { 
+                showAlert('Aucun élève pour cet examen', 'error'); 
+                return; 
+            }
             
             const studentsWithAvg = students.map(s => ({
                 ...s,
                 average: getStudentAverage(s.id),
                 scientificAvg: getStudentAverageByCategory(s.id, 'scientific'),
                 literaryAvg: getStudentAverageByCategory(s.id, 'literary'),
-                grades: (appData.grades.filter(g => g.studentId === s.id).map(g => {
+                grades: appData.grades.filter(g => g.studentId === s.id).map(g => {
                     const subj = appData.subjects.find(sub => sub.id === g.subjectId);
-                    return { subjectName: subj ? subj.name : 'Inconnu', coefficient: subj ? subj.coefficient : 1, grade: g.value, category: subj ? subj.category : 'literary', teacher: g.teacher };
-                }))
+                    return { 
+                        subjectName: subj ? subj.name : 'Inconnu', 
+                        coefficient: subj ? subj.coefficient : 1, 
+                        grade: g.value, 
+                        category: subj ? subj.category : 'literary', 
+                        teacher: g.teacher 
+                    };
+                })
             }));
             
             studentsWithAvg.sort((a, b) => b.average - a.average);
             const classAvg = studentsWithAvg.reduce((sum, s) => sum + s.average, 0) / studentsWithAvg.length;
-            const passCount = studentsWithAvg.filter(s => s.average >= 10).length;
-            const successRate = (passCount / studentsWithAvg.length) * 100;
+            const successRate = (studentsWithAvg.filter(s => s.average >= 10).length / studentsWithAvg.length) * 100;
             
             studentsWithAvg.forEach((student, idx) => {
                 const rank = idx + 1;
-                const totalStudents = studentsWithAvg.length;
-                const percentage = ((rank / totalStudents) * 100).toFixed(1);
+                const total = studentsWithAvg.length;
+                const percentage = ((rank / total) * 100).toFixed(1);
                 const mention = getMention(student.average);
                 
                 let rankClass = '';
@@ -1164,7 +1306,13 @@
                 student.grades.forEach(g => {
                     const gradeClass = getGradeClass(g.grade);
                     const rowClass = g.category === 'scientific' ? 'scientific-row' : 'literary-row';
-                    gradesHtml += `<tr class="${rowClass}"><td><strong>${g.subjectName}</strong></td><td>${g.coefficient}</td><td class="${gradeClass}">${g.grade}/20</td><td>${(g.grade * g.coefficient).toFixed(1)}</td><td>${g.teacher || '-'}</td></tr>`;
+                    gradesHtml += `<tr class="${rowClass}">
+                        <td><strong>${g.subjectName}</strong></td>
+                        <td>${g.coefficient}</td>
+                        <td class="${gradeClass}">${g.grade}/20</td>
+                        <td>${(g.grade * g.coefficient).toFixed(1)}</td>
+                        <td>${g.teacher || '-'}</td>
+                    </tr>`;
                     
                     if (g.category === 'scientific') {
                         scientificPoints += g.grade * g.coefficient;
@@ -1184,7 +1332,6 @@
                     <div class="bulletin-header">
                         <div class="school-year">Année 2025-2026</div>
                         <h2>BULLETIN D'EXAMEN BLANC</h2>
-                        <h3>${student.exam === 'BEPC' ? 'Brevet d\'Études du Premier Cycle' : student.exam === 'BAC1' ? 'Baccalauréat Première Partie' : 'Baccalauréat Terminale'}</h3>
                         <h3>${student.exam}</h3>
                     </div>
                     <div class="student-info-card">
@@ -1206,123 +1353,83 @@
                         <div class="category-card scientific">
                             <h4><i class="fas fa-flask"></i> Matières Scientifiques</h4>
                             <div class="value">${scientificTotal}/20</div>
-                            <div class="percentage">Moyenne Scientifique</div>
                         </div>
                         <div class="category-card literary">
                             <h4><i class="fas fa-book"></i> Matières Littéraires</h4>
                             <div class="value">${literaryTotal}/20</div>
-                            <div class="percentage">Moyenne Littéraire</div>
                         </div>
                     </div>
                     <table class="grades-table">
-                        <thead><tr><th>Matières</th><th>Coeff.</th><th>Note /20</th><th>Points</th><th>Enseignant</th></tr></thead>
+                        <thead><tr><th>Matières</th><th>Coeff.</th><th>Note</th><th>Points</th><th>Enseignant</th></tr></thead>
                         <tbody>${gradesHtml}</tbody>
-                        <tfoot><tr style="background: #f8f9fa; font-weight: bold;"><td colspan="2"><strong>Totaux</strong></td><td><strong>${student.average.toFixed(2)}/20</strong></td><td><strong>${(student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1)}</strong></td><td></tr></tfoot>
+                        <tfoot><tr style="background:#f8f9fa"><td colspan="2"><strong>Totaux</strong></td><td><strong>${student.average.toFixed(2)}/20</strong></td><td><strong>${(student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1)}</strong></td><td></td></tr></tfoot>
                     </table>
                     <div class="stats-summary">
-                        <div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ${rankClass}">${rank}/${totalStudents}</div></div>
+                        <div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ${rankClass}">${rank}/${total}</div></div>
                         <div class="stat-item"><div class="stat-label">Pourcentage</div><div class="stat-number">${percentage}%</div></div>
                         <div class="stat-item"><div class="stat-label">Moyenne Classe</div><div class="stat-number">${classAvg.toFixed(2)}/20</div></div>
                         <div class="stat-item"><div class="stat-label">Écart</div><div class="stat-number ${student.average >= classAvg ? 'grade-good' : 'grade-fail'}">${(student.average - classAvg).toFixed(2)}</div></div>
                         <div class="stat-item"><div class="stat-label">Taux Réussite</div><div class="stat-number">${successRate.toFixed(1)}%</div></div>
                     </div>
-                    <div style="margin-top: 20px; text-align: center;">
+                    <div style="margin-top:20px;text-align:center">
                         <p><strong>Appréciation :</strong> ${getAppreciation(student.average)}</p>
-                        <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">${student.average >= 10 ? '<i class="fas fa-check-circle" style="color:#2ecc71"></i> Félicitations ! Vous êtes admis(e) à l\'examen blanc.' : '<i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i> Des efforts supplémentaires sont nécessaires pour réussir.'}</p>
                     </div>
-                    <div style="text-align: center; margin-top: 20px;"><button class="print-btn" onclick="printBulletin(this)"><i class="fas fa-print"></i> Imprimer le bulletin</button></div>
+                    <div style="text-align:center;margin-top:20px">
+                        <button class="print-btn" onclick="printBulletin(this)"><i class="fas fa-print"></i> Imprimer</button>
+                    </div>
                 `;
                 container.appendChild(bulletin);
             });
-            showAlert(`${students.length} bulletin(s) généré(s) avec succès`, 'success');
+            showAlert(`${students.length} bulletin(s) généré(s)`, 'success');
         }
 
         window.printBulletin = function(btn) {
             const bulletin = btn.closest('.bulletin-section').cloneNode(true);
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`<!DOCTYPE html><html><head><title>Bulletin</title><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}body{padding:20px;background:white;}.bulletin-section{max-width:1000px;margin:0 auto;}.bulletin-header{text-align:center;margin-bottom:20px;border-bottom:3px solid #3498db;padding-bottom:15px;position:relative;}.bulletin-header h2{font-size:1.5rem;color:#2c3e50;}.bulletin-header h3{font-size:0.9rem;color:#666;}.school-year{position:absolute;top:0;right:0;font-size:0.7rem;background:#3498db;color:white;padding:2px 8px;border-radius:20px;}.student-info-card{background:#f8f9fa;border-radius:12px;padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;}.student-detail p{margin:5px 0;font-size:0.9rem;}.average-box,.mention-box{text-align:center;padding:10px 20px;border-radius:12px;min-width:150px;}.average-box{background:#3498db;color:white;}.avg-value{font-size:1.8rem;font-weight:bold;}.mention-box{background:#2ecc71;color:white;}.mention-box.mention-fail{background:#e74c3c;}.mention-box.mention-passable{background:#f39c12;}.category-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:20px 0;}.category-card{background:#f8f9fa;border-radius:10px;padding:12px;text-align:center;border-left:4px solid;}.category-card.scientific{border-left-color:#3498db;}.category-card.literary{border-left-color:#e91e63;}.category-card .value{font-size:1.3rem;font-weight:bold;}.grades-table{width:100%;border-collapse:collapse;margin:20px 0;}.grades-table th{background:#2c3e50;color:white;padding:10px;font-size:0.85rem;}.grades-table td{padding:8px;border-bottom:1px solid #ddd;text-align:center;font-size:0.8rem;}.scientific-row{background:#e3f2fd;}.literary-row{background:#fce4ec;}.grade-excellent{color:#2ecc71;font-weight:bold;}.grade-fail{color:#e74c3c;font-weight:bold;}.stats-summary{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-top:20px;padding-top:20px;border-top:2px dashed #ddd;}.stat-item{text-align:center;flex:1;}.stat-label{font-size:0.7rem;color:#666;}.stat-number{font-size:1rem;font-weight:bold;}.rank-badge{background:#ffd700;color:#2c3e50;padding:3px 10px;border-radius:20px;display:inline-block;}.rank-badge.first{background:linear-gradient(135deg,#ffd700,#ffed4e);}.rank-badge.second{background:linear-gradient(135deg,#c0c0c0,#e0e0e0);}.rank-badge.third{background:linear-gradient(135deg,#cd7f32,#e8a87c);}.print-btn,button{display:none !important;}@media print{.print-btn,button{display:none;}}</style></head><body>${bulletin.outerHTML}</body></html>`);
+            printWindow.document.write(`<!DOCTYPE html><html><head><title>Bulletin</title><meta charset="UTF-8"><style>
+                *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+                body{padding:20px;}
+                .bulletin-section{max-width:1000px;margin:0 auto;}
+                .bulletin-header{text-align:center;margin-bottom:20px;border-bottom:3px solid #3498db;padding-bottom:15px;}
+                .bulletin-header h2{font-size:1.5rem;}
+                .student-info-card{background:#f8f9fa;border-radius:12px;padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;flex-wrap:wrap;}
+                .average-box{background:#3498db;color:white;padding:10px 20px;border-radius:12px;text-align:center;}
+                .mention-box{background:#2ecc71;color:white;padding:10px 20px;border-radius:12px;text-align:center;}
+                .mention-box.mention-fail{background:#e74c3c;}
+                .grades-table{width:100%;border-collapse:collapse;margin:20px 0;}
+                .grades-table th{background:#2c3e50;color:white;padding:10px;}
+                .grades-table td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
+                .stats-summary{display:flex;justify-content:space-between;flex-wrap:wrap;margin-top:20px;}
+                .stat-item{text-align:center;flex:1;}
+                .rank-badge{background:#ffd700;padding:3px 10px;border-radius:20px;display:inline-block;}
+                .print-btn,button{display:none;}
+                @media print{button{display:none;}}
+            </style></head><body>${bulletin.outerHTML}</body></html>`);
             printWindow.document.close();
             printWindow.print();
         };
 
-        function updateAnalysisTab() {
-            const students = appData.students.filter(s => s.exam === appData.currentExam);
-            const container = document.getElementById('studentsAnalysisContainer');
-            if (!container) return;
-            const searchTerm = document.getElementById('searchStudentInput')?.value.toLowerCase() || '';
-            const filterType = document.getElementById('filterDifficultySelect')?.value || 'all';
-            if (students.length === 0) { container.innerHTML = '<div class="form-section" style="text-align:center">Aucun élève</div>'; return; }
-            let totalAvg = 0, studentsWithGrades = 0, studentsWithDifficulty = 0, passingStudents = 0;
-            const studentsData = students.map(s => {
-                const avg = getStudentAverage(s.id);
-                const details = (appData.grades.filter(g => g.studentId === s.id).map(g => {
-                    const subj = appData.subjects.find(sub => sub.id === g.subjectId);
-                    return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value };
-                }));
-                const hasDiff = details.some(g => g.grade < 10);
-                if (details.length > 0) { totalAvg += avg; studentsWithGrades++; if (hasDiff) studentsWithDifficulty++; if (avg >= 10) passingStudents++; }
-                return { ...s, average: avg, gradesDetails: details, hasDifficulty: hasDiff, isPassing: avg >= 10, hasGrades: details.length > 0 };
-            });
-            if (document.getElementById('totalStudentsStat')) document.getElementById('totalStudentsStat').textContent = students.length;
-            if (document.getElementById('studentsWithDiffStat')) document.getElementById('studentsWithDiffStat').textContent = studentsWithDifficulty;
-            if (document.getElementById('globalAvgStat')) document.getElementById('globalAvgStat').textContent = `${studentsWithGrades > 0 ? (totalAvg / studentsWithGrades).toFixed(2) : 0}/20`;
-            if (document.getElementById('successRateStat')) document.getElementById('successRateStat').textContent = `${studentsWithGrades > 0 ? Math.round((passingStudents / studentsWithGrades) * 100) : 0}%`;
-            let filtered = studentsData.filter(s => s.hasGrades);
-            if (searchTerm) filtered = filtered.filter(s => s.firstName.toLowerCase().includes(searchTerm) || s.lastName.toLowerCase().includes(searchTerm));
-            if (filterType === 'difficulty') filtered = filtered.filter(s => s.hasDifficulty);
-            if (filterType === 'good') filtered = filtered.filter(s => !s.hasDifficulty);
-            if (filtered.length === 0) { container.innerHTML = '<div class="form-section" style="text-align:center">Aucun élève correspondant</div>'; return; }
-            filtered.sort((a, b) => b.average - a.average);
-            container.innerHTML = filtered.map((s, idx) => `<div class="student-card"><div class="student-header"><div><span class="student-name">${s.firstName} ${s.lastName}</span><span style="font-size:0.7rem;color:#666;margin-left:8px;">${s.matricule}</span></div><div><span class="student-average ${s.isPassing ? 'average-pass' : 'average-fail'}">${s.average.toFixed(2)}/20</span><span style="margin-left:8px;font-size:0.7rem;">Rang: ${idx+1}/${filtered.length}</span></div></div><div class="subjects-grid">${s.gradesDetails.map(g => `<div class="subject-item ${g.grade < 10 ? 'subject-difficulty' : g.grade < 12 ? 'subject-warning' : 'subject-good'}"><span class="subject-name">${g.subjectName}</span><span class="subject-grade ${g.grade < 10 ? 'grade-low' : g.grade < 12 ? 'grade-medium' : 'grade-high'}">${g.grade}/20</span></div>`).join('')}</div></div>`).join('');
-        }
-
-        function exportAnalysis() {
-            const students = appData.students.filter(s => s.exam === appData.currentExam);
-            const data = students.map(s => ({ nom: s.lastName, prenom: s.firstName, matricule: s.matricule, moyenne: getStudentAverage(s.id).toFixed(2), statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis' }));
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `analyse_${appData.currentExam}_${Date.now()}.json`; a.click(); URL.revokeObjectURL(a.href);
-            showAlert('Analyse exportée', 'success');
-        }
-
-        function updateGeneralStats() {
-            const container = document.getElementById('generalStats');
-            if (!container) return;
-            const students = appData.students.filter(s => s.exam === appData.currentExam);
-            const subjects = appData.subjects.filter(s => s.exam === appData.currentExam);
-            let total = 0, count = 0, pass = 0;
-            students.forEach(s => { const a = getStudentAverage(s.id); if (a > 0) { total += a; count++; if (a >= 10) pass++; } });
-            const avg = count > 0 ? (total / count).toFixed(2) : 0;
-            const rate = count > 0 ? Math.round(pass / count * 100) : 0;
-            container.innerHTML = `<div class="stat-card"><h3>Élèves</h3><div class="stat-value">${students.length}</div><p>${count} avec notes</p></div><div class="stat-card"><h3>Matières</h3><div class="stat-value">${subjects.length}</div><p>${subjects.filter(s => s.category === 'scientific').length} scientifiques, ${subjects.filter(s => s.category === 'literary').length} littéraires</p></div><div class="stat-card"><h3>Performance</h3><div class="stat-value">${avg}/20</div><div class="progress-bar"><div class="progress-fill ${rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger'}" style="width:${rate}%"></div></div><p>Taux réussite: ${rate}% (${pass}/${count})</p></div>`;
-        }
-
-        function showSubjectStats(subjectId) {
-            const subject = appData.subjects.find(s => s.id === subjectId);
-            if (!subject) return;
-            const grades = appData.grades.filter(g => g.subjectId === subjectId);
-            const studentsWithGrades = [];
-            grades.forEach(g => { const s = appData.students.find(st => st.id === g.studentId); if (s && s.exam === appData.currentExam) studentsWithGrades.push({ student: s, grade: g.value }); });
-            studentsWithGrades.sort((a, b) => b.grade - a.grade);
-            const avg = studentsWithGrades.length > 0 ? studentsWithGrades.reduce((s, g) => s + g.grade, 0) / studentsWithGrades.length : 0;
-            const container = document.getElementById('subjectDetailedStats');
-            container.style.display = 'block';
-            container.innerHTML = `<div style="background:white;border-radius:12px;padding:16px;"><h3>${subject.name}</h3><div class="stat-value">${avg.toFixed(2)}/20</div><p>Total notes: ${studentsWithGrades.length}</p></div>`;
-        }
-
-        function updateCounters() {
-            if (document.getElementById('studentsCount')) document.getElementById('studentsCount').textContent = appData.students.length;
-            if (document.getElementById('subjectsCount')) document.getElementById('subjectsCount').textContent = appData.subjects.length;
-            if (document.getElementById('gradesCount')) document.getElementById('gradesCount').textContent = appData.grades.length;
-        }
-
         function resetAllData() {
             if (confirm('⚠️ Supprimer TOUTES les données ? Cette action est irréversible.')) {
                 appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
-                saveToLocalStorage(); updateUI(); showAlert('Données réinitialisées', 'success');
+                saveToLocalStorage(); 
+                updateUI(); 
+                showAlert('Données réinitialisées', 'success');
             }
         }
 
-        // === INITIALISATION ===
+        function updateUI() { 
+            renderStudents(); 
+            renderSubjects(); 
+            renderGrades(); 
+            updateSelects(); 
+            updateGeneralStats(); 
+            updateAnalysisTab(); 
+            updateCounters(); 
+            saveToLocalStorage(); 
+        }
+
+        // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             if (!checkExistingSession()) { 
                 document.getElementById('authOverlay').style.display = 'flex'; 
@@ -1331,47 +1438,65 @@
                 startAutoSave();
             }
             
-            // Boutons de redirection
-            document.getElementById('backToHomeFromAuth')?.addEventListener('click', goBackToHome);
-            document.getElementById('backToHomeBtn')?.addEventListener('click', goBackToHome);
-            document.getElementById('redirectNowBtn')?.addEventListener('click', () => {
-                closeAutoRedirectModal();
-                window.location.href = 'index.html';
-            });
+            // Boutons
+            const backHomeAuth = document.getElementById('backToHomeFromAuth');
+            const backHomeMain = document.getElementById('backToHomeBtn');
+            const redirectBtn = document.getElementById('redirectNowBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const addStudentBtn = document.getElementById('addStudentBtn');
+            const addSubjectBtn = document.getElementById('addSubjectBtn');
+            const addGradeBtn = document.getElementById('addGradeBtn');
+            const generateBtn = document.getElementById('generateBulletinsBtn');
+            const exportBtn = document.getElementById('exportAllDataBtn');
+            const resetBtn = document.getElementById('resetAllDataBtn');
+            const exportAnalysisBtn = document.getElementById('exportAnalysisBtn');
+            const importFile = document.getElementById('importFileInput');
+            const searchInput = document.getElementById('searchStudentInput');
+            const filterSelect = document.getElementById('filterDifficultySelect');
+            const subjectStatsSelect = document.getElementById('subjectStatsSelect');
+            const authForm = document.getElementById('authForm');
             
-            document.getElementById('authForm')?.addEventListener('submit', (e) => { 
-                e.preventDefault(); 
-                const u = document.getElementById('authUsername').value.trim(); 
-                const p = document.getElementById('authPassword').value.trim(); 
-                if (login(u, p)) { 
-                    startAutoSave(); 
-                } 
-            });
-            document.getElementById('logoutBtn')?.addEventListener('click', () => logout(false));
-            document.getElementById('closeBtn')?.addEventListener('click', () => window.close());
-            document.getElementById('addStudentBtn')?.addEventListener('click', addStudent);
-            document.getElementById('addSubjectBtn')?.addEventListener('click', addSubject);
-            document.getElementById('addGradeBtn')?.addEventListener('click', addGrade);
-            document.getElementById('generateBulletinsBtn')?.addEventListener('click', generateBulletins);
-            document.getElementById('exportAllDataBtn')?.addEventListener('click', exportAllData);
-            document.getElementById('resetAllDataBtn')?.addEventListener('click', resetAllData);
-            document.getElementById('exportAnalysisBtn')?.addEventListener('click', exportAnalysis);
-            document.getElementById('importFileInput')?.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) importJsonFile(e.target.files[0]); e.target.value = ''; });
-            document.getElementById('searchStudentInput')?.addEventListener('input', () => updateAnalysisTab());
-            document.getElementById('filterDifficultySelect')?.addEventListener('change', () => updateAnalysisTab());
-            document.getElementById('subjectStatsSelect')?.addEventListener('change', function() { if (this.value) showSubjectStats(parseInt(this.value)); else document.getElementById('subjectDetailedStats').style.display = 'none'; });
+            if (backHomeAuth) backHomeAuth.addEventListener('click', goBackToHome);
+            if (backHomeMain) backHomeMain.addEventListener('click', goBackToHome);
+            if (redirectBtn) redirectBtn.addEventListener('click', () => { closeAutoRedirectModal(); window.location.href = 'index.html'; });
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+            if (closeBtn) closeBtn.addEventListener('click', () => window.close());
+            if (addStudentBtn) addStudentBtn.addEventListener('click', addStudent);
+            if (addSubjectBtn) addSubjectBtn.addEventListener('click', addSubject);
+            if (addGradeBtn) addGradeBtn.addEventListener('click', addGrade);
+            if (generateBtn) generateBtn.addEventListener('click', generateBulletins);
+            if (exportBtn) exportBtn.addEventListener('click', exportAllData);
+            if (resetBtn) resetBtn.addEventListener('click', resetAllData);
+            if (exportAnalysisBtn) exportAnalysisBtn.addEventListener('click', exportAnalysis);
+            if (importFile) importFile.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) importJsonFile(e.target.files[0]); e.target.value = ''; });
+            if (searchInput) searchInput.addEventListener('input', () => updateAnalysisTab());
+            if (filterSelect) filterSelect.addEventListener('change', () => updateAnalysisTab());
+            if (subjectStatsSelect) subjectStatsSelect.addEventListener('change', function() { if (this.value) showSubjectStats(parseInt(this.value)); else document.getElementById('subjectDetailedStats').style.display = 'none'; });
             
+            if (authForm) {
+                authForm.addEventListener('submit', (e) => { 
+                    e.preventDefault(); 
+                    const u = document.getElementById('authUsername').value.trim(); 
+                    const p = document.getElementById('authPassword').value.trim(); 
+                    if (login(u, p)) startAutoSave(); 
+                });
+            }
+            
+            // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                    const tabId = document.getElementById(`${this.dataset.tab}-tab`);
+                    if (tabId) tabId.classList.add('active');
                     if (this.dataset.tab === 'statistics') updateGeneralStats();
                     if (this.dataset.tab === 'analysis') updateAnalysisTab();
                 });
             });
             
+            // Exam buttons
             document.querySelectorAll('.exam-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.exam-btn').forEach(b => b.classList.remove('active'));
