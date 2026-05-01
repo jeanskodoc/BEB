@@ -89,7 +89,14 @@
 
         .session-info { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .session-badge { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; }
-        .countdown-timer { background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; font-family: monospace; }
+        .countdown-timer { background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; font-family: monospace; font-weight: bold; }
+        .countdown-timer.warning { background: #f39c12; color: #2c3e50; animation: pulse 1s infinite; }
+        .countdown-timer.danger { background: #e74c3c; color: white; animation: pulse 0.5s infinite; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
         .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
         .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
 
@@ -157,7 +164,6 @@
         .progress-warning { background: #f39c12; }
         .progress-danger { background: #e74c3c; }
 
-        /* Styles pour l'analyse des notes */
         .difficulty-badge { background: #e74c3c; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; }
         .warning-badge { background: #f39c12; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; }
         .good-badge { background: #2ecc71; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; }
@@ -259,7 +265,8 @@
                 <div class="session-info">
                     <span class="session-badge"><i class="fas fa-user-check"></i> <span id="sessionUser"></span></span>
                     <span class="session-badge"><i class="fas fa-building"></i> <span id="sessionInstitution"></span></span>
-                    <span class="countdown-timer"><i class="fas fa-clock"></i> Expire: <span id="countdownDisplay"></span></span>
+                    <span class="countdown-timer" id="countdownTimer"><i class="fas fa-clock"></i> <span id="countdownDisplay"></span></span>
+                    <span class="session-badge"><i class="fas fa-hourglass-start"></i> Connecté le: <span id="loginTime"></span></span>
                 </div>
                 <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
             </div>
@@ -310,7 +317,7 @@
                 </div>
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-users"></i> Liste des élèves</h2>
-                    <div class="table-container"><table id="studentsTable"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></table></div>
+                    <div class="table-container"><table id="studentsTable"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></tr></div>
                 </div>
             </div>
 
@@ -349,7 +356,6 @@
                 </div>
             </div>
 
-            <!-- NOUVEL ONGLET: Analyse des Notes par élève -->
             <div id="analysis-tab" class="tab-content">
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-chart-line"></i> Analyse des Performances par Élève</h2>
@@ -419,9 +425,10 @@
     </div>
 
     <script>
-        // === AUTHENTIFICATION ===
+        // === AUTHENTIFICATION AVEC SAUVEGARDE DU TEMPS RESTANT ===
         let activeSession = null;
         let countdownInterval = null;
+        let sessionExpiryWarningShown = false;
         let charts = {};
 
         const VALID_CREDENTIALS = {
@@ -430,67 +437,142 @@
             'LYCEE_001': { password: 'TOKIN2025', institution: 'Lycée de Tokin' }
         };
 
+        // Vérifier une session existante avec sauvegarde du temps restant
         function checkExistingSession() {
             const saved = localStorage.getItem('examAppActiveSession');
             if (saved) {
                 try {
                     const session = JSON.parse(saved);
-                    if (Date.now() < session.expirationTime) {
+                    const now = Date.now();
+                    
+                    if (now < session.expirationTime) {
+                        // Session encore valide - restaurer avec le temps restant
                         activeSession = session;
+                        
+                        // Sauvegarder le temps de connexion initial
+                        if (!session.loginTimeDisplay) {
+                            session.loginTimeDisplay = new Date(session.loginTime).toLocaleString('fr-FR');
+                            localStorage.setItem('examAppActiveSession', JSON.stringify(session));
+                        }
+                        
                         startCountdown();
                         showMainApp();
+                        showAlert(`✅ Session restaurée! Temps restant: ${formatTimeRemaining(session.expirationTime - now)}`, 'success');
                         return true;
-                    } else localStorage.removeItem('examAppActiveSession');
-                } catch(e) {}
+                    } else {
+                        // Session expirée - nettoyer
+                        localStorage.removeItem('examAppActiveSession');
+                        localStorage.removeItem('examData_' + session.username);
+                        showAlert('⏰ Votre session précédente a expiré. Veuillez vous reconnecter.', 'warning');
+                    }
+                } catch(e) {
+                    console.error('Erreur restauration session:', e);
+                }
             }
             return false;
         }
 
+        // Formater le temps restant
+        function formatTimeRemaining(milliseconds) {
+            const hours = Math.floor(milliseconds / (60 * 60 * 1000));
+            const minutes = Math.floor((milliseconds % (60 * 60 * 1000)) / (60 * 1000));
+            const seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
+            return `${hours}h ${minutes}m ${seconds}s`;
+        }
+
         function login(username, password) {
             if (VALID_CREDENTIALS[username] && VALID_CREDENTIALS[username].password === password) {
+                const expirationTime = Date.now() + (6 * 60 * 60 * 1000);
                 activeSession = {
                     username: username,
                     institution: VALID_CREDENTIALS[username].institution,
-                    loginTime: new Date().toISOString(),
-                    expirationTime: Date.now() + (6 * 60 * 60 * 1000)
+                    loginTime: Date.now(),
+                    loginTimeDisplay: new Date().toLocaleString('fr-FR'),
+                    expirationTime: expirationTime,
+                    remainingTimeAtLogin: 6 * 60 * 60 * 1000
                 };
                 localStorage.setItem('examAppActiveSession', JSON.stringify(activeSession));
                 startCountdown();
                 showMainApp();
                 loadFromLocalStorage();
                 updateUI();
+                showAlert(`✅ Connexion réussie! Session valable 6 heures.`, 'success');
                 return true;
             }
             return false;
         }
 
         function logout() {
-            if (confirm('Déconnexion ?')) {
+            if (confirm('⚠️ Voulez-vous vraiment vous déconnecter ? Vos données seront sauvegardées.')) {
+                // Sauvegarder les données avant déconnexion
+                saveToLocalStorage();
                 localStorage.removeItem('examAppActiveSession');
                 activeSession = null;
                 if (countdownInterval) clearInterval(countdownInterval);
                 document.getElementById('authOverlay').style.display = 'flex';
                 document.getElementById('mainApp').style.display = 'none';
-                showAuthAlert('Déconnecté', 'success');
+                showAuthAlert('Déconnecté avec succès', 'success');
             }
         }
 
         function startCountdown() {
             if (countdownInterval) clearInterval(countdownInterval);
+            
             countdownInterval = setInterval(() => {
                 if (!activeSession) return;
-                const remaining = activeSession.expirationTime - Date.now();
+                
+                const now = Date.now();
+                const remaining = activeSession.expirationTime - now;
+                
                 if (remaining <= 0) {
+                    // Session expirée - déconnexion automatique
                     clearInterval(countdownInterval);
-                    showAuthAlert('Session expirée', 'warning');
-                    setTimeout(() => logout(), 2000);
+                    countdownInterval = null;
+                    showAuthAlert('⏰ Votre session a expiré! Déconnexion automatique...', 'warning');
+                    
+                    // Sauvegarder les données avant déconnexion
+                    saveToLocalStorage();
+                    localStorage.removeItem('examAppActiveSession');
+                    activeSession = null;
+                    
+                    setTimeout(() => {
+                        document.getElementById('authOverlay').style.display = 'flex';
+                        document.getElementById('mainApp').style.display = 'none';
+                    }, 2000);
                     return;
                 }
+                
+                // Mettre à jour l'affichage du timer
                 const hours = Math.floor(remaining / (60 * 60 * 1000));
                 const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
                 const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
                 const display = document.getElementById('countdownDisplay');
-                if (display) display.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                const timerElement = document.getElementById('countdownTimer');
+                
+                if (display) {
+                    display.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                    
+                    // Changer la couleur selon le temps restant
+                    if (remaining < 300000) { // Moins de 5 minutes
+                        timerElement.classList.add('danger');
+                        timerElement.classList.remove('warning');
+                        if (!sessionExpiryWarningShown) {
+                            showAlert('⚠️ Attention! Il vous reste moins de 5 minutes avant expiration de la session!', 'warning');
+                            sessionExpiryWarningShown = true;
+                        }
+                    } else if (remaining < 600000) { // Moins de 10 minutes
+                        timerElement.classList.add('warning');
+                        timerElement.classList.remove('danger');
+                    } else {
+                        timerElement.classList.remove('warning', 'danger');
+                    }
+                }
+                
+                // Sauvegarder périodiquement le temps restant
+                if (remaining % 60000 < 1000) { // Toutes les minutes environ
+                    const updatedSession = { ...activeSession, lastSaved: now };
+                    localStorage.setItem('examAppActiveSession', JSON.stringify(updatedSession));
+                }
             }, 1000);
         }
 
@@ -499,10 +581,12 @@
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('sessionUser').textContent = activeSession.username;
             document.getElementById('sessionInstitution').textContent = activeSession.institution;
+            document.getElementById('loginTime').textContent = activeSession.loginTimeDisplay || new Date(activeSession.loginTime).toLocaleString('fr-FR');
         }
 
         function showAuthAlert(msg, type) {
             const div = document.getElementById('authAlert');
+            if (!div) return;
             div.textContent = msg;
             div.className = `alert alert-${type}`;
             div.style.display = 'block';
@@ -511,13 +595,14 @@
 
         function showAlert(msg, type) {
             const div = document.getElementById('alert');
+            if (!div) return;
             div.textContent = msg;
             div.className = `alert alert-${type}`;
             div.style.display = 'block';
             setTimeout(() => div.style.display = 'none', 4000);
         }
 
-        // === DONNÉES ===
+        // === DONNÉES AVEC SAUVEGARDE AUTOMATIQUE ===
         let appData = {
             currentExam: 'BEPC',
             students: [],
@@ -528,18 +613,36 @@
             nextGradeId: 1
         };
 
+        let autoSaveInterval = null;
+
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('examData_' + (activeSession?.username || 'default'));
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
                     appData = { ...appData, ...data };
-                } catch(e) {}
+                    showAlert('📂 Données chargées avec succès', 'success');
+                } catch(e) {
+                    console.error('Erreur chargement:', e);
+                }
             }
         }
 
         function saveToLocalStorage() {
-            localStorage.setItem('examData_' + (activeSession?.username || 'default'), JSON.stringify(appData));
+            if (activeSession) {
+                localStorage.setItem('examData_' + activeSession.username, JSON.stringify(appData));
+            }
+        }
+
+        // Sauvegarde automatique toutes les 30 secondes
+        function startAutoSave() {
+            if (autoSaveInterval) clearInterval(autoSaveInterval);
+            autoSaveInterval = setInterval(() => {
+                if (activeSession) {
+                    saveToLocalStorage();
+                    console.log('💾 Sauvegarde automatique effectuée à', new Date().toLocaleTimeString());
+                }
+            }, 30000);
         }
 
         // === CRUD ===
@@ -551,10 +654,12 @@
             updateGeneralStats();
             updateAnalysisTab();
             updateCounters();
+            saveToLocalStorage(); // Sauvegarde après chaque modification
         }
 
         function renderStudents() {
             const tbody = document.getElementById('studentsList');
+            if (!tbody) return;
             tbody.innerHTML = '';
             const filtered = appData.students.filter(s => s.exam === appData.currentExam);
             if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucun élève</td></tr>'; return; }
@@ -565,6 +670,7 @@
 
         function renderSubjects() {
             const tbody = document.getElementById('subjectsList');
+            if (!tbody) return;
             tbody.innerHTML = '';
             const filtered = appData.subjects.filter(s => s.exam === appData.currentExam);
             if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Aucune matière</td></tr>'; return; }
@@ -575,6 +681,7 @@
 
         function renderGrades() {
             const tbody = document.getElementById('gradesList');
+            if (!tbody) return;
             tbody.innerHTML = '';
             const filtered = appData.grades.filter(g => {
                 const student = appData.students.find(s => s.id === g.studentId);
@@ -592,22 +699,28 @@
 
         function updateSelects() {
             const studentSelect = document.getElementById('gradeStudent');
-            studentSelect.innerHTML = '<option value="">Choisir</option>';
-            appData.students.filter(s => s.exam === appData.currentExam).forEach(s => {
-                studentSelect.innerHTML += `<option value="${s.id}">${s.firstName} ${s.lastName} (${s.matricule})</option>`;
-            });
+            if (studentSelect) {
+                studentSelect.innerHTML = '<option value="">Choisir</option>';
+                appData.students.filter(s => s.exam === appData.currentExam).forEach(s => {
+                    studentSelect.innerHTML += `<option value="${s.id}">${s.firstName} ${s.lastName} (${s.matricule})</option>`;
+                });
+            }
             
             const subjectSelect = document.getElementById('gradeSubject');
-            subjectSelect.innerHTML = '<option value="">Choisir</option>';
-            appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => {
-                subjectSelect.innerHTML += `<option value="${s.id}">${s.name} (Coeff ${s.coefficient})</option>`;
-            });
+            if (subjectSelect) {
+                subjectSelect.innerHTML = '<option value="">Choisir</option>';
+                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => {
+                    subjectSelect.innerHTML += `<option value="${s.id}">${s.name} (Coeff ${s.coefficient})</option>`;
+                });
+            }
 
             const statSelect = document.getElementById('subjectStatsSelect');
-            statSelect.innerHTML = '<option value="">-- Choisir une matière --</option>';
-            appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => {
-                statSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-            });
+            if (statSelect) {
+                statSelect.innerHTML = '<option value="">-- Choisir une matière --</option>';
+                appData.subjects.filter(s => s.exam === appData.currentExam).forEach(s => {
+                    statSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                });
+            }
         }
 
         function addStudent() {
@@ -617,7 +730,6 @@
             const exam = document.getElementById('studentExam').value;
             if (!lastName || !firstName || !matricule) { showAlert('Remplissez tous les champs', 'error'); return; }
             appData.students.push({ id: appData.nextStudentId++, lastName, firstName, matricule, exam });
-            saveToLocalStorage();
             updateUI();
             document.getElementById('lastName').value = '';
             document.getElementById('firstName').value = '';
@@ -629,7 +741,6 @@
             if (confirm('Supprimer cet élève ?')) {
                 appData.students = appData.students.filter(s => s.id !== id);
                 appData.grades = appData.grades.filter(g => g.studentId !== id);
-                saveToLocalStorage();
                 updateUI();
                 showAlert('Élève supprimé', 'success');
             }
@@ -641,7 +752,6 @@
             const exam = document.getElementById('subjectExam').value;
             if (!name || coefficient < 1) { showAlert('Nom et coefficient valides', 'error'); return; }
             appData.subjects.push({ id: appData.nextSubjectId++, name, coefficient, exam });
-            saveToLocalStorage();
             updateUI();
             document.getElementById('subjectName').value = '';
             showAlert('Matière ajoutée', 'success');
@@ -651,7 +761,6 @@
             if (confirm('Supprimer cette matière ?')) {
                 appData.subjects = appData.subjects.filter(s => s.id !== id);
                 appData.grades = appData.grades.filter(g => g.subjectId !== id);
-                saveToLocalStorage();
                 updateUI();
                 showAlert('Matière supprimée', 'success');
             }
@@ -674,7 +783,6 @@
                 appData.grades.push({ id: appData.nextGradeId++, studentId, subjectId, value, teacher });
                 showAlert('Note ajoutée', 'success');
             }
-            saveToLocalStorage();
             updateUI();
             document.getElementById('gradeValue').value = '';
             document.getElementById('gradeTeacher').value = '';
@@ -683,7 +791,6 @@
         window.deleteGrade = function(id) {
             if (confirm('Supprimer cette note ?')) {
                 appData.grades = appData.grades.filter(g => g.id !== id);
-                saveToLocalStorage();
                 updateUI();
                 showAlert('Note supprimée', 'success');
             }
@@ -703,7 +810,6 @@
             return coeffs > 0 ? points / coeffs : 0;
         }
 
-        // Récupérer toutes les notes d'un élève avec détails
         function getStudentGradesDetailed(studentId) {
             const grades = appData.grades.filter(g => g.studentId === studentId);
             return grades.map(g => {
@@ -721,23 +827,23 @@
             });
         }
 
-        // === ANALYSE DES NOTES PAR ÉLÈVE ===
         function updateAnalysisTab() {
             const students = appData.students.filter(s => s.exam === appData.currentExam);
             const container = document.getElementById('studentsAnalysisContainer');
+            if (!container) return;
+            
             const searchTerm = document.getElementById('searchStudentInput')?.value.toLowerCase() || '';
             const filterType = document.getElementById('filterDifficultySelect')?.value || 'all';
             
             if (students.length === 0) {
                 container.innerHTML = '<div class="form-section" style="text-align:center"><i class="fas fa-info-circle"></i> Aucun élève enregistré pour cet examen</div>';
-                document.getElementById('totalStudentsStat').textContent = '0';
-                document.getElementById('studentsWithDiffStat').textContent = '0';
-                document.getElementById('globalAvgStat').textContent = '0/20';
-                document.getElementById('successRateStat').textContent = '0%';
+                if (document.getElementById('totalStudentsStat')) document.getElementById('totalStudentsStat').textContent = '0';
+                if (document.getElementById('studentsWithDiffStat')) document.getElementById('studentsWithDiffStat').textContent = '0';
+                if (document.getElementById('globalAvgStat')) document.getElementById('globalAvgStat').textContent = '0/20';
+                if (document.getElementById('successRateStat')) document.getElementById('successRateStat').textContent = '0%';
                 return;
             }
             
-            // Calculer les statistiques globales
             let totalAvg = 0;
             let studentsWithGrades = 0;
             let studentsWithDifficulty = 0;
@@ -769,12 +875,11 @@
             const globalAvg = studentsWithGrades > 0 ? (totalAvg / studentsWithGrades).toFixed(2) : 0;
             const successRate = studentsWithGrades > 0 ? Math.round((passingStudents / studentsWithGrades) * 100) : 0;
             
-            document.getElementById('totalStudentsStat').textContent = students.length;
-            document.getElementById('studentsWithDiffStat').textContent = studentsWithDifficulty;
-            document.getElementById('globalAvgStat').textContent = `${globalAvg}/20`;
-            document.getElementById('successRateStat').textContent = `${successRate}%`;
+            if (document.getElementById('totalStudentsStat')) document.getElementById('totalStudentsStat').textContent = students.length;
+            if (document.getElementById('studentsWithDiffStat')) document.getElementById('studentsWithDiffStat').textContent = studentsWithDifficulty;
+            if (document.getElementById('globalAvgStat')) document.getElementById('globalAvgStat').textContent = `${globalAvg}/20`;
+            if (document.getElementById('successRateStat')) document.getElementById('successRateStat').textContent = `${successRate}%`;
             
-            // Filtrer les élèves
             let filteredStudents = studentsData.filter(s => s.hasGrades);
             
             if (searchTerm) {
@@ -796,7 +901,6 @@
                 return;
             }
             
-            // Trier par moyenne décroissante
             filteredStudents.sort((a, b) => b.average - a.average);
             
             container.innerHTML = filteredStudents.map((student, idx) => {
@@ -896,9 +1000,9 @@
             showAlert('Analyse exportée avec succès', 'success');
         }
 
-        // === STATISTIQUES ===
         function updateGeneralStats() {
             const container = document.getElementById('generalStats');
+            if (!container) return;
             const students = appData.students.filter(s => s.exam === appData.currentExam);
             const subjects = appData.subjects.filter(s => s.exam === appData.currentExam);
             let totalAvg = 0, count = 0, passing = 0;
@@ -993,14 +1097,14 @@
         }
 
         function updateCounters() {
-            document.getElementById('studentsCount').textContent = appData.students.length;
-            document.getElementById('subjectsCount').textContent = appData.subjects.length;
-            document.getElementById('gradesCount').textContent = appData.grades.length;
+            if (document.getElementById('studentsCount')) document.getElementById('studentsCount').textContent = appData.students.length;
+            if (document.getElementById('subjectsCount')) document.getElementById('subjectsCount').textContent = appData.subjects.length;
+            if (document.getElementById('gradesCount')) document.getElementById('gradesCount').textContent = appData.grades.length;
         }
 
-        // === BULLETINS ===
         function generateBulletins() {
             const container = document.getElementById('bulletinResults');
+            if (!container) return;
             container.innerHTML = '';
             const students = appData.students.filter(s => s.exam === appData.currentExam);
             if (students.length === 0) { showAlert('Aucun élève', 'error'); return; }
@@ -1084,14 +1188,14 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `backup_${new Date().toISOString().slice(0,19)}.json`;
+            a.download = `backup_${activeSession?.username || 'data'}_${new Date().toISOString().slice(0,19)}.json`;
             a.click();
             URL.revokeObjectURL(url);
             showAlert('Export effectué', 'success');
         }
 
         function resetAllData() {
-            if (confirm('⚠️ Supprimer TOUTES les données ?')) {
+            if (confirm('⚠️ Supprimer TOUTES les données ? Cette action est irréversible.')) {
                 appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
                 saveToLocalStorage();
                 updateUI();
@@ -1104,30 +1208,34 @@
             if (!checkExistingSession()) {
                 document.getElementById('authOverlay').style.display = 'flex';
                 document.getElementById('mainApp').style.display = 'none';
+            } else {
+                startAutoSave();
             }
             
             document.getElementById('authForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const username = document.getElementById('authUsername').value.trim();
                 const password = document.getElementById('authPassword').value.trim();
-                if (login(username, password)) showAuthAlert('Connexion réussie', 'success');
-                else showAuthAlert('Identifiants incorrects', 'error');
+                if (login(username, password)) {
+                    showAuthAlert('Connexion réussie', 'success');
+                    startAutoSave();
+                } else showAuthAlert('Identifiants incorrects', 'error');
             });
             
-            document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('closeBtn').addEventListener('click', () => window.close());
-            document.getElementById('addStudentBtn').addEventListener('click', addStudent);
-            document.getElementById('addSubjectBtn').addEventListener('click', addSubject);
-            document.getElementById('addGradeBtn').addEventListener('click', addGrade);
-            document.getElementById('generateBulletinsBtn').addEventListener('click', generateBulletins);
-            document.getElementById('exportAllDataBtn').addEventListener('click', exportAllData);
-            document.getElementById('resetAllDataBtn').addEventListener('click', resetAllData);
-            document.getElementById('exportAnalysisBtn').addEventListener('click', exportAnalysis);
+            document.getElementById('logoutBtn')?.addEventListener('click', logout);
+            document.getElementById('closeBtn')?.addEventListener('click', () => window.close());
+            document.getElementById('addStudentBtn')?.addEventListener('click', addStudent);
+            document.getElementById('addSubjectBtn')?.addEventListener('click', addSubject);
+            document.getElementById('addGradeBtn')?.addEventListener('click', addGrade);
+            document.getElementById('generateBulletinsBtn')?.addEventListener('click', generateBulletins);
+            document.getElementById('exportAllDataBtn')?.addEventListener('click', exportAllData);
+            document.getElementById('resetAllDataBtn')?.addEventListener('click', resetAllData);
+            document.getElementById('exportAnalysisBtn')?.addEventListener('click', exportAnalysis);
             
-            document.getElementById('searchStudentInput').addEventListener('input', () => updateAnalysisTab());
-            document.getElementById('filterDifficultySelect').addEventListener('change', () => updateAnalysisTab());
+            document.getElementById('searchStudentInput')?.addEventListener('input', () => updateAnalysisTab());
+            document.getElementById('filterDifficultySelect')?.addEventListener('change', () => updateAnalysisTab());
             
-            document.getElementById('subjectStatsSelect').addEventListener('change', function() {
+            document.getElementById('subjectStatsSelect')?.addEventListener('change', function() {
                 const subjectId = parseInt(this.value);
                 if (subjectId) showSubjectStats(subjectId);
                 else document.getElementById('subjectDetailedStats').style.display = 'none';
@@ -1138,11 +1246,12 @@
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                    const tabId = document.getElementById(`${this.dataset.tab}-tab`);
+                    if (tabId) tabId.classList.add('active');
                     if (this.dataset.tab === 'statistics') {
                         updateGeneralStats();
                         const select = document.getElementById('subjectStatsSelect');
-                        if (select.value) showSubjectStats(parseInt(select.value));
+                        if (select && select.value) showSubjectStats(parseInt(select.value));
                     }
                     if (this.dataset.tab === 'analysis') updateAnalysisTab();
                 });
@@ -1154,8 +1263,11 @@
                     this.classList.add('active');
                     appData.currentExam = this.dataset.exam;
                     updateUI();
-                    document.getElementById('subjectDetailedStats').style.display = 'none';
-                    document.getElementById('subjectStatsSelect').value = '';
+                    const statSelect = document.getElementById('subjectStatsSelect');
+                    if (statSelect) {
+                        document.getElementById('subjectDetailedStats').style.display = 'none';
+                        statSelect.value = '';
+                    }
                     updateAnalysisTab();
                 });
             });
