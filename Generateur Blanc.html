@@ -64,6 +64,27 @@
         .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
         .expiry-info { background: #e8f4fd; padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 0.8rem; text-align: center; }
         .auth-footer { text-align: center; margin-top: 20px; font-size: 0.8rem; color: #7f8c8d; }
+        
+        .back-home-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .back-home-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
 
         .alert { padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
         .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
@@ -99,6 +120,21 @@
         }
         .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
         .logout-btn:hover { background: #c0392b; transform: translateY(-2px); }
+        
+        .back-to-home-btn {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .back-to-home-btn:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
 
         header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
@@ -229,7 +265,7 @@
         }
 
         @media print {
-            .session-info-bar, .exam-selector, .tabs, .header-buttons, .generate-section, .logout-btn, .btn, .actions, .form-section, #alert, .footer, .filter-bar { display: none !important; }
+            .session-info-bar, .exam-selector, .tabs, .header-buttons, .generate-section, .logout-btn, .btn, .actions, .form-section, #alert, .footer, .filter-bar, .back-to-home-btn { display: none !important; }
             .bulletin-section { page-break-after: always; box-shadow: none; }
         }
     </style>
@@ -254,6 +290,9 @@
                 </div>
                 <button type="submit" class="auth-btn"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
             </form>
+            <button class="back-home-btn" id="backToHomeFromAuth">
+                <i class="fas fa-arrow-left"></i> Retour à l'accueil
+            </button>
             <div class="expiry-info"><i class="fas fa-hourglass-half"></i> Identifiants valables 6 heures</div>
             <div class="auth-footer"><p><i class="fab fa-whatsapp"></i> +228 92 87 16 05</p></div>
         </div>
@@ -268,7 +307,10 @@
                     <span class="countdown-timer" id="countdownTimer"><i class="fas fa-clock"></i> <span id="countdownDisplay"></span></span>
                     <span class="session-badge"><i class="fas fa-hourglass-start"></i> Connecté le: <span id="loginTime"></span></span>
                 </div>
-                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="back-to-home-btn" id="backToHomeBtn"><i class="fas fa-home"></i> Accueil</button>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+                </div>
             </div>
 
             <header>
@@ -317,7 +359,7 @@
                 </div>
                 <div class="form-section">
                     <h2 class="form-title"><i class="fas fa-users"></i> Liste des élèves</h2>
-                    <div class="table-container"><table id="studentsTable"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></tr></div>
+                    <div class="table-container"><table id="studentsTable"><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></table></div>
                 </div>
             </div>
 
@@ -437,6 +479,17 @@
             'LYCEE_001': { password: 'TOKIN2025', institution: 'Lycée de Tokin' }
         };
 
+        // Fonction pour retourner à la page d'accueil
+        function goBackToHome() {
+            if (confirm('Voulez-vous vraiment quitter cette page et retourner à l\'accueil ?')) {
+                // Sauvegarder les données avant de quitter
+                if (activeSession) {
+                    saveToLocalStorage();
+                }
+                window.location.href = 'index.html';
+            }
+        }
+
         // Vérifier une session existante avec sauvegarde du temps restant
         function checkExistingSession() {
             const saved = localStorage.getItem('examAppActiveSession');
@@ -463,7 +516,7 @@
                         // Session expirée - nettoyer
                         localStorage.removeItem('examAppActiveSession');
                         localStorage.removeItem('examData_' + session.username);
-                        showAlert('⏰ Votre session précédente a expiré. Veuillez vous reconnecter.', 'warning');
+                        showAuthAlert('⏰ Votre session précédente a expiré. Veuillez vous reconnecter.', 'warning');
                     }
                 } catch(e) {
                     console.error('Erreur restauration session:', e);
@@ -664,7 +717,14 @@
             const filtered = appData.students.filter(s => s.exam === appData.currentExam);
             if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Aucun élève</td></tr>'; return; }
             filtered.forEach(s => {
-                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.lastName}</td><td>${s.firstName}</td><td>${s.matricule}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteStudent(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+                tbody.innerHTML += `<tr>
+                    <td>${s.id}</td>
+                    <td>${s.lastName}</td>
+                    <td>${s.firstName}</td>
+                    <td>${s.matricule}</td>
+                    <td>${s.exam}</td>
+                    <td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteStudent(${s.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
             });
         }
 
@@ -675,7 +735,13 @@
             const filtered = appData.subjects.filter(s => s.exam === appData.currentExam);
             if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Aucune matière</td></tr>'; return; }
             filtered.forEach(s => {
-                tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.coefficient}</td><td>${s.exam}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+                tbody.innerHTML += `<tr>
+                    <td>${s.id}</td>
+                    <td>${s.name}</td>
+                    <td>${s.coefficient}</td>
+                    <td>${s.exam}</td>
+                    <td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteSubject(${s.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>`;
             });
         }
 
@@ -692,7 +758,14 @@
                 const student = appData.students.find(s => s.id === g.studentId);
                 const subject = appData.subjects.find(s => s.id === g.subjectId);
                 if (student && subject) {
-                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+                    tbody.innerHTML += `<tr>
+                        <td>${student.firstName} ${student.lastName}</td>
+                        <td>${subject.name}</td>
+                        <td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td>
+                        <td>${subject.coefficient}</td>
+                        <td>${g.teacher}</td>
+                        <td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td>
+                    </tr>`;
                 }
             });
         }
@@ -1132,7 +1205,12 @@
                 bulletin.className = 'bulletin-section';
                 let gradesHtml = '';
                 student.gradeDetails.forEach(g => {
-                    gradesHtml += `<tr><td><strong>${g.subject}</strong></td><td>${g.coeff}</td><td class="${g.grade < 10 ? 'warning' : ''}">${g.grade}/20</td><td>${g.teacher}</td></tr>`;
+                    gradesHtml += `<tr>
+                        <td><strong>${g.subject}</strong></td>
+                        <td>${g.coeff}</td>
+                        <td class="${g.grade < 10 ? 'warning' : ''}">${g.grade}/20</td>
+                        <td>${g.teacher}</td>
+                    </tr>`;
                 });
                 const isPassing = parseFloat(student.avg) >= 10;
                 bulletin.innerHTML = `
@@ -1211,6 +1289,10 @@
             } else {
                 startAutoSave();
             }
+            
+            // Boutons retour à l'accueil
+            document.getElementById('backToHomeFromAuth')?.addEventListener('click', goBackToHome);
+            document.getElementById('backToHomeBtn')?.addEventListener('click', goBackToHome);
             
             document.getElementById('authForm').addEventListener('submit', (e) => {
                 e.preventDefault();
