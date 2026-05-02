@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Espace Élève - Consultation des Résultats Scolaires</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            margin-bottom: 5px;
+        }
+
+        .header h1 i {
+            color: #3498db;
+            margin-right: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: clamp(0.75rem, 3vw, 0.9rem);
+        }
+
+        /* Login Panel */
+        .login-panel {
+            background: white;
+            border-radius: 20px;
+            padding: clamp(20px, 5vw, 30px);
+            max-width: 450px;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-header i {
+            font-size: clamp(2rem, 8vw, 3rem);
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .login-header h2 {
+            color: #2c3e50;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+            font-size: clamp(0.7rem, 3vw, 0.85rem);
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: clamp(0.8rem, 3vw, 0.85rem);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #7f8c8d;
+            font-size: clamp(0.65rem, 2.5vw, 0.7rem);
+        }
+
+        .btn-connect {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: clamp(0.9rem, 3.5vw, 1rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46,204,113,0.3);
+        }
+
+        .btn-connect:active {
+            transform: translateY(0);
+        }
+
+        .btn-back {
+            width: 100%;
+            padding: 12px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .btn-back:active {
+            transform: translateY(0);
+        }
+
+        /* Result Panel */
+        .result-panel {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .student-info-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: clamp(18px, 4vw, 25px);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .student-info-card h2 {
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .info-item strong {
+            display: block;
+            font-size: clamp(0.65rem, 2.5vw, 0.7rem);
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .info-item span {
+            font-size: clamp(0.85rem, 3.5vw, 1rem);
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: clamp(15px, 3vw, 20px);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: clamp(1.3rem, 5vw, 2rem);
+            font-weight: bold;
+            color: #2c3e50;
+            word-break: break-word;
+        }
+
+        .stat-card .label {
+            font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        /* Mention Styles */
+        .mention-exc {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+        }
+        .mention-exc .value, .mention-exc i { color: #2c3e50; }
+
+        .mention-tb {
+            background: linear-gradient(135deg, #1abc9c, #16a085);
+            color: white;
+        }
+        .mention-tb .value, .mention-tb i { color: white; }
+
+        .mention-bien {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        .mention-bien .value, .mention-bien i { color: white; }
+
+        .mention-passable {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+        .mention-passable .value, .mention-passable i { color: white; }
+
+        .mention-fail {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        .mention-fail .value, .mention-fail i { color: white; }
+
+        /* Grades Section */
+        .grades-section {
+            background: white;
+            border-radius: 20px;
+            padding: clamp(15px, 4vw, 20px);
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        .grades-section h3 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        th, td {
+            padding: clamp(8px, 2vw, 12px);
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: clamp(0.7rem, 2.8vw, 0.8rem);
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .grade-excellent {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .grade-good {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .grade-passable {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .grade-fail {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: clamp(0.6rem, 2.5vw, 0.7rem);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-scientific {
+            background: #3498db;
+            color: white;
+        }
+
+        .badge-literary {
+            background: #e91e63;
+            color: white;
+        }
+
+        /* Appreciation Section */
+        .appreciation-section {
+            background: #f0f8ff;
+            border-radius: 16px;
+            padding: clamp(15px, 4vw, 20px);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .appreciation-section p {
+            font-size: clamp(0.85rem, 3.5vw, 1rem);
+            color: #2c3e50;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .appreciation-section i {
+            color: #3498db;
+            margin: 0 5px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn-back {
+            width: auto;
+            min-width: 160px;
+            margin-top: 0;
+        }
+
+        /* Alert */
+        .alert {
+            padding: clamp(10px, 3vw, 12px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: white;
+            font-size: clamp(0.65rem, 2.5vw, 0.75rem);
+            opacity: 0.8;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn-back {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .category-badge {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-panel {
+                padding: 20px;
+            }
+
+            .student-info-card {
+                padding: 15px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-card .value {
+                font-size: 1.2rem;
+            }
+
+            .grades-section {
+                padding: 12px;
+            }
+
+            th, td {
+                padding: 6px 4px;
+                font-size: 0.7rem;
+            }
+
+            .action-buttons .btn-back {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Landscape mode */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Touch devices improvements */
+        @media (hover: none) {
+            .stat-card:hover {
+                transform: none;
+            }
+            
+            .btn-connect:hover, .btn-back:hover {
+                transform: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .header, .login-panel, .action-buttons, .footer {
+                display: none;
+            }
+            
+            .result-panel {
+                display: block !important;
+            }
+            
+            .stat-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .grades-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-graduation-cap"></i> Espace Élève - Consultation des Résultats</h1>
+            <p>Accédez à vos résultats en toute sécurité</p>
+        </div>
+
+        <!-- Login Panel -->
+        <div id="loginPanel" class="login-panel">
+            <div class="login-header">
+                <i class="fas fa-user-lock"></i>
+                <h2>Connexion Élève</h2>
+                <p>Connectez-vous avec vos identifiants personnels</p>
+            </div>
+            <div id="loginAlert" class="alert"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nom et Prénom</label>
+                    <input type="text" id="studentName" placeholder="Ex: Dupont Jean" required autocomplete="off">
+                    <small>Entrez votre nom suivi de votre prénom (ex: Dupont Jean)</small>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Mot de passe</label>
+                    <input type="password" id="studentPassword" placeholder="Votre matricule" required>
+                    <small>Votre mot de passe est votre numéro matricule</small>
+                </div>
+                <button type="submit" class="btn-connect"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
+                <button type="button" class="btn-back" id="backToHomeBtn"><i class="fas fa-home"></i> Retour à l'accueil</button>
+            </form>
+        </div>
+
+        <!-- Result Panel -->
+        <div id="resultPanel" class="result-panel">
+            <!-- Informations élève -->
+            <div class="student-info-card">
+                <h2><i class="fas fa-id-card"></i> Fiche de Résultats</h2>
+                <div class="info-grid" id="studentInfo"></div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <!-- Tableau des notes -->
+            <div class="grades-section">
+                <h3><i class="fas fa-table"></i> Détail des notes par matière</h3>
+                <div class="table-container">
+                    <table id="gradesTable">
+                        <thead>
+                            <tr>
+                                <th>Matière</th>
+                                <th>Coeff.</th>
+                                <th>Note /20</th>
+                                <th>Points</th>
+                                <th>Catégorie</th>
+                                <th>Enseignant</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradesBody"></tbody>
+                        <tfoot id="gradesFooter"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Appréciation -->
+            <div class="appreciation-section" id="appreciationSection">
+                <i class="fas fa-quote-left"></i>
+                <p id="appreciationText"></p>
+                <i class="fas fa-quote-right"></i>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="action-buttons">
+                <button class="btn-back" id="logoutBtn" style="background: #e74c3c;">
+                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                </button>
+                <button class="btn-back" id="printResultsBtn" style="background: #3498db;">
+                    <i class="fas fa-print"></i> Imprimer mes résultats
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Application de Gestion Scolaire | Consultation sécurisée des résultats</p>
+        </div>
+    </div>
+
+    <script>
+        // Données de la base (synchronisées avec l'application principale)
+        let appData = {
+            students: [],
+            subjects: [],
+            grades: [],
+            currentExam: 'BEPC'
+        };
+
+        // Élève connecté
+        let currentStudent = null;
+
+        // ==================== CHARGEMENT DES DONNÉES ====================
+        function loadData() {
+            // Charger depuis localStorage (même base que l'application principale)
+            const saved = localStorage.getItem('examData_ADMIN_001');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    appData.students = data.students || [];
+                    appData.subjects = data.subjects || [];
+                    appData.grades = data.grades || [];
+                    appData.currentExam = data.currentExam || 'BEPC';
+                } catch(e) {
+                    console.error('Erreur chargement:', e);
+                }
+            }
+
+            // Données de démonstration si la base est vide
+            if (appData.students.length === 0) {
+                loadDemoData();
+            }
+        }
+
+        // Données de démonstration
+        function loadDemoData() {
+            appData.students = [
+                { id: 1, lastName: 'Dupont', firstName: 'Jean', matricule: 'BEPC001', exam: 'BEPC' },
+                { id: 2, lastName: 'Martin', firstName: 'Sophie', matricule: 'BEPC002', exam: 'BEPC' },
+                { id: 3, lastName: 'Bernard', firstName: 'Lucas', matricule: 'BAC1001', exam: 'BAC1' },
+                { id: 4, lastName: 'Petit', firstName: 'Emma', matricule: 'BAC2001', exam: 'BAC2' },
+                { id: 5, lastName: 'Kouassi', firstName: 'Amadou', matricule: 'BEPC003', exam: 'BEPC' }
+            ];
+
+            appData.subjects = [
+                { id: 1, name: 'Mathématiques', coefficient: 4, category: 'scientific', exam: 'BEPC' },
+                { id: 2, name: 'Français', coefficient: 3, category: 'literary', exam: 'BEPC' },
+                { id: 3, name: 'Anglais', coefficient: 2, category: 'literary', exam: 'BEPC' },
+                { id: 4, name: 'Histoire-Géographie', coefficient: 2, category: 'literary', exam: 'BEPC' },
+                { id: 5, name: 'Physique-Chimie', coefficient: 3, category: 'scientific', exam: 'BEPC' },
+                { id: 6, name: 'SVT', coefficient: 2, category: 'scientific', exam: 'BEPC' },
+                { id: 7, name: 'Mathématiques', coefficient: 4, category: 'scientific', exam: 'BAC1' },
+                { id: 8, name: 'Philosophie', coefficient: 3, category: 'literary', exam: 'BAC1' },
+                { id: 9, name: 'Mathématiques', coefficient: 5, category: 'scientific', exam: 'BAC2' },
+                { id: 10, name: 'Philosophie', coefficient: 4, category: 'literary', exam: 'BAC2' }
+            ];
+
+            appData.grades = [
+                { id: 1, studentId: 1, subjectId: 1, value: 15, teacher: 'M. Kouassi' },
+                { id: 2, studentId: 1, subjectId: 2, value: 14, teacher: 'Mme Konan' },
+                { id: 3, studentId: 1, subjectId: 3, value: 16, teacher: 'M. Yao' },
+                { id: 4, studentId: 1, subjectId: 4, value: 13, teacher: 'Mme N\'Guessan' },
+                { id: 5, studentId: 1, subjectId: 5, value: 12, teacher: 'M. Koffi' },
+                { id: 6, studentId: 1, subjectId: 6, value: 11, teacher: 'Mme Kouadio' },
+                { id: 7, studentId: 2, subjectId: 1, value: 8, teacher: 'M. Kouassi' },
+                { id: 8, studentId: 2, subjectId: 2, value: 15, teacher: 'Mme Konan' },
+                { id: 9, studentId: 2, subjectId: 3, value: 12, teacher: 'M. Yao' },
+                { id: 10, studentId: 2, subjectId: 4, value: 14, teacher: 'Mme N\'Guessan' },
+                { id: 11, studentId: 2, subjectId: 5, value: 9, teacher: 'M. Koffi' },
+                { id: 12, studentId: 2, subjectId: 6, value: 10, teacher: 'Mme Kouadio' },
+                { id: 13, studentId: 3, subjectId: 7, value: 13, teacher: 'M. Kouassi' },
+                { id: 14, studentId: 3, subjectId: 8, value: 11, teacher: 'Mme Konan' },
+                { id: 15, studentId: 4, subjectId: 9, value: 16, teacher: 'M. Kouassi' },
+                { id: 16, studentId: 4, subjectId: 10, value: 14, teacher: 'Mme Konan' },
+                { id: 17, studentId: 5, subjectId: 1, value: 11, teacher: 'M. Kouassi' },
+                { id: 18, studentId: 5, subjectId: 2, value: 10, teacher: 'Mme Konan' },
+                { id: 19, studentId: 5, subjectId: 3, value: 9, teacher: 'M. Yao' },
+                { id: 20, studentId: 5, subjectId: 4, value: 12, teacher: 'Mme N\'Guessan' },
+                { id: 21, studentId: 5, subjectId: 5, value: 8, teacher: 'M. Koffi' },
+                { id: 22, studentId: 5, subjectId: 6, value: 10, teacher: 'Mme Kouadio' }
+            ];
+        }
+
+        // ==================== FONCTIONS DE CALCUL ====================
+        function getStudentGrades(studentId) {
+            return appData.grades.filter(g => g.studentId === studentId);
+        }
+
+        function getSubjectById(subjectId) {
+            return appData.subjects.find(s => s.id === subjectId);
+        }
+
+        function getStudentAverage(studentId) {
+            const grades = getStudentGrades(studentId);
+            let totalPoints = 0;
+            let totalCoeffs = 0;
+            
+            grades.forEach(g => {
+                const subject = getSubjectById(g.subjectId);
+                if (subject) {
+                    totalPoints += g.value * subject.coefficient;
+                    totalCoeffs += subject.coefficient;
+                }
+            });
+            
+            return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
+        }
+
+        function getStudentAverageByCategory(studentId, category) {
+            const grades = getStudentGrades(studentId);
+            let totalPoints = 0;
+            let totalCoeffs = 0;
+            
+            grades.forEach(g => {
+                const subject = getSubjectById(g.subjectId);
+                if (subject && subject.category === category) {
+                    totalPoints += g.value * subject.coefficient;
+                    totalCoeffs += subject.coefficient;
+                }
+            });
+            
+            return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
+        }
+
+        function getMention(average) {
+            if (average >= 16) return { text: "EXCELLENT", class: "mention-exc", icon: "🏆" };
+            if (average >= 14) return { text: "TRÈS BIEN", class: "mention-tb", icon: "⭐" };
+            if (average >= 12) return { text: "BIEN", class: "mention-bien", icon: "👍" };
+            if (average >= 10) return { text: "PASSABLE", class: "mention-passable", icon: "✅" };
+            return { text: "NON ADMIS", class: "mention-fail", icon: "❌" };
+        }
+
+        function getGradeClass(grade) {
+            if (grade >= 16) return "grade-excellent";
+            if (grade >= 14) return "grade-good";
+            if (grade >= 10) return "grade-passable";
+            return "grade-fail";
+        }
+
+        function getAppreciation(avg) {
+            if (avg >= 16) return "Félicitations ! Vous faites preuve d'excellence académique. Continuez sur cette lancée exceptionnelle !";
+            if (avg >= 14) return "Très bien ! Votre travail est remarquable. Maintenez cet excellent niveau !";
+            if (avg >= 12) return "Bien ! Vous avez de bonnes bases. Quelques efforts supplémentaires vous mèneront vers l'excellence.";
+            if (avg >= 10) return "Passable. Vous avez obtenu la moyenne, mais des progrès sont encore possibles. Travaillez davantage pour vous améliorer.";
+            if (avg >= 8) return "Insuffisant. Vous devez fournir plus d'efforts. N'hésitez pas à demander de l'aide à vos professeurs.";
+            return "Très insuffisant. Une remise à niveau est nécessaire. Veuillez consulter vos professeurs pour un accompagnement personnalisé.";
+        }
+
+        // ==================== AUTHENTIFICATION ====================
+        function authenticateStudent(nameInput, passwordInput) {
+            // Extraire nom et prénom
+            const nameParts = nameInput.trim().split(' ');
+            if (nameParts.length < 2) {
+                showLoginAlert('Veuillez entrer votre nom ET votre prénom séparés par un espace', 'error');
+                return null;
+            }
+            
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(' ');
+            
+            // Chercher l'élève
+            const student = appData.students.find(s => 
+                s.firstName.toLowerCase() === firstName.toLowerCase() && 
+                s.lastName.toLowerCase() === lastName.toLowerCase() &&
+                s.matricule === passwordInput.trim()
+            );
+            
+            return student;
+        }
+
+        // ==================== AFFICHAGE DES RÉSULTATS ====================
+        function displayResults(student) {
+            const grades = getStudentGrades(student.id);
+            const average = getStudentAverage(student.id);
+            const mention = getMention(average);
+            const scientificAvg = getStudentAverageByCategory(student.id, 'scientific');
+            const literaryAvg = getStudentAverageByCategory(student.id, 'literary');
+            
+            // Info élève
+            const studentInfo = document.getElementById('studentInfo');
+            studentInfo.innerHTML = `
+                <div class="info-item"><strong>👤 Nom</strong><span>${escapeHtml(student.lastName)}</span></div>
+                <div class="info-item"><strong>👤 Prénom</strong><span>${escapeHtml(student.firstName)}</span></div>
+                <div class="info-item"><strong>🆔 Matricule</strong><span>${escapeHtml(student.matricule)}</span></div>
+                <div class="info-item"><strong>📚 Examen</strong><span>${student.exam}</span></div>
+            `;
+            
+            // Statistiques
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card ${mention.class}">
+                    <i class="fas fa-star"></i>
+                    <div class="value">${mention.text}</div>
+                    <div class="label">${mention.icon} Mention obtenue</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="value">${average.toFixed(2)}/20</div>
+                    <div class="label">📊 Moyenne générale</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-flask"></i>
+                    <div class="value">${scientificAvg.toFixed(2)}/20</div>
+                    <div class="label">🔬 Moyenne scientifique</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-book"></i>
+                    <div class="value">${literaryAvg.toFixed(2)}/20</div>
+                    <div class="label">📖 Moyenne littéraire</div>
+                </div>
+            `;
+            
+            // Tableau des notes
+            const gradesBody = document.getElementById('gradesBody');
+            const gradesFooter = document.getElementById('gradesFooter');
+            gradesBody.innerHTML = '';
+            
+            let totalPoints = 0;
+            let totalCoeffs = 0;
+            
+            grades.forEach(g => {
+                const subject = getSubjectById(g.subjectId);
+                if (subject) {
+                    const points = g.value * subject.coefficient;
+                    totalPoints += points;
+                    totalCoeffs += subject.coefficient;
+                    const gradeClass = getGradeClass(g.value);
+                    
+                    gradesBody.innerHTML += `
+                        <tr>
+                            <td><strong>${escapeHtml(subject.name)}</strong></td>
+                            <td>${subject.coefficient}</td>
+                            <td class="${gradeClass}">${g.value}/20</td>
+                            <td>${points.toFixed(1)}</td>
+                            <td><span class="category-badge ${subject.category === 'scientific' ? 'badge-scientific' : 'badge-literary'}">${subject.category === 'scientific' ? '🔬 Scientifique' : '📖 Littéraire'}</span></td>
+                            <td>${escapeHtml(g.teacher) || '-'}</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            gradesFooter.innerHTML = `
+                <tr style="background: #f8f9fa; font-weight: bold;">
+                    <td colspan="2"><strong>TOTAL</strong></td>
+                    <td><strong>${(totalCoeffs > 0 ? (totalPoints / totalCoeffs).toFixed(2) : 0)}/20</strong></td>
+                    <td><strong>${totalPoints.toFixed(1)}</strong></td>
+                    <td colspan="2"></td>
+                </tr>
+            `;
+            
+            // Appréciation
+            document.getElementById('appreciationText').innerHTML = getAppreciation(average);
+            
+            // Afficher le panel
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('resultPanel').style.display = 'block';
+            
+            // Scroll vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== ESCAPE HTML ====================
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // ==================== ALERTES ====================
+        function showLoginAlert(message, type) {
+            const alertDiv = document.getElementById('loginAlert');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // ==================== RÉINITIALISATION ====================
+        function resetToLogin() {
+            currentStudent = null;
+            document.getElementById('loginPanel').style.display = 'block';
+            document.getElementById('resultPanel').style.display = 'none';
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentPassword').value = '';
+            document.getElementById('loginAlert').style.display = 'none';
+        }
+
+        // ==================== IMPRESSION ====================
+        function printResults() {
+            const printContent = document.getElementById('resultPanel').cloneNode(true);
+            
+            // Supprimer les boutons dans l'impression
+            const btns = printContent.querySelectorAll('.action-buttons');
+            btns.forEach(btn => btn.remove());
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Résultats Scolaires - ${currentStudent?.firstName} ${currentStudent?.lastName}</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+                        body { padding: 20px; background: white; }
+                        .student-info-card { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+                        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+                        .info-item { background: rgba(255,255,255,0.15); border-radius: 10px; padding: 10px; }
+                        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+                        .stat-card { background: #f8f9fa; border-radius: 16px; padding: 15px; text-align: center; }
+                        .stat-card .value { font-size: 1.5rem; font-weight: bold; }
+                        .mention-exc { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+                        .mention-tb { background: linear-gradient(135deg, #1abc9c, #16a085); color: white; }
+                        .mention-bien { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+                        .mention-passable { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+                        .mention-fail { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+                        .grades-section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid #e0e0e0; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { padding: 10px; text-align: center; border-bottom: 1px solid #e0e0e0; }
+                        th { background: #f8f9fa; }
+                        .grade-excellent { color: #2ecc71; font-weight: bold; }
+                        .grade-good { color: #3498db; font-weight: bold; }
+                        .grade-passable { color: #f39c12; font-weight: bold; }
+                        .grade-fail { color: #e74c3c; font-weight: bold; }
+                        .appreciation-section { background: #f0f8ff; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px; }
+                        @media print {
+                            body { padding: 0; }
+                            .action-buttons, .btn-back { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>${printContent.innerHTML}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // ==================== INITIALISATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Charger les données
+            loadData();
+            
+            // Formulaire de connexion
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const nameInput = document.getElementById('studentName').value;
+                const passwordInput = document.getElementById('studentPassword').value;
+                
+                const student = authenticateStudent(nameInput, passwordInput);
+                
+                if (student) {
+                    currentStudent = student;
+                    displayResults(student);
+                } else {
+                    showLoginAlert('❌ Identifiants incorrects. Vérifiez votre nom/prénom et votre matricule.', 'error');
+                }
+            });
+            
+            // Déconnexion
+            document.getElementById('logoutBtn').addEventListener('click', resetToLogin);
+            
+            // Retour accueil
+            document.getElementById('backToHomeBtn').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            
+            // Impression
+            document.getElementById('printResultsBtn').addEventListener('click', printResults);
+        });
+    </script>
+</body>
+</html>
