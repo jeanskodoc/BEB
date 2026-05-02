@@ -390,6 +390,19 @@
             opacity: 1;
         }
 
+        .merge-section {
+            background: #f0f8ff;
+            border: 2px dashed #3498db;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        .merge-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .container { padding: 10px; }
             .session-info-bar { flex-direction: column; text-align: center; }
@@ -497,6 +510,7 @@
             </div>
 
             <div class="tabs">
+                <div class="tab" data-tab="base">🏠 Base</div>
                 <div class="tab active" data-tab="students">Élèves</div>
                 <div class="tab" data-tab="subjects">Matières</div>
                 <div class="tab" data-tab="grades">Notes</div>
@@ -507,6 +521,37 @@
             </div>
 
             <div id="alert" class="alert"></div>
+
+            <!-- Nouvel onglet BASE -->
+            <div id="base-tab" class="tab-content">
+                <div class="form-section">
+                    <h2 class="form-title"><i class="fas fa-database"></i> Gestion de la Base de Données</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3><i class="fas fa-users"></i> Élèves</h3><div class="stat-value" id="baseStudentsCount">0</div></div>
+                        <div class="stat-card"><h3><i class="fas fa-book"></i> Matières</h3><div class="stat-value" id="baseSubjectsCount">0</div></div>
+                        <div class="stat-card"><h3><i class="fas fa-chart-bar"></i> Notes</h3><div class="stat-value" id="baseGradesCount">0</div></div>
+                    </div>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button class="btn btn-success" id="exportBaseJsonBtn"><i class="fas fa-download"></i> Exporter JSON</button>
+                        <button class="btn btn-info" id="exportBaseCsvBtn"><i class="fas fa-file-csv"></i> Exporter CSV</button>
+                        <label class="file-input-label" id="importBaseFileLabel">
+                            <i class="fas fa-upload"></i> Importer JSON
+                            <input type="file" id="importBaseFileInput" accept=".json">
+                        </label>
+                    </div>
+                    
+                    <!-- Section Fusion de fichiers JSON -->
+                    <div class="merge-section">
+                        <h4><i class="fas fa-code-branch"></i> Fusionner plusieurs fichiers JSON</h4>
+                        <p style="font-size:0.75rem; color:#666; margin-bottom:12px;">Sélectionnez plusieurs fichiers JSON exportés pour les fusionner avec les données actuelles</p>
+                        <label class="file-input-label" style="background:#9b59b6;">
+                            <i class="fas fa-object-group"></i> Sélectionner fichiers à fusionner
+                            <input type="file" id="mergeFilesInput" accept=".json" multiple>
+                        </label>
+                        <button class="btn btn-warning" id="performMergeBtn" style="margin-top:12px;"><i class="fas fa-code-branch"></i> Fusionner les fichiers sélectionnés</button>
+                    </div>
+                </div>
+            </div>
 
             <div id="students-tab" class="tab-content active">
                 <div class="form-section">
@@ -602,10 +647,11 @@
             </div>
 
             <div id="bulletin-tab" class="tab-content">
-                <div class="generate-section">
-                    <button class="generate-btn" id="generateBulletinsBtn"><i class="fas fa-file-alt"></i> Générer tous les bulletins</button>
+                <div class="form-section">
+                    <h2 class="form-title"><i class="fas fa-file-alt"></i> Génération des bulletins</h2>
+                    <button class="btn btn-primary" id="generateBulletinsBtn"><i class="fas fa-file-alt"></i> Générer tous les bulletins</button>
+                    <div id="bulletinResults" style="margin-top: 20px;"></div>
                 </div>
-                <div id="bulletinResults"></div>
             </div>
 
             <div id="data-tab" class="tab-content">
@@ -645,7 +691,6 @@
         let sessionExpiryWarningShown = false;
         let autoSaveInterval = null;
         let redirectTimeout = null;
-        let charts = {};
 
         // Identifiants valides
         const VALID_CREDENTIALS = {
@@ -664,6 +709,9 @@
             nextSubjectId: 1, 
             nextGradeId: 1 
         };
+
+        // Fichiers sélectionnés pour fusion
+        let selectedMergeFiles = [];
 
         // ==================== FONCTIONS DE SESSION ====================
         function goBackToHome() {
@@ -886,7 +934,163 @@
                 }
             }, 30000);
         }
-        
+
+        // ==================== FONCTIONS DE FUSION ====================
+        function mergeDataFromFiles(files) {
+            if (!files || files.length === 0) {
+                showAlert('Veuillez sélectionner au moins un fichier à fusionner', 'error');
+                return;
+            }
+
+            let filesProcessed = 0;
+            let mergedStudents = [];
+            let mergedSubjects = [];
+            let mergedGrades = [];
+            let maxStudentId = appData.nextStudentId;
+            let maxSubjectId = appData.nextSubjectId;
+            let maxGradeId = appData.nextGradeId;
+
+            // Fonction pour traiter chaque fichier
+            const processFile = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const importedData = JSON.parse(e.target.result);
+                            let dataToMerge;
+                            
+                            if (importedData.data && importedData.data.students !== undefined) {
+                                dataToMerge = importedData.data;
+                            } else if (importedData.students !== undefined) {
+                                dataToMerge = importedData;
+                            } else {
+                                reject(new Error('Format invalide'));
+                                return;
+                            }
+                            
+                            if (dataToMerge.students && Array.isArray(dataToMerge.students)) {
+                                dataToMerge.students.forEach(s => {
+                                    const newId = maxStudentId++;
+                                    mergedStudents.push({ ...s, id: newId });
+                                });
+                            }
+                            
+                            if (dataToMerge.subjects && Array.isArray(dataToMerge.subjects)) {
+                                dataToMerge.subjects.forEach(s => {
+                                    const newId = maxSubjectId++;
+                                    mergedSubjects.push({ ...s, id: newId });
+                                });
+                            }
+                            
+                            if (dataToMerge.grades && Array.isArray(dataToMerge.grades)) {
+                                dataToMerge.grades.forEach(g => {
+                                    const newId = maxGradeId++;
+                                    mergedGrades.push({ ...g, id: newId });
+                                });
+                            }
+                            
+                            resolve();
+                        } catch(error) {
+                            reject(error);
+                        }
+                    };
+                    reader.onerror = reject;
+                    reader.readAsText(file);
+                });
+            };
+
+            // Traiter tous les fichiers séquentiellement
+            const processAll = async () => {
+                showAlert('🔄 Fusion en cours...', 'info');
+                for (const file of files) {
+                    try {
+                        await processFile(file);
+                        filesProcessed++;
+                    } catch(e) {
+                        console.error(`Erreur fichier ${file.name}:`, e);
+                    }
+                }
+                
+                // Mettre à jour les données
+                appData.students = [...appData.students, ...mergedStudents];
+                appData.subjects = [...appData.subjects, ...mergedSubjects];
+                appData.grades = [...appData.grades, ...mergedGrades];
+                appData.nextStudentId = maxStudentId;
+                appData.nextSubjectId = maxSubjectId;
+                appData.nextGradeId = maxGradeId;
+                
+                saveToLocalStorage();
+                updateUI();
+                updateBaseCounters();
+                showAlert(`✅ Fusion terminée! ${mergedStudents.length} élèves, ${mergedSubjects.length} matières, ${mergedGrades.length} notes ajoutés depuis ${filesProcessed} fichier(s)`, 'success');
+                
+                // Réinitialiser la sélection
+                const mergeInput = document.getElementById('mergeFilesInput');
+                if (mergeInput) mergeInput.value = '';
+                selectedMergeFiles = [];
+            };
+            
+            processAll();
+        }
+
+        // ==================== EXPORT CSV ====================
+        function exportToCSV() {
+            // Exporter les élèves
+            const studentsCSV = convertToCSV(appData.students, ['id', 'lastName', 'firstName', 'matricule', 'exam']);
+            // Exporter les matières
+            const subjectsCSV = convertToCSV(appData.subjects, ['id', 'name', 'coefficient', 'category', 'exam']);
+            // Exporter les notes
+            const gradesWithNames = appData.grades.map(g => {
+                const student = appData.students.find(s => s.id === g.studentId);
+                const subject = appData.subjects.find(s => s.id === g.subjectId);
+                return {
+                    id: g.id,
+                    studentName: student ? `${student.firstName} ${student.lastName}` : 'Inconnu',
+                    subjectName: subject ? subject.name : 'Inconnu',
+                    value: g.value,
+                    teacher: g.teacher || ''
+                };
+            });
+            const gradesCSV = convertToCSV(gradesWithNames, ['id', 'studentName', 'subjectName', 'value', 'teacher']);
+            
+            // Créer un fichier zip ou plusieurs fichiers
+            const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+            if (studentsCSV) downloadCSV(studentsCSV, `eleves_${timestamp}.csv`);
+            if (subjectsCSV) setTimeout(() => downloadCSV(subjectsCSV, `matieres_${timestamp}.csv`), 100);
+            if (gradesCSV) setTimeout(() => downloadCSV(gradesCSV, `notes_${timestamp}.csv`), 200);
+            
+            showAlert('📥 Export CSV effectué (3 fichiers séparés)', 'success');
+        }
+
+        function convertToCSV(data, columns) {
+            if (!data || data.length === 0) return '';
+            const header = columns.join(',');
+            const rows = data.map(row => {
+                return columns.map(col => {
+                    let val = row[col];
+                    if (val === undefined || val === null) return '';
+                    if (typeof val === 'string' && (val.includes(',') || val.includes('"'))) {
+                        val = `"${val.replace(/"/g, '""')}"`;
+                    }
+                    return val;
+                }).join(',');
+            });
+            return [header, ...rows].join('\n');
+        }
+
+        function downloadCSV(csvContent, filename) {
+            if (!csvContent) return;
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
         // ==================== IMPORT/EXPORT ====================
         function exportAllData() {
             const exportData = {
@@ -929,6 +1133,7 @@
                     
                     saveToLocalStorage();
                     updateUI();
+                    updateBaseCounters();
                     showAlert(`📤 Import réussi! ${appData.students.length} élèves, ${appData.subjects.length} matières, ${appData.grades.length} notes.`, 'success');
                 } catch(error) {
                     showAlert('❌ Erreur lors de l\'import du fichier. Format invalide.', 'error');
@@ -937,11 +1142,24 @@
             reader.readAsText(file);
         }
 
+        function exportBaseJSON() {
+            exportAllData();
+        }
+
+        function updateBaseCounters() {
+            const baseStudents = document.getElementById('baseStudentsCount');
+            const baseSubjects = document.getElementById('baseSubjectsCount');
+            const baseGrades = document.getElementById('baseGradesCount');
+            if (baseStudents) baseStudents.textContent = appData.students.length;
+            if (baseSubjects) baseSubjects.textContent = appData.subjects.length;
+            if (baseGrades) baseGrades.textContent = appData.grades.length;
+        }
+
         // ==================== FONCTIONS DE CALCUL ====================
         function getStudentAverage(studentId) {
-            const grades = appData.grades.filter(g => g.studentId === studentId);
+            const studentGrades = appData.grades.filter(g => g.studentId === studentId);
             let points = 0, coeffs = 0;
-            grades.forEach(g => { 
+            studentGrades.forEach(g => { 
                 const subj = appData.subjects.find(s => s.id === g.subjectId); 
                 if (subj) { 
                     points += g.value * subj.coefficient; 
@@ -952,9 +1170,9 @@
         }
 
         function getStudentAverageByCategory(studentId, category) {
-            const grades = appData.grades.filter(g => g.studentId === studentId);
+            const studentGrades = appData.grades.filter(g => g.studentId === studentId);
             let points = 0, coeffs = 0;
-            grades.forEach(g => { 
+            studentGrades.forEach(g => { 
                 const subj = appData.subjects.find(s => s.id === g.subjectId); 
                 if (subj && subj.category === category) { 
                     points += g.value * subj.coefficient; 
@@ -1034,7 +1252,7 @@
                 const student = appData.students.find(s => s.id === g.studentId); 
                 const subject = appData.subjects.find(s => s.id === g.subjectId); 
                 if (student && subject) { 
-                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
+                    tbody.innerHTML += `<tr><td>${student.firstName} ${student.lastName}</td><td>${subject.name}</td><td class="${g.value < 10 ? 'warning' : ''}">${g.value}/20</td><td>${subject.coefficient}</td><td>${g.teacher || '-'}</td><td><button class="action-btn" style="background:#e74c3c;color:white" onclick="deleteGrade(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`; 
                 } 
             });
         }
@@ -1213,9 +1431,9 @@
             });
             
             const totalAvg = studentsData.reduce((sum, s) => sum + s.average, 0);
-            const avgGeneral = (totalAvg / studentsData.length).toFixed(2);
+            const avgGeneral = studentsData.length > 0 ? (totalAvg / studentsData.length).toFixed(2) : 0;
             const studentsWithDifficulty = studentsData.filter(s => s.hasDifficulty).length;
-            const successRate = Math.round((studentsData.filter(s => s.isPassing).length / studentsData.length) * 100);
+            const successRate = studentsData.length > 0 ? Math.round((studentsData.filter(s => s.isPassing).length / studentsData.length) * 100) : 0;
             
             const totalStat = document.getElementById('totalStudentsStat');
             const diffStat = document.getElementById('studentsWithDiffStat');
@@ -1228,12 +1446,14 @@
             
             studentsData.sort((a, b) => b.average - a.average);
             container.innerHTML = studentsData.map((s, idx) => `
-                <div class="student-card">
-                    <div class="student-header">
-                        <div><span class="student-name">${s.firstName} ${s.lastName}</span></div>
-                        <div><span class="student-average ${s.isPassing ? 'average-pass' : 'average-fail'}">${s.average.toFixed(2)}/20</span><span style="margin-left:8px">Rang: ${idx+1}</span></div>
+                <div style="background:white;border-radius:12px;padding:16px;margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;">
+                        <div><strong>${s.firstName} ${s.lastName}</strong> (${s.matricule})</div>
+                        <div><span style="background:${s.isPassing ? '#2ecc71' : '#e74c3c'};color:white;padding:4px 12px;border-radius:20px;">${s.average.toFixed(2)}/20</span> <span>Rang: ${idx+1}</span></div>
                     </div>
-                    <div class="subjects-grid">${s.gradesDetails.map(g => `<div class="subject-item ${g.grade < 10 ? 'subject-difficulty' : 'subject-good'}"><span class="subject-name">${g.subjectName}</span><span class="subject-grade ${g.grade < 10 ? 'grade-low' : 'grade-high'}">${g.grade}/20</span></div>`).join('')}</div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">
+                        ${s.gradesDetails.map(g => `<div style="padding:4px;background:${g.grade < 10 ? '#ffebee' : '#e8f5e9'};border-radius:6px;"><small>${g.subjectName}</small><br><span style="font-weight:bold;color:${g.grade < 10 ? '#e74c3c' : '#2ecc71'}">${g.grade}/20</span></div>`).join('')}
+                    </div>
                 </div>`).join('');
         }
 
@@ -1279,14 +1499,14 @@
                         coefficient: subj ? subj.coefficient : 1, 
                         grade: g.value, 
                         category: subj ? subj.category : 'literary', 
-                        teacher: g.teacher 
+                        teacher: g.teacher || '-' 
                     };
                 })
             }));
             
             studentsWithAvg.sort((a, b) => b.average - a.average);
-            const classAvg = studentsWithAvg.reduce((sum, s) => sum + s.average, 0) / studentsWithAvg.length;
-            const successRate = (studentsWithAvg.filter(s => s.average >= 10).length / studentsWithAvg.length) * 100;
+            const classAvg = studentsWithAvg.length > 0 ? studentsWithAvg.reduce((sum, s) => sum + s.average, 0) / studentsWithAvg.length : 0;
+            const successRate = studentsWithAvg.length > 0 ? (studentsWithAvg.filter(s => s.average >= 10).length / studentsWithAvg.length) * 100 : 0;
             
             studentsWithAvg.forEach((student, idx) => {
                 const rank = idx + 1;
@@ -1414,6 +1634,7 @@
                 appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
                 saveToLocalStorage(); 
                 updateUI(); 
+                updateBaseCounters();
                 showAlert('Données réinitialisées', 'success');
             }
         }
@@ -1426,6 +1647,7 @@
             updateGeneralStats(); 
             updateAnalysisTab(); 
             updateCounters(); 
+            updateBaseCounters();
             saveToLocalStorage(); 
         }
 
@@ -1452,6 +1674,11 @@
             const resetBtn = document.getElementById('resetAllDataBtn');
             const exportAnalysisBtn = document.getElementById('exportAnalysisBtn');
             const importFile = document.getElementById('importFileInput');
+            const exportBaseJsonBtn = document.getElementById('exportBaseJsonBtn');
+            const exportBaseCsvBtn = document.getElementById('exportBaseCsvBtn');
+            const importBaseFile = document.getElementById('importBaseFileInput');
+            const mergeFilesInput = document.getElementById('mergeFilesInput');
+            const performMergeBtn = document.getElementById('performMergeBtn');
             const searchInput = document.getElementById('searchStudentInput');
             const filterSelect = document.getElementById('filterDifficultySelect');
             const subjectStatsSelect = document.getElementById('subjectStatsSelect');
@@ -1469,7 +1696,30 @@
             if (exportBtn) exportBtn.addEventListener('click', exportAllData);
             if (resetBtn) resetBtn.addEventListener('click', resetAllData);
             if (exportAnalysisBtn) exportAnalysisBtn.addEventListener('click', exportAnalysis);
+            if (exportBaseJsonBtn) exportBaseJsonBtn.addEventListener('click', exportBaseJSON);
+            if (exportBaseCsvBtn) exportBaseCsvBtn.addEventListener('click', exportToCSV);
             if (importFile) importFile.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) importJsonFile(e.target.files[0]); e.target.value = ''; });
+            if (importBaseFile) importBaseFile.addEventListener('change', (e) => { if (e.target.files && e.target.files[0]) importJsonFile(e.target.files[0]); e.target.value = ''; });
+            
+            if (mergeFilesInput) {
+                mergeFilesInput.addEventListener('change', (e) => {
+                    selectedMergeFiles = Array.from(e.target.files);
+                    if (selectedMergeFiles.length > 0) {
+                        showAlert(`${selectedMergeFiles.length} fichier(s) sélectionné(s) pour fusion`, 'info');
+                    }
+                });
+            }
+            
+            if (performMergeBtn) {
+                performMergeBtn.addEventListener('click', () => {
+                    if (selectedMergeFiles.length === 0) {
+                        showAlert('Veuillez d\'abord sélectionner des fichiers à fusionner', 'error');
+                        return;
+                    }
+                    mergeDataFromFiles(selectedMergeFiles);
+                });
+            }
+            
             if (searchInput) searchInput.addEventListener('input', () => updateAnalysisTab());
             if (filterSelect) filterSelect.addEventListener('change', () => updateAnalysisTab());
             if (subjectStatsSelect) subjectStatsSelect.addEventListener('change', function() { if (this.value) showSubjectStats(parseInt(this.value)); else document.getElementById('subjectDetailedStats').style.display = 'none'; });
@@ -1493,6 +1743,7 @@
                     if (tabId) tabId.classList.add('active');
                     if (this.dataset.tab === 'statistics') updateGeneralStats();
                     if (this.dataset.tab === 'analysis') updateAnalysisTab();
+                    if (this.dataset.tab === 'base') updateBaseCounters();
                 });
             });
             
@@ -1505,6 +1756,8 @@
                     updateUI();
                 });
             });
+            
+            updateBaseCounters();
         });
     </script>
 </body>
