@@ -1,544 +1,784 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Portail Scolaire</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Portail des examens blancs 2025-2026 - Espaces administration et élèves">
+  <meta name="theme-color" content="#006a4e">
+  <title>Portail Scolaire - Examens Blancs 2025-2026</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+    /* === Variables === */
+    :root {
+      --flag-green: #006a4e;
+      --flag-yellow: #fcd116;
+      --flag-red: #dc1e2d;
+      --color-primary: #006a4e;
+      --color-primary-dark: #00503c;
+      --color-secondary: #fcd116;
+      --color-admin: #3498db;
+      --color-admin-dark: #2980b9;
+      --color-student: #006a4e;
+      --color-student-dark: #00503c;
+      --color-text: #1a2a3a;
+      --color-muted: #6b7c8a;
+      --color-light: #eef1f5;
+      --radius-sm: clamp(6px, 1.2vw, 8px);
+      --radius-md: clamp(10px, 1.8vw, 14px);
+      --radius-lg: clamp(14px, 2.5vw, 18px);
+      --radius-xl: clamp(18px, 3vw, 22px);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
+    /* === Reset & Base === */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Container */
-        .portal-container {
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-        }
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
-        /* Header compact */
-        .portal-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: linear-gradient(135deg, var(--flag-green) 0%, #004d3a 50%, #003825 100%);
+      font-family: var(--font);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(12px, 3vw, 24px);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-        .logo {
-            width: 55px;
-            height: 55px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
+    /* === Portal Layout === */
+    .portal {
+      width: 100%;
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 3vw, 28px);
+    }
 
-        .logo i {
-            font-size: 28px;
-            color: #667eea;
-        }
+    /* === Header === */
+    .portal-header {
+      text-align: center;
+    }
 
-        .portal-header h1 {
-            font-size: 1.4rem;
-            color: white;
-            margin-bottom: 5px;
-        }
+    /* --- Drapeau du Togo en CSS --- */
+    .flag-togo {
+      width: clamp(52px, 10vw, 70px);
+      height: clamp(52px, 10vw, 70px);
+      margin: 0 auto clamp(8px, 1.5vw, 14px);
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      transition: transform var(--transition);
+      aspect-ratio: 1;
+    }
 
-        .portal-header p {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.85);
-        }
+    .flag-togo:hover {
+      transform: scale(1.06);
+    }
 
-        /* Grille compacte */
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+    .flag-togo-inner {
+      width: 80%;
+      height: 80%;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+    }
 
-        /* Cartes compactes */
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 18px 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+    .stripe { height: 100%; }
+    .stripe:nth-child(odd) { background: var(--flag-green); }
+    .stripe:nth-child(even) { background: var(--flag-yellow); }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
+    .canton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 45%;
+      height: 60%;
+      background: var(--flag-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .card-admin {
-            border-top: 3px solid #3498db;
-        }
+    .star {
+      width: 30%;
+      aspect-ratio: 1;
+      background: #fff;
+      clip-path: polygon(
+        50% 0%, 61% 35%, 98% 35%, 68% 57%,
+        79% 91%, 50% 70%, 21% 91%, 32% 57%,
+        2% 35%, 39% 35%
+      );
+    }
 
-        .card-student {
-            border-top: 3px solid #2ecc71;
-        }
+    .portal-title {
+      font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
 
-        .card-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
+    .portal-subtitle {
+      font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+      color: rgba(255,255,255,0.88);
+      margin-top: 4px;
+      font-weight: 500;
+    }
 
-        .card-admin .card-icon {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-        }
+    /* === Cards Grid === */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(14px, 2.5vw, 22px);
+    }
 
-        .card-student .card-icon {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-        }
+    /* === Card === */
+    .card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: clamp(16px, 2.5vw, 22px);
+      box-shadow: var(--shadow-md);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
 
-        .card-icon i {
-            font-size: 22px;
-            color: white;
-        }
+    .card:focus-visible {
+      outline: 3px solid var(--flag-yellow);
+      outline-offset: 2px;
+    }
 
-        .card h2 {
-            font-size: 1.1rem;
-            color: #2c3e50;
-            margin-bottom: 4px;
-        }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
 
-        .card .badge {
-            display: inline-block;
-            background: #ecf0f1;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.65rem;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
+    .card--admin {
+      border-top: 3px solid var(--color-admin);
+    }
 
-        .card p {
-            color: #7f8c8d;
-            font-size: 0.75rem;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
+    .card--student {
+      border-top: 3px solid var(--flag-green);
+    }
 
-        /* Features compacts */
-        .card-features {
-            list-style: none;
-            margin: 10px 0 15px;
-        }
+    .card-icon {
+      width: clamp(40px, 6vw, 50px);
+      height: clamp(40px, 6vw, 50px);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(10px, 1.5vw, 14px);
+      flex-shrink: 0;
+    }
 
-        .card-features li {
-            padding: 4px 0;
-            color: #555;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+    .card--admin .card-icon {
+      background: linear-gradient(135deg, var(--color-admin), var(--color-admin-dark));
+    }
 
-        .card-features li i {
-            width: 14px;
-            font-size: 0.65rem;
-        }
+    .card--student .card-icon {
+      background: linear-gradient(135deg, var(--flag-green), #00503c);
+    }
 
-        .card-admin .card-features li i {
-            color: #3498db;
-        }
+    .card-icon i {
+      font-size: clamp(18px, 3vw, 24px);
+      color: #fff;
+    }
 
-        .card-student .card-features li i {
-            color: #2ecc71;
-        }
+    .card-title {
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      font-weight: 700;
+      color: var(--color-text);
+    }
 
-        /* Boutons compacts */
-        .btn-access {
-            width: 100%;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
+    .card-badge {
+      display: inline-block;
+      background: var(--color-light);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: clamp(0.6rem, 1.4vw, 0.68rem);
+      font-weight: 600;
+      color: var(--color-muted);
+      margin-top: 6px;
+      width: fit-content;
+    }
 
-        .btn-admin {
-            background: #3498db;
-            color: white;
-        }
+    .card-desc {
+      color: var(--color-muted);
+      font-size: clamp(0.72rem, 1.6vw, 0.8rem);
+      line-height: 1.5;
+      margin-top: 10px;
+    }
 
-        .btn-admin:hover {
-            background: #2980b9;
-        }
+    .card-features {
+      list-style: none;
+      margin: clamp(10px, 1.8vw, 16px) 0 clamp(14px, 2vw, 20px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(4px, 0.8vw, 7px);
+    }
 
-        .btn-student {
-            background: #2ecc71;
-            color: white;
-        }
+    .card-features li {
+      font-size: clamp(0.66rem, 1.4vw, 0.74rem);
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
 
-        .btn-student:hover {
-            background: #27ae60;
-        }
+    .card-features li i {
+      width: 14px;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
 
-        /* Info section compacte */
-        .info-section {
-            text-align: center;
-            color: white;
-            margin-top: 20px;
-            padding: 12px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-        }
+    .card--admin .card-features li i { color: var(--color-admin); }
+    .card--student .card-features li i { color: var(--flag-green); }
 
-        .info-section p {
-            font-size: 0.7rem;
-            opacity: 0.9;
-        }
+    /* === Button === */
+    .card-btn {
+      margin-top: auto;
+      width: 100%;
+      padding: clamp(9px, 1.4vw, 12px) clamp(12px, 1.8vw, 16px);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: clamp(0.72rem, 1.5vw, 0.8rem);
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), transform 100ms;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: #fff;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 40px;
+    }
 
-        .info-section .contact {
-            margin-top: 6px;
-            font-size: 0.65rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-        }
+    .card-btn:active {
+      transform: scale(0.97);
+    }
 
-        /* Footer compact */
-        .portal-footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.65rem;
-        }
+    .card-btn--admin {
+      background: var(--color-admin);
+    }
 
-        /* Modal compact */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+    .card-btn--admin:hover {
+      background: var(--color-admin-dark);
+    }
 
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            max-width: 320px;
-            width: 90%;
-            text-align: center;
-        }
+    .card-btn--student {
+      background: var(--flag-green);
+    }
 
-        .modal-content i {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
+    .card-btn--student:hover {
+      background: #00503c;
+    }
 
-        .modal-content h3 {
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-        }
+    /* === Info Bar === */
+    .info-bar {
+      text-align: center;
+      color: #fff;
+      padding: clamp(12px, 2vw, 16px);
+      background: rgba(0,0,0,0.2);
+      border-radius: var(--radius-md);
+      font-size: clamp(0.66rem, 1.4vw, 0.74rem);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
 
-        .modal-content p {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            margin-bottom: 16px;
-        }
+    .info-bar p {
+      opacity: 0.95;
+    }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
+    .info-bar .contacts {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: clamp(6px, 1.5vw, 12px);
+      row-gap: 4px;
+      opacity: 0.85;
+      font-size: clamp(0.62rem, 1.3vw, 0.7rem);
+    }
 
-        .modal-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
+    .info-bar .contacts i {
+      margin-right: 3px;
+    }
 
-        .modal-btn-confirm {
-            background: #3498db;
-            color: white;
-        }
+    /* === Footer === */
+    .portal-footer {
+      text-align: center;
+      padding-top: clamp(12px, 2vw, 18px);
+      border-top: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5);
+      font-size: clamp(0.6rem, 1.2vw, 0.68rem);
+    }
 
-        .modal-btn-cancel {
-            background: #95a5a6;
-            color: white;
-        }
+    /* === Modal === */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(12px, 3vw, 20px);
+      -webkit-backdrop-filter: blur(3px);
+      backdrop-filter: blur(3px);
+    }
 
-        /* Ripple effect */
-        .btn-access {
-            position: relative;
-            overflow: hidden;
-        }
+    .modal[open] {
+      display: flex;
+    }
 
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-            transform: scale(0);
-            animation: ripple 0.5s linear;
-            pointer-events: none;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
-        @keyframes ripple {
-            to {
-                transform: scale(3);
-                opacity: 0;
-            }
-        }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            body {
-                padding: 12px;
-            }
-            
-            .cards-container {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            
-            .card {
-                padding: 15px;
-            }
-            
-            .portal-header h1 {
-                font-size: 1.2rem;
-            }
-            
-            .logo {
-                width: 48px;
-                height: 48px;
-            }
-            
-            .logo i {
-                font-size: 24px;
-            }
-        }
+    .modal-box {
+      background: #fff;
+      border-radius: var(--radius-xl);
+      padding: clamp(22px, 4vw, 30px) clamp(18px, 3vw, 26px) clamp(20px, 3vw, 24px);
+      max-width: min(90vw, 340px);
+      width: 100%;
+      text-align: center;
+      animation: scaleIn 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
 
-        @media (max-width: 380px) {
-            .card-features li {
-                font-size: 0.65rem;
-            }
-            
-            .btn-access {
-                padding: 7px 10px;
-                font-size: 0.7rem;
-            }
-        }
+    .modal-box i {
+      font-size: clamp(34px, 7vw, 44px);
+      margin-bottom: clamp(10px, 2vw, 14px);
+    }
 
-        /* Mode paysage sur mobile */
-        @media (max-width: 800px) and (orientation: landscape) {
-            .cards-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            
-            .card {
-                padding: 12px;
-            }
-            
-            .card-features li {
-                padding: 2px 0;
-            }
-        }
+    .modal-title {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 700;
+      color: var(--color-text);
+    }
 
-        /* Impression */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .btn-access, .modal {
-                display: none;
-            }
-            .card {
-                break-inside: avoid;
-                border: 1px solid #ddd;
-            }
-        }
-    </style>
+    .modal-msg {
+      font-size: clamp(0.76rem, 1.6vw, 0.85rem);
+      color: var(--color-muted);
+      margin: 6px 0 clamp(16px, 3vw, 22px);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: clamp(8px, 2vw, 12px);
+      justify-content: center;
+    }
+
+    .modal-btn {
+      padding: clamp(8px, 1.5vw, 10px) clamp(18px, 4vw, 26px);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: clamp(0.76rem, 1.6vw, 0.85rem);
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition), transform 100ms;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 40px;
+    }
+
+    .modal-btn:active {
+      transform: scale(0.96);
+    }
+
+    .modal-btn--confirm {
+      background: var(--color-admin);
+      color: #fff;
+    }
+
+    .modal-btn--confirm:hover {
+      background: var(--color-admin-dark);
+    }
+
+    .modal-btn--cancel {
+      background: #95a5a6;
+      color: #fff;
+    }
+
+    .modal-btn--cancel:hover {
+      background: #7f8c8d;
+    }
+
+    /* === Loading Overlay === */
+    .loading {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(255,255,255,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+
+    .loading[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .spinner {
+      width: clamp(32px, 6vw, 44px);
+      height: clamp(32px, 6vw, 44px);
+      border: clamp(3px, 0.6vw, 4px) solid var(--color-light);
+      border-top-color: var(--flag-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* === Reduced Motion === */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .card:hover { transform: none; }
+      .flag-togo:hover { transform: none; }
+      .modal-box { animation: none; }
+    }
+
+    /* === Responsive - Très petits écrans (< 360px) === */
+    @media (max-width: 360px) {
+      body { padding: 8px; }
+      .portal { gap: 14px; }
+      .cards { gap: 12px; }
+      .card { padding: 14px; }
+      .card-features { gap: 3px; }
+      .card-btn { min-height: 36px; padding: 8px 10px; }
+      .modal-btn { min-height: 36px; padding: 8px 14px; flex: 1; }
+    }
+
+    /* === Responsive - Mobile (< 640px) === */
+    @media (max-width: 640px) {
+      .cards { grid-template-columns: 1fr; }
+
+      body { padding: clamp(8px, 2vw, 14px); }
+
+      .card-features li {
+        font-size: clamp(0.7rem, 3.2vw, 0.78rem);
+        padding: 3px 0;
+      }
+
+      .card-btn {
+        font-size: clamp(0.75rem, 3.4vw, 0.85rem);
+        padding: 12px 14px;
+      }
+    }
+
+    /* === Responsive - Très grands écrans (> 1400px) === */
+    @media (min-width: 1400px) {
+      .portal { max-width: 1100px; }
+      .cards { gap: 28px; }
+    }
+
+    /* === Paysage mobile (tous les écrans en orientation landscape) === */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body { align-items: flex-start; padding: 10px 16px; }
+      .portal { gap: 10px; }
+      .portal-header { display: flex; align-items: center; gap: 14px; justify-content: center; flex-wrap: wrap; }
+      .flag-togo { width: 40px; height: 40px; margin: 0; }
+      .cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .card { padding: 12px; }
+      .card-icon { width: 34px; height: 34px; margin-bottom: 8px; }
+      .card-icon i { font-size: 16px; }
+      .card-features { margin: 8px 0 10px; gap: 2px; }
+      .card-features li { font-size: 0.62rem; padding: 1px 0; }
+      .card-btn { min-height: 32px; padding: 6px 10px; font-size: 0.65rem; }
+      .info-bar { padding: 8px 12px; }
+      .info-bar .contacts { font-size: 0.6rem; }
+      .portal-footer { padding-top: 8px; }
+    }
+
+    /* === Tablette paysage (800-1024px) === */
+    @media (min-width: 641px) and (max-width: 1024px) and (orientation: landscape) {
+      .cards { gap: 16px; }
+      .card { padding: 16px 14px; }
+    }
+
+    /* === Tablette portrait === */
+    @media (min-width: 641px) and (max-width: 900px) and (orientation: portrait) {
+      .cards { gap: 16px; }
+      .card { padding: 18px 16px; }
+    }
+
+    /* === Écrans larges specs (foldable, ultra-wide, etc.) === */
+    @media (horizontal-viewport-segments: 2) {
+      .portal { max-width: 100%; padding: 0 env(safe-area-inset-left) 0 env(safe-area-inset-right); }
+    }
+
+    /* === Impression === */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .card-btn,
+      .modal,
+      .loading,
+      .info-bar .contacts { display: none !important; }
+      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      .portal { gap: 14px; }
+      .flag-togo { box-shadow: none; }
+    }
+  </style>
 </head>
 <body>
-    <div class="portal-container">
-        <!-- En-tête compact -->
-        <div class="portal-header">
-            <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
-            </div>
-            <h1>Portail Scolaire</h1>
-            <p>Examens Blancs 2025-2026</p>
-        </div>
 
-        <!-- Cartes -->
-        <div class="cards-container">
-            <!-- Carte Administration -->
-            <div class="card card-admin">
-                <div class="card-icon">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <h2>Administration</h2>
-                <div class="badge">Accès réservé</div>
-                <p>Gestion des bulletins et analyses</p>
-                <ul class="card-features">
-                    <li><i class="fas fa-check-circle"></i> Élèves / Matières / Notes</li>
-                    <li><i class="fas fa-chart-line"></i> Analyses et statistiques</li>
-                    <li><i class="fas fa-file-alt"></i> Bulletins personnalisés</li>
-                    <li><i class="fas fa-database"></i> Export/Import JSON/CSV</li>
-                </ul>
-                <button class="btn-access btn-admin" onclick="openAdminAccess()">
-                    <i class="fas fa-sign-in-alt"></i> Accéder
-                </button>
-            </div>
+  <!-- Loading overlay -->
+  <div class="loading" id="loading" role="status" aria-label="Chargement en cours">
+    <div class="spinner"></div>
+  </div>
 
-            <!-- Carte Élève -->
-            <div class="card card-student">
-                <div class="card-icon">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-                <h2>Espace Élève</h2>
-                <div class="badge">Consultation</div>
-                <p>Consultez vos notes et résultats</p>
-                <ul class="card-features">
-                    <li><i class="fas fa-id-card"></i> Accès sécurisé</li>
-                    <li><i class="fas fa-chart-simple"></i> Moyenne et mention</li>
-                    <li><i class="fas fa-table-list"></i> Détail des notes</li>
-                    <li><i class="fas fa-print"></i> Impression des résultats</li>
-                </ul>
-                <button class="btn-access btn-student" onclick="openStudentAccess()">
-                    <i class="fas fa-user-lock"></i> Voir mes notes
-                </button>
-            </div>
-        </div>
-
-        <!-- Info compacte -->
-        <div class="info-section">
-            <p><i class="fas fa-info-circle"></i> Base de données locale sécurisée</p>
-            <div class="contact">
-                <i class="fas fa-phone"></i> +228 92 87 16 05
-                <span>•</span>
-                <i class="fas fa-envelope"></i> contact@examens-blancs.tg
-            </div>
-        </div>
-
-        <!-- Footer compact -->
-        <div class="portal-footer">
-            <p>© 2025 - Ministère de l'Éducation</p>
-        </div>
+  <!-- Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <i class="fas fa-shield-alt" id="modal-icon" aria-hidden="true"></i>
+      <p class="modal-title" id="modal-title">Confirmation</p>
+      <p class="modal-msg" id="modal-msg">Continuer ?</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--confirm" id="modal-confirm">Oui</button>
+        <button class="modal-btn modal-btn--cancel" id="modal-cancel">Non</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Modal -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <i class="fas fa-shield-alt" id="modalIcon" style="color: #3498db;"></i>
-            <h3 id="modalTitle">Confirmation</h3>
-            <p id="modalMessage">Continuer ?</p>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-confirm" onclick="confirmAction()">Oui</button>
-                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Non</button>
-            </div>
+  <main class="portal">
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="flag-togo" role="img" aria-label="Drapeau du Togo">
+        <div class="flag-togo-inner">
+          <div class="stripe"></div>
+          <div class="stripe"></div>
+          <div class="stripe"></div>
+          <div class="stripe"></div>
+          <div class="stripe"></div>
+          <div class="canton">
+            <div class="star"></div>
+          </div>
         </div>
-    </div>
+      </div>
+      <h1 class="portal-title">Portail Scolaire</h1>
+      <p class="portal-subtitle">Examens Blancs 2025–2026</p>
+    </header>
 
-    <script>
-        let pendingAction = null;
+    <!-- Cards -->
+    <section class="cards" aria-label="Accès aux espaces">
+      <article class="card card--admin">
+        <div class="card-icon" aria-hidden="true"><i class="fas fa-crown"></i></div>
+        <h2 class="card-title">Administration</h2>
+        <span class="card-badge">Accès réservé</span>
+        <p class="card-desc">Gestion des bulletins et analyses</p>
+        <ul class="card-features">
+          <li><i class="fas fa-check-circle" aria-hidden="true"></i> Élèves / Matières / Notes</li>
+          <li><i class="fas fa-chart-line" aria-hidden="true"></i> Analyses et statistiques</li>
+          <li><i class="fas fa-file-alt" aria-hidden="true"></i> Bulletins personnalisés</li>
+          <li><i class="fas fa-database" aria-hidden="true"></i> Export/Import JSON/CSV</li>
+        </ul>
+        <button class="card-btn card-btn--admin" data-action="admin">
+          <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Accéder
+        </button>
+      </article>
 
-        function openAdminAccess() {
-            pendingAction = 'admin';
-            const modal = document.getElementById('confirmModal');
-            const modalIcon = document.getElementById('modalIcon');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = document.getElementById('modalMessage');
-            
-            modalIcon.style.color = '#3498db';
-            modalIcon.className = 'fas fa-crown';
-            modalTitle.textContent = 'Accès Administration';
-            modalMessage.textContent = 'Accéder à l\'espace administrateur ?';
-            modal.style.display = 'flex';
+      <article class="card card--student">
+        <div class="card-icon" aria-hidden="true"><i class="fas fa-user-graduate"></i></div>
+        <h2 class="card-title">Espace Élève</h2>
+        <span class="card-badge">Consultation</span>
+        <p class="card-desc">Consultez vos notes et résultats</p>
+        <ul class="card-features">
+          <li><i class="fas fa-id-card" aria-hidden="true"></i> Accès sécurisé</li>
+          <li><i class="fas fa-chart-simple" aria-hidden="true"></i> Moyenne et mention</li>
+          <li><i class="fas fa-table-list" aria-hidden="true"></i> Détail des notes</li>
+          <li><i class="fas fa-print" aria-hidden="true"></i> Impression des résultats</li>
+        </ul>
+        <button class="card-btn card-btn--student" data-action="student">
+          <i class="fas fa-user-lock" aria-hidden="true"></i> Voir mes notes
+        </button>
+      </article>
+    </section>
+
+    <!-- Info -->
+    <aside class="info-bar">
+      <p><i class="fas fa-info-circle" aria-hidden="true"></i> Base de données locale sécurisée</p>
+      <div class="contacts">
+        <span><i class="fas fa-phone" aria-hidden="true"></i> +228 92 87 16 05</span>
+        <span aria-hidden="true">•</span>
+        <span><i class="fas fa-envelope" aria-hidden="true"></i> contact@examens-blancs.tg</span>
+      </div>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="portal-footer">
+      <small>&copy; 2025 – Ministère de l'Éducation</small>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const modalEl = document.getElementById('modal');
+      const modalIcon = document.getElementById('modal-icon');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMsg = document.getElementById('modal-msg');
+      const modalConfirm = document.getElementById('modal-confirm');
+      const modalCancel = document.getElementById('modal-cancel');
+      const loadingEl = document.getElementById('loading');
+
+      let pendingAction = null;
+      let previousFocus = null;
+
+      const config = {
+        admin: {
+          icon: 'fa-crown',
+          color: '#3498db',
+          title: 'Accès Administration',
+          msg: "Accéder à l'espace administrateur&nbsp;?",
+          href: 'Bulletin.html',
+        },
+        student: {
+          icon: 'fa-user-graduate',
+          color: '#006a4e',
+          title: 'Accès Élève',
+          msg: 'Consulter vos notes&nbsp;?',
+          href: 'Mes notes.html',
+        },
+      };
+
+      function openModal(action) {
+        const cfg = config[action];
+        if (!cfg) return;
+
+        previousFocus = document.activeElement;
+        pendingAction = action;
+
+        modalIcon.className = 'fas ' + cfg.icon;
+        modalIcon.style.color = cfg.color;
+        modalTitle.textContent = cfg.title;
+        modalMsg.innerHTML = cfg.msg;
+
+        modalEl.setAttribute('open', '');
+        modalEl.style.display = 'flex';
+        modalConfirm.focus();
+      }
+
+      function closeModal() {
+        modalEl.removeAttribute('open');
+        modalEl.style.display = 'none';
+        pendingAction = null;
+        if (previousFocus && previousFocus.focus) {
+          previousFocus.focus();
+          previousFocus = null;
+        }
+      }
+
+      function confirmAction() {
+        const cfg = config[pendingAction];
+        if (!cfg) { closeModal(); return; }
+
+        closeModal();
+
+        loadingEl.setAttribute('aria-hidden', 'false');
+        loadingEl.style.display = 'flex';
+
+        setTimeout(function () {
+          window.location.href = cfg.href;
+        }, 300);
+      }
+
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-action]');
+        if (btn) {
+          e.preventDefault();
+          openModal(btn.dataset.action);
+          return;
         }
 
-        function openStudentAccess() {
-            pendingAction = 'student';
-            const modal = document.getElementById('confirmModal');
-            const modalIcon = document.getElementById('modalIcon');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = document.getElementById('modalMessage');
-            
-            modalIcon.style.color = '#2ecc71';
-            modalIcon.className = 'fas fa-user-graduate';
-            modalTitle.textContent = 'Accès Élève';
-            modalMessage.textContent = 'Consulter vos notes ?';
-            modal.style.display = 'flex';
+        if (e.target.closest('#modal-confirm')) {
+          confirmAction();
+          return;
         }
 
-        function confirmAction() {
-            if (pendingAction === 'admin') {
-                window.location.href = 'Bulletin.html';
-            } else if (pendingAction === 'student') {
-                window.location.href = 'Mes notes.html';
-            }
-            closeModal();
+        if (e.target.closest('#modal-cancel') || e.target === modalEl) {
+          closeModal();
         }
+      });
 
-        function closeModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-            pendingAction = null;
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modalEl.style.display === 'flex') {
+          closeModal();
+          e.preventDefault();
         }
+      });
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('confirmModal');
-            if (event.target === modal) closeModal();
+      modalEl.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+
+        const focusable = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
         }
+      });
 
-        // Ripple effect
-        document.querySelectorAll('.btn-access').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                ripple.classList.add('ripple');
-                this.appendChild(ripple);
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                ripple.style.left = `${x}px`;
-                ripple.style.top = `${y}px`;
-                setTimeout(() => ripple.remove(), 500);
-            });
-        });
-    </script>
+      window.addEventListener('pageshow', function () {
+        loadingEl.style.display = 'none';
+        loadingEl.setAttribute('aria-hidden', 'true');
+      });
+
+      loadingEl.setAttribute('aria-hidden', 'true');
+    })();
+  </script>
 </body>
 </html>
