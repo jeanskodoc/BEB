@@ -1016,6 +1016,10 @@
             <div class="summary-card"><h4>Moy. générale</h4><div class="number" id="globalAvgStat">0/20</div></div>
             <div class="summary-card"><h4>Taux réussite</h4><div class="number" id="successRateStat">0%</div></div>
           </div>
+
+          <!-- Statistiques par matière : moyenne de classe par matière + points pondérés par coefficient -->
+          <div id="subjectStatsContainer" style="margin-top:20px"></div>
+
           <div id="studentsAnalysisContainer"></div>
         </div>
       </section>
@@ -1448,24 +1452,69 @@
       }
 
       // ===== CALCULS =====
+      // Renvoie les notes d'un élève en filtrant par examen courant pour éviter
+      // de mélanger les notes issues de BEPC / BAC1 / BAC2 lorsqu'un même élève
+      // serait présent dans plusieurs examens.
+      function getStudentGrades(studentId) {
+        var student = appData.students.find(function (s) { return s.id === studentId; });
+        var exam = student ? student.exam : appData.currentExam;
+        return appData.grades.filter(function (g) {
+          if (g.studentId !== studentId) return false;
+          var subj = appData.subjects.find(function (s) { return s.id === g.subjectId; });
+          return subj ? subj.exam === exam : false;
+        });
+      }
+
+      // Moyenne pondérée = somme(note × coefficient) / somme(coefficients)
+      // Renvoie également les totaux intermédiaires pour réutilisation dans les
+      // bulletins (évite de recalculer et garantit la cohérence des chiffres).
       function getStudentAverage(studentId) {
-        var studentGrades = appData.grades.filter(function (g) { return g.studentId === studentId; });
+        var r = getStudentAverageDetail(studentId);
+        return r.coeffs > 0 ? r.points / r.coeffs : 0;
+      }
+
+      function getStudentAverageDetail(studentId) {
+        var studentGrades = getStudentGrades(studentId);
         var points = 0, coeffs = 0;
         studentGrades.forEach(function (g) {
           var subj = appData.subjects.find(function (s) { return s.id === g.subjectId; });
           if (subj) { points += g.value * subj.coefficient; coeffs += subj.coefficient; }
         });
-        return coeffs > 0 ? points / coeffs : 0;
+        return { points: points, coeffs: coeffs, average: coeffs > 0 ? points / coeffs : 0 };
       }
 
       function getStudentAverageByCategory(studentId, category) {
-        var studentGrades = appData.grades.filter(function (g) { return g.studentId === studentId; });
+        var studentGrades = getStudentGrades(studentId);
         var points = 0, coeffs = 0;
         studentGrades.forEach(function (g) {
           var subj = appData.subjects.find(function (s) { return s.id === g.subjectId; });
           if (subj && subj.category === category) { points += g.value * subj.coefficient; coeffs += subj.coefficient; }
         });
         return coeffs > 0 ? points / coeffs : 0;
+      }
+
+      function getStudentCategoryDetail(studentId, category) {
+        var studentGrades = getStudentGrades(studentId);
+        var points = 0, coeffs = 0;
+        studentGrades.forEach(function (g) {
+          var subj = appData.subjects.find(function (s) { return s.id === g.subjectId; });
+          if (subj && subj.category === category) { points += g.value * subj.coefficient; coeffs += subj.coefficient; }
+        });
+        return { points: points, coeffs: coeffs, average: coeffs > 0 ? points / coeffs : 0 };
+      }
+
+      // Moyenne générale de la classe : moyenne PONDÉRÉE par le total de
+      // coefficients de chaque élève. Une simple moyenne des moyennes serait
+      // incorrecte dès qu'un élève n'a pas exactement la même liste de
+      // matières / coefficients que les autres (cas d'option, absence à une
+      // épreuve, élève arrivé en cours d'année, etc.).
+      function getClassWeightedAverage(students) {
+        var totalPoints = 0, totalCoeffs = 0;
+        students.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          if (d.coeffs > 0) { totalPoints += d.points; totalCoeffs += d.coeffs; }
+        });
+        return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
       }
 
       function getMention(avg) {
@@ -1634,9 +1683,17 @@
         if (!container) return;
         var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         var subjects = appData.subjects.filter(function (s) { return s.exam === appData.currentExam; });
-        var total = 0, count = 0, pass = 0;
-        students.forEach(function (s) { var a = getStudentAverage(s.id); if (a > 0) { total += a; count++; if (a >= 10) pass++; } });
-        var avg = count > 0 ? (total / count).toFixed(2) : 0;
+        // Moyenne générale de la classe = somme des points / somme des coefficients
+        // (moyenne pondérée par élève, et non simple moyenne des moyennes).
+        var totalPoints = 0, totalCoeffs = 0, count = 0, pass = 0;
+        students.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          if (d.coeffs > 0) {
+            totalPoints += d.points; totalCoeffs += d.coeffs; count++;
+            if (d.average >= 10) pass++;
+          }
+        });
+        var avg = totalCoeffs > 0 ? (totalPoints / totalCoeffs).toFixed(2) : 0;
         var rate = count > 0 ? Math.round(pass / count * 100) : 0;
         container.innerHTML =
           '<div class="stat-card"><h3>Élèves</h3><div class="stat-value">' + students.length + '</div><p style="font-size:0.72rem">' + count + ' avec notes</p></div>' +
@@ -1645,20 +1702,122 @@
         updateCharts();
       }
 
+      // ===== STATISTIQUES PAR MATIÈRE =====
+      // Calcule, pour chaque matière de l'examen courant :
+      //   - la moyenne de la classe dans la matière (somme des notes / nombre d'élèves),
+      //   - le coefficient de la matière,
+      //   - les points pondérés = moyenne × coefficient (contribution à la moyenne générale),
+      //   - le nombre d'élèves ayant composé, le min, le max, le taux de réussite (>= 10).
+      // La moyenne générale affichée en bas du tableau est la moyenne PONDÉRÉE par
+      // les coefficients des matières :
+      //     MoyGénérale = Σ(moyenne_matière × coefficient_matière) / Σ(coefficient_matière)
+      // On tient bien compte du coefficient à la fois pour la contribution de
+      // chaque matière (points pondérés) ET pour le calcul global de la moyenne.
+      function getSubjectClassStats(subject) {
+        var subjectGrades = appData.grades.filter(function (g) {
+          return g.subjectId === subject.id;
+        });
+        if (subjectGrades.length === 0) {
+          return { count: 0, average: 0, min: 0, max: 0, pass: 0, points: 0, coefficient: subject.coefficient };
+        }
+        var sum = 0, min = 21, max = -1, pass = 0;
+        subjectGrades.forEach(function (g) {
+          sum += g.value;
+          if (g.value < min) min = g.value;
+          if (g.value > max) max = g.value;
+          if (g.value >= 10) pass++;
+        });
+        var average = sum / subjectGrades.length;
+        return {
+          count: subjectGrades.length,
+          average: average,
+          min: min,
+          max: max,
+          pass: pass,
+          // Points pondérés = moyenne de la matière × coefficient de la matière.
+          points: average * subject.coefficient,
+          coefficient: subject.coefficient
+        };
+      }
+
+      function updateSubjectStats() {
+        var container = document.getElementById('subjectStatsContainer');
+        if (!container) return;
+        var subjects = appData.subjects.filter(function (s) { return s.exam === appData.currentExam; });
+        if (subjects.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px">Aucune matière enregistrée pour cet examen</div>';
+          return;
+        }
+
+        var rows = '';
+        var sumPoints = 0, sumCoeffs = 0;
+        subjects.forEach(function (subj) {
+          var st = getSubjectClassStats(subj);
+          sumPoints += st.points;
+          sumCoeffs += st.coefficient;
+          var avgClass = st.count > 0 ? 'grade-good' : 'grade-fail';
+          var gradeClass = st.average >= 16 ? 'grade-excellent' : st.average >= 14 ? 'grade-good' : st.average >= 10 ? 'grade-passable' : 'grade-fail';
+          var catBadge = subj.category === 'scientific' ? '<span class="badge badge-scientific">Sci.</span>' : '<span class="badge badge-literary">Lit.</span>';
+          rows += '<tr>' +
+            '<td style="text-align:left"><strong>' + escapeHtml(subj.name) + '</strong> ' + catBadge + '</td>' +
+            '<td>' + subj.coefficient + '</td>' +
+            '<td>' + st.count + '</td>' +
+            '<td class="' + gradeClass + '" style="font-weight:bold">' + (st.count > 0 ? st.average.toFixed(2) : '–') + '/20</td>' +
+            '<td>' + (st.count > 0 ? st.min.toFixed(1) : '–') + '</td>' +
+            '<td>' + (st.count > 0 ? st.max.toFixed(1) : '–') + '</td>' +
+            '<td>' + (st.count > 0 ? Math.round(st.pass / st.count * 100) : 0) + '%</td>' +
+            '<td style="font-weight:bold">' + (st.count > 0 ? st.points.toFixed(2) : '–') + '</td>' +
+            '</tr>';
+        });
+
+        // Moyenne générale = Σ(moyenne_matière × coefficient_matière) / Σ(coefficient_matière)
+        var generalAvg = sumCoeffs > 0 ? sumPoints / sumCoeffs : 0;
+        var generalClass = generalAvg >= 16 ? 'grade-excellent' : generalAvg >= 14 ? 'grade-good' : generalAvg >= 10 ? 'grade-passable' : 'grade-fail';
+
+        container.innerHTML =
+          '<h3 class="form-title" style="font-size:1rem;margin-bottom:10px"><i class="fas fa-table" aria-hidden="true"></i> Statistiques par matière (moyennes pondérées par coefficient)</h3>' +
+          '<div style="overflow-x:auto">' +
+          '<table class="grades-table" style="width:100%;font-size:0.82rem">' +
+            '<thead><tr>' +
+              '<th style="text-align:left">Matière</th>' +
+              '<th>Coeff.</th>' +
+              '<th>Élèves</th>' +
+              '<th>Moy. classe</th>' +
+              '<th>Min</th>' +
+              '<th>Max</th>' +
+              '<th>Réussite</th>' +
+              '<th>Points (moy × coeff)</th>' +
+            '</tr></thead>' +
+            '<tbody>' + rows + '</tbody>' +
+            '<tfoot><tr style="background:#f8f9fa;font-weight:bold">' +
+              '<td style="text-align:left">TOTAUX</td>' +
+              '<td>' + sumCoeffs + '</td>' +
+              '<td colspan="5" style="text-align:right">Moyenne générale pondérée = Σ points / Σ coefficients =</td>' +
+              '<td class="' + generalClass + '">' + generalAvg.toFixed(2) + '/20</td>' +
+            '</tr></tfoot>' +
+          '</table>' +
+          '</div>' +
+          '<p style="font-size:0.72rem;color:#666;margin-top:8px"><i class="fas fa-info-circle" aria-hidden="true"></i> La "Moy. classe" est la moyenne arithmétique des notes des élèves dans la matière. La "Moyenne générale pondérée" combine les moyennes de chaque matière en les pondérant par leur coefficient : ceci garantit qu\'une matière à fort coefficient pèse plus lourd dans le résultat final.</p>';
+      }
+
       function updateAnalysisTab() {
+        // Toujours rafraîchir les statistiques par matière (moyennes pondérées
+        // par coefficient) avant l'analyse par élève.
+        updateSubjectStats();
         var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         var container = document.getElementById('studentsAnalysisContainer');
         if (!container) return;
         if (students.length === 0) { container.innerHTML = '<div class="form-section" style="text-align:center">Aucun élève pour cet examen</div>'; return; }
 
         var studentsData = students.map(function (s) {
-          var avg = getStudentAverage(s.id);
-          var gradesDetails = appData.grades.filter(function (g) { return g.studentId === s.id; }).map(function (g) {
+          var detail = getStudentAverageDetail(s.id);
+          var avg = detail.average;
+          var gradesDetails = getStudentGrades(s.id).map(function (g) {
             var subj = appData.subjects.find(function (sub) { return sub.id === g.subjectId; });
-            return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value, coefficient: subj ? subj.coefficient : 1 };
+            return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value, coefficient: subj ? subj.coefficient : 1, category: subj ? subj.category : 'literary' };
           });
           var hasDifficulty = gradesDetails.some(function (g) { return g.grade < 10; });
-          return { id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, average: avg, gradesDetails: gradesDetails, hasDifficulty: hasDifficulty, isPassing: avg >= 10 };
+          return { id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, average: avg, totalCoeffs: detail.coeffs, totalPoints: detail.points, gradesDetails: gradesDetails, hasDifficulty: hasDifficulty, isPassing: avg >= 10 };
         });
 
         var searchTerm = (document.getElementById('searchStudentInput').value || '').toLowerCase();
@@ -1672,8 +1831,11 @@
           return true;
         });
 
-        var totalAvg = studentsData.reduce(function (sum, s) { return sum + s.average; }, 0);
-        var avgGeneral = studentsData.length > 0 ? (totalAvg / studentsData.length).toFixed(2) : 0;
+        // Moyenne générale = moyenne pondérée par le total des coefficients de
+        // chaque élève (et non simple moyenne des moyennes individuelles).
+        var sumPoints = 0, sumCoeffs = 0;
+        studentsData.forEach(function (s) { sumPoints += s.totalPoints; sumCoeffs += s.totalCoeffs; });
+        var avgGeneral = sumCoeffs > 0 ? (sumPoints / sumCoeffs).toFixed(2) : 0;
 
         var el1 = document.getElementById('totalStudentsStat'); if (el1) el1.textContent = studentsData.length;
         var el2 = document.getElementById('studentsWithDiffStat'); if (el2) el2.textContent = studentsData.filter(function (s) { return s.hasDifficulty; }).length;
@@ -1691,13 +1853,16 @@
       function exportAnalysis() {
         var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         var data = students.map(function (s) {
+          var detail = getStudentAverageDetail(s.id);
           return {
             nom: s.lastName, prenom: s.firstName, matricule: s.matricule,
-            moyenne: getStudentAverage(s.id).toFixed(2),
-            statut: getStudentAverage(s.id) >= 10 ? 'Admis' : 'Non admis',
-            matieres: appData.grades.filter(function (g) { return g.studentId === s.id; }).map(function (g) {
+            moyenne: detail.average.toFixed(2),
+            total_points: detail.points,
+            total_coefficients: detail.coeffs,
+            statut: detail.average >= 10 ? 'Admis' : 'Non admis',
+            matieres: getStudentGrades(s.id).map(function (g) {
               var subj = appData.subjects.find(function (sub) { return sub.id === g.subjectId; });
-              return { matiere: subj ? subj.name : null, note: g.value };
+              return { matiere: subj ? subj.name : null, note: g.value, coefficient: subj ? subj.coefficient : 1, points: g.value * (subj ? subj.coefficient : 1) };
             })
           };
         });
@@ -1721,12 +1886,17 @@
         if (!students.length) { showAlert('Aucun élève pour cet examen', 'error'); return; }
 
         var studentsWithAvg = students.map(function (s) {
+          var detail = getStudentAverageDetail(s.id);
+          var sciDetail = getStudentCategoryDetail(s.id, 'scientific');
+          var litDetail = getStudentCategoryDetail(s.id, 'literary');
           return {
             id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, exam: s.exam,
-            average: getStudentAverage(s.id),
-            scientificAvg: getStudentAverageByCategory(s.id, 'scientific'),
-            literaryAvg: getStudentAverageByCategory(s.id, 'literary'),
-            grades: appData.grades.filter(function (g) { return g.studentId === s.id; }).map(function (g) {
+            average: detail.average,
+            totalPoints: detail.points,
+            totalCoeffs: detail.coeffs,
+            scientificAvg: sciDetail.average,
+            literaryAvg: litDetail.average,
+            grades: getStudentGrades(s.id).map(function (g) {
               var subj = appData.subjects.find(function (sub) { return sub.id === g.subjectId; });
               return { subjectName: subj ? subj.name : 'Inconnu', coefficient: subj ? subj.coefficient : 1, grade: g.value, category: subj ? subj.category : 'literary', teacher: g.teacher || '-' };
             })
@@ -1734,7 +1904,11 @@
         });
 
         studentsWithAvg.sort(function (a, b) { return b.average - a.average; });
-        var classAvg = studentsWithAvg.length > 0 ? studentsWithAvg.reduce(function (s, a) { return s + a.average; }, 0) / studentsWithAvg.length : 0;
+        // Moyenne de classe = moyenne pondérée par le total de coefficients de
+        // chaque élève (somme des points / somme des coefficients).
+        var classSumPoints = 0, classSumCoeffs = 0;
+        studentsWithAvg.forEach(function (s) { classSumPoints += s.totalPoints; classSumCoeffs += s.totalCoeffs; });
+        var classAvg = classSumCoeffs > 0 ? classSumPoints / classSumCoeffs : 0;
         var successRate = studentsWithAvg.length > 0 ? (studentsWithAvg.filter(function (s) { return s.average >= 10; }).length / studentsWithAvg.length) * 100 : 0;
 
         bulletinPreviews = [];
@@ -1758,15 +1932,22 @@
             else { literaryPoints += g.grade * g.coefficient; literaryCoeffs += g.coefficient; }
           });
 
-          var scientificTotal = scientificCoeffs > 0 ? (scientificPoints / scientificCoeffs).toFixed(2) : 0;
-          var literaryTotal = literaryCoeffs > 0 ? (literaryPoints / literaryCoeffs).toFixed(2) : 0;
-          var totalPoints = (student.average * (scientificCoeffs + literaryCoeffs)).toFixed(1);
+          var scientificTotal = scientificCoeffs > 0 ? (scientificPoints / scientificCoeffs).toFixed(2) : '0.00';
+          var literaryTotal = literaryCoeffs > 0 ? (literaryPoints / literaryCoeffs).toFixed(2) : '0.00';
+          // Totaux calculés directement à partir des sommes (et non reconstruits
+          // à partir de la moyenne) pour garantir la cohérence des chiffres.
+          var totalPoints = (scientificPoints + literaryPoints).toFixed(1);
+          var totalCoeffs = scientificCoeffs + literaryCoeffs;
+          // Vérification de cohérence : average doit être égal à totalPoints / totalCoeffs.
+          // On utilise totalPoints / totalCoeffs pour l'affichage afin d'éviter tout
+          // écart d'arrondi entre la moyenne affichée et les totaux affichés.
+          var computedAvg = totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
 
           var fullHtml =
             '<div class="bulletin-header"><span class="school-year">Année Scolaire 2025-2026</span><h2>BULLETIN D\'EXAMEN BLANC</h2><h3>' + student.exam + '</h3><p style="font-size:0.7rem;color:#666;margin-top:5px">Établissement: ' + (activeSession ? activeSession.institution : 'Ministère de l\'Éducation') + '</p></div>' +
             '<div class="student-info-card"><div class="student-detail"><p><strong>Nom :</strong> ' + escapeHtml(student.lastName) + '</p><p><strong>Prénom :</strong> ' + escapeHtml(student.firstName) + '</p><p><strong>Matricule :</strong> ' + escapeHtml(student.matricule) + '</p></div><div class="average-box"><div class="avg-value">' + student.average.toFixed(2) + '/20</div><div>Moyenne Générale</div></div><div class="mention-box ' + mention.cls + '"><div>' + mention.text + '</div><div>Mention</div></div></div>' +
             '<div class="category-summary"><div class="category-card scientific"><h4>Matières Scientifiques</h4><div style="font-size:1.1rem;font-weight:bold">' + scientificTotal + '/20</div></div><div class="category-card literary"><h4>Matières Littéraires</h4><div style="font-size:1.1rem;font-weight:bold">' + literaryTotal + '/20</div></div></div>' +
-            '<table class="grades-table"><thead><tr><th>Matières</th><th>Coeff.</th><th>Note</th><th>Points</th><th>Enseignant</th></tr></thead><tbody>' + gradesHtml + '</tbody><tfoot><tr style="background:#f8f9fa;font-weight:bold"><td colspan="2">Totaux</td><td>' + student.average.toFixed(2) + '/20</td><td>' + totalPoints + '</td><td></td></tr></tfoot></table>' +
+            '<table class="grades-table"><thead><tr><th>Matières</th><th>Coeff.</th><th>Note</th><th>Points</th><th>Enseignant</th></tr></thead><tbody>' + gradesHtml + '</tbody><tfoot><tr style="background:#f8f9fa;font-weight:bold"><td style="text-align:left">Totaux</td><td>' + totalCoeffs + '</td><td>' + student.average.toFixed(2) + '/20</td><td>' + totalPoints + '</td><td></td></tr></tfoot></table>' +
             '<div class="stats-summary"><div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ' + getRankClass(rank) + '">' + rank + '/' + total + '</div></div><div class="stat-item"><div class="stat-label">Pourcentage</div><div class="stat-number">' + percentage + '%</div></div><div class="stat-item"><div class="stat-label">Moy. Classe</div><div class="stat-number">' + classAvg.toFixed(2) + '/20</div></div><div class="stat-item"><div class="stat-label">Écart</div><div class="stat-number ' + (student.average >= classAvg ? 'grade-good' : 'grade-fail') + '">' + (student.average - classAvg).toFixed(2) + '</div></div><div class="stat-item"><div class="stat-label">Taux Réussite</div><div class="stat-number">' + successRate.toFixed(1) + '%</div></div></div>' +
             '<div style="margin-top:16px;padding:12px;background:#f0f8ff;border-radius:10px;text-align:center"><p><strong>Appréciation :</strong> ' + getAppreciation(student.average) + '</p></div>' +
             '<div style="margin-top:16px;text-align:center;font-size:0.68rem;color:#999;border-top:1px solid #eee;padding-top:12px"><p>Date: ' + new Date().toLocaleDateString('fr-FR') + ' – Le Chef d\'Établissement</p></div>';
