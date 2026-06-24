@@ -464,6 +464,18 @@
     .mention-passable { background: var(--color-warning); }
     .mention-fail { background: var(--color-danger); }
 
+    /* Badge compact pour les classements et tableaux d'analyse */
+    .mention-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .mention-badge.mention-exc { color: var(--color-text); }
+
     .category-summary {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: clamp(10px, 1.5vw, 14px); margin: 16px 0;
@@ -929,6 +941,43 @@
             <label class="file-input-label"><i class="fas fa-upload"></i> Importer JSON<input type="file" id="importJsonInput" accept=".json"></label>
           </div>
         </div>
+
+        <!-- ===== IMPORT CSV ===== -->
+        <div class="form-section">
+          <h2 class="form-title"><i class="fas fa-file-import" aria-hidden="true"></i> Importation CSV</h2>
+          <p style="font-size:0.8rem;color:#555;margin-bottom:12px">Importez vos données depuis des fichiers CSV. Les fichiers doivent être encodés en UTF-8 et utiliser la virgule <code>,</code> ou le point-virgule <code>;</code> comme séparateur. Téléchargez un modèle pour voir le format attendu.</p>
+
+          <div class="btn-group" style="margin-bottom:10px">
+            <button class="btn btn-sm" id="downloadTemplateStudentsBtn" type="button"><i class="fas fa-file-csv"></i> Modèle Élèves</button>
+            <button class="btn btn-sm" id="downloadTemplateSubjectsBtn" type="button"><i class="fas fa-file-csv"></i> Modèle Matières</button>
+            <button class="btn btn-sm" id="downloadTemplateGradesBtn" type="button"><i class="fas fa-file-csv"></i> Modèle Notes</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px">
+            <div style="border:1px solid #e0e0e0;border-radius:10px;padding:12px;background:#fafafa">
+              <h4 style="font-size:0.88rem;margin-bottom:6px"><i class="fas fa-users" style="color:#3498db"></i> Importer Élèves</h4>
+              <p style="font-size:0.7rem;color:#666;margin-bottom:8px">Colonnes : <code>prenom,nom,matricule,examen,etablissement</code></p>
+              <label class="file-input-label" style="display:inline-block;padding:6px 12px;font-size:0.8rem"><i class="fas fa-upload"></i> Choisir CSV<input type="file" id="importCsvStudentsInput" accept=".csv,.txt" style="display:none"></label>
+            </div>
+            <div style="border:1px solid #e0e0e0;border-radius:10px;padding:12px;background:#fafafa">
+              <h4 style="font-size:0.88rem;margin-bottom:6px"><i class="fas fa-book" style="color:#2ecc71"></i> Importer Matières</h4>
+              <p style="font-size:0.7rem;color:#666;margin-bottom:8px">Colonnes : <code>nom,coefficient,categorie,examen</code></p>
+              <label class="file-input-label" style="display:inline-block;padding:6px 12px;font-size:0.8rem"><i class="fas fa-upload"></i> Choisir CSV<input type="file" id="importCsvSubjectsInput" accept=".csv,.txt" style="display:none"></label>
+            </div>
+            <div style="border:1px solid #e0e0e0;border-radius:10px;padding:12px;background:#fafafa">
+              <h4 style="font-size:0.88rem;margin-bottom:6px"><i class="fas fa-edit" style="color:#f39c12"></i> Importer Notes</h4>
+              <p style="font-size:0.7rem;color:#666;margin-bottom:8px">Colonnes : <code>matricule,matiere,note,enseignant</code></p>
+              <label class="file-input-label" style="display:inline-block;padding:6px 12px;font-size:0.8rem"><i class="fas fa-upload"></i> Choisir CSV<input type="file" id="importCsvGradesInput" accept=".csv,.txt" style="display:none"></label>
+            </div>
+          </div>
+
+          <div class="info-box" style="margin-top:12px;padding:10px 12px;background:#fff8e1;border-radius:8px;font-size:0.74rem;border-left:4px solid #f39c12">
+            <i class="fas fa-lightbulb" aria-hidden="true"></i> <strong>Astuce :</strong> Pour les notes, l'import utilise le <strong>matricule</strong> de l'élève et le <strong>nom de la matière</strong> comme clés. Importez d'abord les élèves et les matières, puis les notes. Si l'examen n'est pas précisé, c'est l'examen courant (<span id="currentExamLabel">BEPC</span>) qui sera utilisé.
+          </div>
+
+          <div id="csvImportResult" style="margin-top:10px"></div>
+        </div>
+
         <div class="form-section">
           <h2 class="form-title"><i class="fas fa-sync-alt" aria-hidden="true"></i> Maintenance</h2>
           <div class="btn-group">
@@ -953,11 +1002,14 @@
             <div class="form-group"><label for="matricule">Matricule</label><input type="text" id="matricule" placeholder="Numéro matricule"></div>
             <div class="form-group"><label for="studentExam">Examen</label><select id="studentExam"><option value="BEPC">BEPC</option><option value="BAC1">BAC1</option><option value="BAC2">BAC2</option></select></div>
           </div>
+          <div class="form-row">
+            <div class="form-group"><label for="studentInstitution">Établissement</label><input type="text" id="studentInstitution" placeholder="Nom de l'établissement" list="institutionList"><datalist id="institutionList"></datalist></div>
+          </div>
           <button class="btn btn-success" id="addStudentBtn" type="button"><i class="fas fa-plus"></i> Ajouter</button>
         </div>
         <div class="form-section">
           <h2 class="form-title"><i class="fas fa-users" aria-hidden="true"></i> Liste des élèves</h2>
-          <div class="table-container"><table><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></table></div>
+          <div class="table-container"><table><thead><tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Matricule</th><th>Établissement</th><th>Examen</th><th>Actions</th></tr></thead><tbody id="studentsList"></tbody></table></div>
         </div>
       </section>
 
@@ -1008,7 +1060,8 @@
           <div class="filter-bar">
             <input type="text" id="searchStudentInput" placeholder="Rechercher un élève...">
             <select id="filterDifficultySelect"><option value="all">Tous les élèves</option><option value="difficulty">Élèves avec difficultés</option><option value="good">Élèves sans difficulté</option></select>
-            <button class="btn btn-info" id="exportAnalysisBtn" type="button"><i class="fas fa-download"></i> Exporter</button>
+            <button class="btn btn-info" id="exportAnalysisBtn" type="button"><i class="fas fa-download"></i> Exporter JSON</button>
+            <button class="btn" id="exportSubjectStatsBtn" type="button"><i class="fas fa-file-csv"></i> Exporter Stats Matières</button>
           </div>
           <div class="summary-stats" id="analysisSummary">
             <div class="summary-card"><h4>Total Élèves</h4><div class="number" id="totalStudentsStat">0</div></div>
@@ -1017,8 +1070,14 @@
             <div class="summary-card"><h4>Taux réussite</h4><div class="number" id="successRateStat">0%</div></div>
           </div>
 
+          <!-- Cartes synthétiques : Top 10 / Bottom 5 / Quartiles / Comparaison catégories -->
+          <div id="analysisHighlights" style="margin-top:20px"></div>
+
           <!-- Statistiques par matière : moyenne de classe par matière + points pondérés par coefficient -->
           <div id="subjectStatsContainer" style="margin-top:20px"></div>
+
+          <!-- Graphiques par matière -->
+          <div id="subjectChartsContainer" style="margin-top:20px"></div>
 
           <div id="studentsAnalysisContainer"></div>
         </div>
@@ -1036,6 +1095,11 @@
             <div><h3 style="text-align:center;font-size:0.85rem">Distribution des Moyennes</h3><canvas id="averagesChart" class="chart-container"></canvas></div>
             <div><h3 style="text-align:center;font-size:0.85rem">Répartition par Mention</h3><canvas id="mentionsChart" class="chart-container"></canvas></div>
           </div>
+        </div>
+        <!-- Classement des 10 premiers élèves de l'examen courant -->
+        <div class="form-section">
+          <h2 class="form-title"><i class="fas fa-trophy" aria-hidden="true"></i> Classement — Top 10</h2>
+          <div id="top10RankingContainer"></div>
         </div>
       </section>
 
@@ -1161,6 +1225,11 @@
             }
             startCountdown();
             showMainApp();
+            // CRITIQUE : recharger les données persistées avant toute mise à jour
+            // de l'UI, sinon fullUIUpdate() écrase le localStorage avec des
+            // tableaux vides.
+            loadFromLocalStorage();
+            fullUIUpdate();
             return true;
           } else {
             localStorage.removeItem('examAppActiveSession');
@@ -1265,9 +1334,10 @@
         var div = document.getElementById('authAlert');
         if (div) {
           div.textContent = msg;
-          div.className = 'alert alert-' + type;
+          div.className = 'alert alert-' + type + ' is-visible';
           div.style.display = 'block';
-          setTimeout(function () { div.style.display = 'none'; }, 5000);
+          div.style.opacity = '1';
+          setTimeout(function () { div.style.display = 'none'; div.classList.remove('is-visible'); }, 5000);
         }
       }
 
@@ -1390,18 +1460,30 @@
 
       function exportToCSV() {
         var ts = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        var studentsCSV = convertToCSV(appData.students, ['id', 'lastName', 'firstName', 'matricule', 'exam']);
-        var subjectsCSV = convertToCSV(appData.subjects, ['id', 'name', 'coefficient', 'category', 'exam']);
-        var gradesWithNames = appData.grades.map(function (g) {
+        var exam = appData.currentExam;
+        // Filtre par examen courant pour un export cohérent (et indique
+        // l'examen dans le nom de fichier).
+        var students = appData.students.filter(function (s) { return s.exam === exam; });
+        var subjects = appData.subjects.filter(function (s) { return s.exam === exam; });
+        var subjectIds = new Set(subjects.map(function (s) { return s.id; }));
+        var studentIds = new Set(students.map(function (s) { return s.id; }));
+        var grades = appData.grades.filter(function (g) {
+          return studentIds.has(g.studentId) && subjectIds.has(g.subjectId);
+        });
+
+        var studentsCSV = convertToCSV(students, ['id', 'lastName', 'firstName', 'matricule', 'institution', 'exam']);
+        var subjectsCSV = convertToCSV(subjects, ['id', 'name', 'coefficient', 'category', 'exam']);
+        var gradesWithNames = grades.map(function (g) {
           var s = appData.students.find(function (st) { return st.id === g.studentId; });
           var sub = appData.subjects.find(function (su) { return su.id === g.subjectId; });
-          return { id: g.id, studentName: s ? s.firstName + ' ' + s.lastName : 'Inconnu', subjectName: sub ? sub.name : 'Inconnu', value: g.value, teacher: g.teacher || '' };
+          return { id: g.id, matricule: s ? s.matricule : '', studentName: s ? s.firstName + ' ' + s.lastName : 'Inconnu', subjectName: sub ? sub.name : 'Inconnu', value: g.value, teacher: g.teacher || '' };
         });
-        var gradesCSV = convertToCSV(gradesWithNames, ['id', 'studentName', 'subjectName', 'value', 'teacher']);
-        if (studentsCSV) downloadCSV(studentsCSV, 'eleves_' + ts + '.csv');
-        if (subjectsCSV) setTimeout(function () { downloadCSV(subjectsCSV, 'matieres_' + ts + '.csv'); }, 100);
-        if (gradesCSV) setTimeout(function () { downloadCSV(gradesCSV, 'notes_' + ts + '.csv'); }, 200);
-        showAlert('Export CSV effectué (3 fichiers)', 'success');
+        var gradesCSV = convertToCSV(gradesWithNames, ['id', 'matricule', 'studentName', 'subjectName', 'value', 'teacher']);
+        var count = 0;
+        if (studentsCSV) { downloadCSV(studentsCSV, 'eleves_' + exam + '_' + ts + '.csv'); count++; }
+        if (subjectsCSV) { setTimeout(function () { downloadCSV(subjectsCSV, 'matieres_' + exam + '_' + ts + '.csv'); }, 100); count++; }
+        if (gradesCSV) { setTimeout(function () { downloadCSV(gradesCSV, 'notes_' + exam + '_' + ts + '.csv'); }, 200); count++; }
+        showAlert('Export CSV (' + exam + ') : ' + count + ' fichier(s) généré(s)', 'success');
       }
 
       function convertToCSV(data, cols) {
@@ -1428,24 +1510,328 @@
         URL.revokeObjectURL(link.href);
       }
 
+      // ===== IMPORT CSV =====
+      // Analyse robuste d'une ligne CSV : gère les séparateurs , ou ; , les
+      // guillemets et les champs vides. Renvoie un tableau de cellules.
+      function parseCSVLine(line, separator) {
+        var result = [];
+        var cur = '';
+        var inQuotes = false;
+        for (var i = 0; i < line.length; i++) {
+          var ch = line[i];
+          if (inQuotes) {
+            if (ch === '"') {
+              if (line[i + 1] === '"') { cur += '"'; i++; }
+              else { inQuotes = false; }
+            } else { cur += ch; }
+          } else {
+            if (ch === '"') inQuotes = true;
+            else if (ch === separator) { result.push(cur); cur = ''; }
+            else cur += ch;
+          }
+        }
+        result.push(cur);
+        return result.map(function (c) { return c.trim(); });
+      }
+
+      // Découpe un texte CSV complet en tableau d'objets {colonne: valeur}.
+      // Détecte automatiquement le séparateur (, ou ;) à partir de la 1re ligne.
+      function parseCSV(text) {
+        // BOM UTF-8 + normalisation des fins de ligne
+        text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        var lines = text.split('\n').filter(function (l) { return l.trim() !== ''; });
+        if (lines.length === 0) return { headers: [], rows: [] };
+        // Détection du séparateur
+        var sep = (lines[0].split(',').length >= lines[0].split(';').length) ? ',' : ';';
+        var headers = parseCSVLine(lines[0], sep).map(function (h) {
+          return h.toLowerCase().replace(/[\s_-]/g, '');
+        });
+        var rows = [];
+        for (var i = 1; i < lines.length; i++) {
+          var cells = parseCSVLine(lines[i], sep);
+          var obj = {};
+          headers.forEach(function (h, idx) { obj[h] = cells[idx] !== undefined ? cells[idx] : ''; });
+          rows.push(obj);
+        }
+        return { headers: headers, rows: rows };
+      }
+
+      // Affiche le rapport d'import dans la zone dédiée de l'onglet Base.
+      function showCsvImportResult(html, type) {
+        var el = document.getElementById('csvImportResult');
+        if (!el) return;
+        var bg = type === 'error' ? '#fdecea' : type === 'warning' ? '#fff8e1' : '#e8f8f0';
+        var border = type === 'error' ? '#e74c3c' : type === 'warning' ? '#f39c12' : '#2ecc71';
+        el.innerHTML = '<div style="padding:10px 12px;background:' + bg + ';border-left:4px solid ' + border + ';border-radius:6px;font-size:0.8rem">' + html + '</div>';
+      }
+
+      // Récupère une valeur de colonne en testant plusieurs noms équivalents
+      // (ex: "prenom" ou "firstname" ou "prénom").
+      function pickField(row, names) {
+        for (var i = 0; i < names.length; i++) {
+          var key = names[i].toLowerCase().replace(/[\s_-]/g, '');
+          if (row[key] !== undefined && row[key] !== '') return row[key];
+        }
+        return '';
+      }
+
+      // === IMPORT ELEVES ===
+      // Format attendu : prenom,nom,matricule,examen,etablissement
+      function importStudentsFromCSV(text) {
+        var parsed = parseCSV(text);
+        if (!parsed.rows.length) { showCsvImportResult('Fichier vide ou en-têtes manquantes.', 'error'); return; }
+        var added = 0, skipped = 0, errors = [];
+        var existingMatricules = new Set(appData.students.map(function (s) { return s.matricule; }));
+        parsed.rows.forEach(function (row, idx) {
+          var prenom = pickField(row, ['prenom', 'firstname', 'prénom']);
+          var nom = pickField(row, ['nom', 'lastname', 'name']);
+          var matricule = pickField(row, ['matricule', 'matr', 'id']);
+          var examen = pickField(row, ['examen', 'exam']) || appData.currentExam;
+          var etablissement = pickField(row, ['etablissement', 'institution', 'ecole', 'college', 'lycee', 'school']);
+          // Si l'établissement n'est pas précisé dans le CSV, on prend celui de la session active
+          if (!etablissement && activeSession) etablissement = activeSession.institution;
+          if (!prenom || !nom || !matricule) {
+            skipped++;
+            errors.push('Ligne ' + (idx + 2) + ' : champs manquants');
+            return;
+          }
+          if (existingMatricules.has(matricule)) {
+            skipped++;
+            errors.push('Ligne ' + (idx + 2) + ' : matricule "' + matricule + '" déjà existant');
+            return;
+          }
+          if (['BEPC', 'BAC1', 'BAC2'].indexOf(examen) === -1) examen = appData.currentExam;
+          appData.students.push({
+            id: appData.nextStudentId++,
+            firstName: prenom, lastName: nom, matricule: matricule, exam: examen,
+            institution: etablissement
+          });
+          existingMatricules.add(matricule);
+          added++;
+        });
+        saveToLocalStorage(); fullUIUpdate();
+        var msg = '<strong>' + added + ' élève(s) importé(s)</strong>';
+        if (skipped > 0) msg += ' — ' + skipped + ' ignoré(s)';
+        if (errors.length) msg += '<br><details><summary>Détails (' + errors.length + ')</summary><ul style="margin:6px 0 0 16px">' + errors.map(function (e) { return '<li>' + escapeHtml(e) + '</li>'; }).join('') + '</ul></details>';
+        showCsvImportResult(msg, skipped > 0 ? 'warning' : 'success');
+        showAlert(msg.replace(/<[^>]+>/g, ''), 'success');
+      }
+
+      // === IMPORT MATIERES ===
+      // Format attendu : nom,coefficient,categorie,examen
+      function importSubjectsFromCSV(text) {
+        var parsed = parseCSV(text);
+        if (!parsed.rows.length) { showCsvImportResult('Fichier vide ou en-têtes manquantes.', 'error'); return; }
+        var added = 0, skipped = 0, errors = [];
+        // Détecte les doublons : on construit un Set des clés
+        // "nom|examen" (insensible à la casse) déjà présentes + vues dans ce CSV.
+        var existingKeys = new Set();
+        appData.subjects.forEach(function (s) {
+          existingKeys.add(s.name.toLowerCase().trim() + '|' + s.exam);
+        });
+        parsed.rows.forEach(function (row, idx) {
+          var nom = pickField(row, ['nom', 'name', 'matiere', 'matières']);
+          var coeff = parseInt(pickField(row, ['coefficient', 'coeff']), 10);
+          var categorie = (pickField(row, ['categorie', 'category']) || 'scientific').toLowerCase();
+          var examen = pickField(row, ['examen', 'exam']) || appData.currentExam;
+          if (!nom || isNaN(coeff) || coeff < 1) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : nom ou coefficient invalide');
+            return;
+          }
+          if (categorie.indexOf('sci') === 0) categorie = 'scientific';
+          else if (categorie.indexOf('lit') === 0) categorie = 'literary';
+          else categorie = 'scientific';
+          if (['BEPC', 'BAC1', 'BAC2'].indexOf(examen) === -1) examen = appData.currentExam;
+          var key = nom.toLowerCase().trim() + '|' + examen;
+          if (existingKeys.has(key)) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : matière "' + nom + '" déjà existante pour ' + examen);
+            return;
+          }
+          appData.subjects.push({
+            id: appData.nextSubjectId++,
+            name: nom, coefficient: coeff, category: categorie, exam: examen
+          });
+          existingKeys.add(key);
+          added++;
+        });
+        saveToLocalStorage(); fullUIUpdate();
+        var msg = '<strong>' + added + ' matière(s) importée(s)</strong>';
+        if (skipped > 0) msg += ' — ' + skipped + ' ignorée(s)';
+        if (errors.length) msg += '<br><details><summary>Détails (' + errors.length + ')</summary><ul style="margin:6px 0 0 16px">' + errors.map(function (e) { return '<li>' + escapeHtml(e) + '</li>'; }).join('') + '</ul></details>';
+        showCsvImportResult(msg, skipped > 0 ? 'warning' : 'success');
+        showAlert(msg.replace(/<[^>]+>/g, ''), 'success');
+      }
+
+      // === IMPORT NOTES ===
+      // Format attendu : matricule,matiere,note,enseignant
+      // Utilise matricule + nom de matière comme clés de jointure (insensible à
+      // la casse et aux espaces). Cela permet d'importer des notes sans
+      // connaître les IDs internes.
+      function importGradesFromCSV(text) {
+        var parsed = parseCSV(text);
+        if (!parsed.rows.length) { showCsvImportResult('Fichier vide ou en-têtes manquantes.', 'error'); return; }
+        var added = 0, skipped = 0, errors = [];
+        // Index pour recherche rapide
+        var studentByMatr = {};
+        appData.students.forEach(function (s) {
+          studentByMatr[s.matricule.toLowerCase().trim()] = s;
+        });
+        var subjectByName = {};
+        appData.subjects.forEach(function (s) {
+          subjectByName[s.name.toLowerCase().trim()] = s;
+        });
+        parsed.rows.forEach(function (row, idx) {
+          var matr = pickField(row, ['matricule', 'matr', 'eleve']);
+          var matiere = pickField(row, ['matiere', 'matières', 'matiere', 'subject', 'name']);
+          var note = parseFloat(pickField(row, ['note', 'valeur', 'value', 'grade']).replace(',', '.'));
+          var enseignant = pickField(row, ['enseignant', 'prof', 'teacher']) || '-';
+          if (!matr || !matiere || isNaN(note)) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : champ manquant ou note invalide');
+            return;
+          }
+          if (note < 0 || note > 20) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : note ' + note + ' hors plage [0-20]');
+            return;
+          }
+          var student = studentByMatr[matr.toLowerCase().trim()];
+          if (!student) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : matricule "' + matr + '" introuvable');
+            return;
+          }
+          var subject = subjectByName[matiere.toLowerCase().trim()];
+          if (!subject) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : matière "' + matiere + '" introuvable');
+            return;
+          }
+          // Vérifie cohérence examen (si la matière appartient à un autre examen que l'élève)
+          if (subject.exam !== student.exam) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : élève (' + student.exam + ') et matière (' + subject.exam + ') pas du même examen');
+            return;
+          }
+          // Évite les doublons (même élève + même matière)
+          var exists = appData.grades.some(function (g) {
+            return g.studentId === student.id && g.subjectId === subject.id;
+          });
+          if (exists) {
+            skipped++; errors.push('Ligne ' + (idx + 2) + ' : note déjà existante pour ' + matr + ' / ' + matiere);
+            return;
+          }
+          appData.grades.push({
+            id: appData.nextGradeId++,
+            studentId: student.id, subjectId: subject.id,
+            value: note, teacher: enseignant
+          });
+          added++;
+        });
+        saveToLocalStorage(); fullUIUpdate();
+        var msg = '<strong>' + added + ' note(s) importée(s)</strong>';
+        if (skipped > 0) msg += ' — ' + skipped + ' ignorée(s)';
+        if (errors.length) msg += '<br><details><summary>Détails (' + errors.length + ')</summary><ul style="margin:6px 0 0 16px">' + errors.map(function (e) { return '<li>' + escapeHtml(e) + '</li>'; }).join('') + '</ul></details>';
+        showCsvImportResult(msg, skipped > 0 ? 'warning' : 'success');
+        showAlert(msg.replace(/<[^>]+>/g, ''), 'success');
+      }
+
+      // === MODELES CSV ===
+      function downloadTemplateStudents() {
+        var csv = 'prenom,nom,matricule,examen,etablissement\n';
+        csv += 'Awa,Traore,ELV001,BEPC,CEG Massedena\n';
+        csv += 'Mamadou,Camara,ELV002,BEPC,CEG Massedena\n';
+        csv += 'Fatou,Diop,ELV003,BAC1,Lycée de Tokin\n';
+        downloadCSV(csv, 'modele_eleves.csv');
+      }
+      function downloadTemplateSubjects() {
+        var csv = 'nom,coefficient,categorie,examen\n';
+        csv += 'Mathematiques,4,scientifique,BEPC\n';
+        csv += 'Francais,3,litteraire,BEPC\n';
+        csv += 'Physique-Chimie,3,scientifique,BEPC\n';
+        csv += 'Anglais,2,litteraire,BEPC\n';
+        csv += 'EPS,1,litteraire,BEPC\n';
+        downloadCSV(csv, 'modele_matieres.csv');
+      }
+      function downloadTemplateGrades() {
+        var csv = 'matricule,matiere,note,enseignant\n';
+        csv += 'ELV001,Mathematiques,14.5,M.Kone\n';
+        csv += 'ELV001,Francais,11.0,Mme.Bah\n';
+        csv += 'ELV001,Physique-Chimie,16.0,M.Sow\n';
+        csv += 'ELV002,Mathematiques,9.5,M.Kone\n';
+        csv += 'ELV002,Francais,13.0,Mme.Bah\n';
+        downloadCSV(csv, 'modele_notes.csv');
+      }
+
+      // === EXPORT STATS PAR MATIERE EN CSV ===
+      function exportSubjectStatsToCSV() {
+        var subjects = appData.subjects.filter(function (s) { return s.exam === appData.currentExam; });
+        if (!subjects.length) { showAlert('Aucune matière à exporter', 'error'); return; }
+        var header = 'matiere,categorie,coefficient,nb_eleves,moyenne_classe,note_min,note_max,taux_reussite,points_ponderes';
+        var rows = subjects.map(function (subj) {
+          var st = getSubjectClassStats(subj);
+          return [
+            '"' + subj.name.replace(/"/g, '""') + '"',
+            subj.category,
+            subj.coefficient,
+            st.count,
+            st.count > 0 ? st.average.toFixed(2) : '',
+            st.count > 0 ? st.min.toFixed(1) : '',
+            st.count > 0 ? st.max.toFixed(1) : '',
+            st.count > 0 ? Math.round(st.pass / st.count * 100) : 0,
+            st.count > 0 ? st.points.toFixed(2) : ''
+          ].join(',');
+        });
+        var sumPoints = 0, sumCoeffs = 0;
+        subjects.forEach(function (subj) {
+          var st = getSubjectClassStats(subj);
+          sumPoints += st.points; sumCoeffs += subj.coefficient;
+        });
+        var generalAvg = sumCoeffs > 0 ? sumPoints / sumCoeffs : 0;
+        rows.push('"MOYENNE GENERALE PONDEREE","", ' + sumCoeffs + ',,' + generalAvg.toFixed(2) + ',,,,' + sumPoints.toFixed(2));
+        var csv = [header].concat(rows).join('\n');
+        downloadCSV(csv, 'stats_matieres_' + appData.currentExam + '_' + Date.now() + '.csv');
+        showAlert('Statistiques par matière exportées', 'success');
+      }
+
       function checkIntegrity() {
         var validStudentIds = new Set(appData.students.map(function (s) { return s.id; }));
         var validSubjectIds = new Set(appData.subjects.map(function (s) { return s.id; }));
-        var orphanGrades = appData.grades.filter(function (g) { return !validStudentIds.has(g.studentId) || !validSubjectIds.has(g.subjectId); });
-        if (orphanGrades.length > 0) {
+        // Notes orphelines : l'élève ou la matière n'existe plus
+        var orphanGrades = appData.grades.filter(function (g) {
+          return !validStudentIds.has(g.studentId) || !validSubjectIds.has(g.subjectId);
+        });
+        // Notes incohérentes : l'élève et la matière existent mais n'appartiennent
+        // pas au même examen (ex: élève BEPC noté dans une matière BAC1).
+        var crossExamGrades = appData.grades.filter(function (g) {
+          var st = appData.students.find(function (s) { return s.id === g.studentId; });
+          var sub = appData.subjects.find(function (s) { return s.id === g.subjectId; });
+          if (!st || !sub) return false;
+          return st.exam !== sub.exam;
+        });
+        var totalIssues = orphanGrades.length + crossExamGrades.length;
+        if (totalIssues > 0) {
           var before = appData.grades.length;
-          appData.grades = appData.grades.filter(function (g) { return validStudentIds.has(g.studentId) && validSubjectIds.has(g.subjectId); });
+          var badIds = new Set([].concat(orphanGrades, crossExamGrades).map(function (g) { return g.id; }));
+          appData.grades = appData.grades.filter(function (g) { return !badIds.has(g.id); });
           saveToLocalStorage();
           fullUIUpdate();
-          showAlert('Nettoyage: ' + (before - appData.grades.length) + ' notes orphelines supprimées', 'info');
+          var msg = 'Nettoyage : ' + (before - appData.grades.length) + ' note(s) supprimée(s)';
+          if (orphanGrades.length) msg += ' — ' + orphanGrades.length + ' orpheline(s)';
+          if (crossExamGrades.length) msg += ' — ' + crossExamGrades.length + ' incohérente(s) (examen élève ≠ matière)';
+          showAlert(msg, 'info');
         } else {
-          showAlert('Base intègre ! Aucune donnée orpheline.', 'success');
+          showAlert('Base intègre ! Aucune note orpheline ni incohérence d\'examen.', 'success');
         }
       }
 
       function resetAllData() {
         if (!confirm('ATTENTION: Supprimer TOUTES les données ? Action irréversible.')) return;
         appData = { currentExam: 'BEPC', students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
+        // Vide aussi les bulletins déjà générés et les aperçus
+        var bulletinResults = document.getElementById('bulletinResults');
+        if (bulletinResults) bulletinResults.innerHTML = '';
+        bulletinPreviews = [];
+        currentPreviewIndex = -1;
+        var overlay = document.getElementById('bulletinPreviewOverlay');
+        if (overlay) overlay.style.display = 'none';
+        // Détruit les graphiques éventuellement affichés
+        destroyCharts();
         saveToLocalStorage();
         fullUIUpdate();
         showAlert('Toutes les données ont été réinitialisées', 'success');
@@ -1545,6 +1931,10 @@
       function destroyCharts() {
         if (charts.averages) { charts.averages.destroy(); charts.averages = null; }
         if (charts.mentions) { charts.mentions.destroy(); charts.mentions = null; }
+        if (typeof subjectCharts !== 'undefined') {
+          if (subjectCharts.averages) { subjectCharts.averages.destroy(); subjectCharts.averages = null; }
+          if (subjectCharts.points) { subjectCharts.points.destroy(); subjectCharts.points = null; }
+        }
       }
 
       function updateCharts() {
@@ -1554,8 +1944,14 @@
         var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         if (!students.length) return;
 
+        // On inclut les élèves qui ont au moins une note (totalCoeffs > 0),
+        // même si leur moyenne vaut 0 (élève ayant tout raté). On exclut
+        // seulement ceux qui n'ont aucune note.
         var averages = [];
-        students.forEach(function (s) { var a = getStudentAverage(s.id); if (a > 0) averages.push(a); });
+        students.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          if (d.coeffs > 0) averages.push(d.average);
+        });
         if (!averages.length) return;
 
         var ranges = [
@@ -1572,6 +1968,8 @@
           for (var i = 0; i < ranges.length; i++) {
             if (avg >= ranges[i].min && avg < ranges[i].max) { ranges[i].count++; break; }
           }
+          // Cas extrême : moyenne = 20 (n'entre dans aucun range à cause de < max)
+          if (avg >= 20) ranges[ranges.length - 1].count++;
         });
 
         var ctxAvg = document.getElementById('averagesChart');
@@ -1593,7 +1991,10 @@
         }
 
         var mentions = { 'EXCELLENT': 0, 'TRÈS BIEN': 0, 'BIEN': 0, 'PASSABLE': 0, 'NON ADMIS': 0 };
-        students.forEach(function (s) { var avg = getStudentAverage(s.id); if (avg > 0) mentions[getMention(avg).text]++; });
+        students.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          if (d.coeffs > 0) mentions[getMention(d.average).text]++;
+        });
 
         var ctxMen = document.getElementById('mentionsChart');
         if (ctxMen) {
@@ -1619,7 +2020,8 @@
         tbody.innerHTML = '';
         var filtered = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         filtered.forEach(function (s) {
-          tbody.innerHTML += '<tr><td>' + s.id + '</td><td>' + escapeHtml(s.lastName) + '</td><td>' + escapeHtml(s.firstName) + '</td><td>' + escapeHtml(s.matricule) + '</td><td>' + s.exam + '</td><td><button class="action-btn action-edit" onclick="editStudent(' + s.id + ')" type="button"><i class="fas fa-edit"></i></button><button class="action-btn action-delete" onclick="deleteStudent(' + s.id + ')" type="button"><i class="fas fa-trash"></i></button></td></tr>';
+          var inst = escapeHtml(s.institution || '—');
+          tbody.innerHTML += '<tr><td>' + s.id + '</td><td>' + escapeHtml(s.lastName) + '</td><td>' + escapeHtml(s.firstName) + '</td><td>' + escapeHtml(s.matricule) + '</td><td>' + inst + '</td><td>' + s.exam + '</td><td><button class="action-btn action-edit" onclick="editStudent(' + s.id + ')" type="button"><i class="fas fa-edit"></i></button><button class="action-btn action-delete" onclick="deleteStudent(' + s.id + ')" type="button"><i class="fas fa-trash"></i></button></td></tr>';
         });
       }
 
@@ -1655,17 +2057,19 @@
       function updateSelects() {
         var studentSelect = document.getElementById('gradeStudent');
         if (studentSelect) {
-          studentSelect.innerHTML = '<option value="">-- Choisir --</option>';
+          var opts = ['<option value="">-- Choisir --</option>'];
           appData.students.filter(function (s) { return s.exam === appData.currentExam; }).forEach(function (s) {
-            studentSelect.innerHTML += '<option value="' + s.id + '">' + s.firstName + ' ' + s.lastName + ' (' + s.matricule + ')</option>';
+            opts.push('<option value="' + s.id + '">' + escapeHtml(s.firstName + ' ' + s.lastName + ' (' + s.matricule + ')') + '</option>');
           });
+          studentSelect.innerHTML = opts.join('');
         }
         var subjectSelect = document.getElementById('gradeSubject');
         if (subjectSelect) {
-          subjectSelect.innerHTML = '<option value="">-- Choisir --</option>';
+          var sopts = ['<option value="">-- Choisir --</option>'];
           appData.subjects.filter(function (s) { return s.exam === appData.currentExam; }).forEach(function (s) {
-            subjectSelect.innerHTML += '<option value="' + s.id + '">' + s.name + ' (coeff: ' + s.coefficient + ')</option>';
+            sopts.push('<option value="' + s.id + '">' + escapeHtml(s.name + ' (coeff: ' + s.coefficient + ')') + '</option>');
           });
+          subjectSelect.innerHTML = sopts.join('');
         }
       }
 
@@ -1700,6 +2104,79 @@
           '<div class="stat-card"><h3>Matières</h3><div class="stat-value">' + subjects.length + '</div><p style="font-size:0.72rem">' + subjects.filter(function (s) { return s.category === 'scientific'; }).length + ' scientifiques, ' + subjects.filter(function (s) { return s.category === 'literary'; }).length + ' littéraires</p></div>' +
           '<div class="stat-card"><h3>Performance</h3><div class="stat-value">' + avg + '/20</div><div class="progress-bar"><div class="progress-fill ' + (rate >= 70 ? 'progress-success' : rate >= 50 ? 'progress-warning' : 'progress-danger') + '" style="width:' + rate + '%"></div></div><p style="font-size:0.72rem">Taux réussite: ' + rate + '% (' + pass + '/' + count + ')</p></div>';
         updateCharts();
+        updateTop10Ranking();
+      }
+
+      // ===== CLASSEMENT TOP 10 =====
+      // Affiche le classement des 10 premiers élèves de l'examen courant,
+      // triés par moyenne générale décroissante (moyenne pondérée par les
+      // coefficients de leurs matières). Inclut le nom de l'établissement
+      // de chaque élève pour permettre une comparaison inter-établissements.
+      function updateTop10Ranking() {
+        var container = document.getElementById('top10RankingContainer');
+        if (!container) return;
+        var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
+
+        if (students.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px;color:#666">Aucun élève inscrit pour cet examen.</div>';
+          return;
+        }
+
+        // Calcule la moyenne de chaque élève et ne garde que ceux qui ont des notes
+        var ranked = students.map(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          return {
+            id: s.id,
+            name: s.firstName + ' ' + s.lastName,
+            matricule: s.matricule,
+            institution: s.institution || (activeSession ? activeSession.institution : '—'),
+            average: d.average,
+            hasGrades: d.coeffs > 0,
+            totalCoeffs: d.coeffs,
+            mention: getMention(d.average)
+          };
+        }).filter(function (s) { return s.hasGrades; })
+          .sort(function (a, b) { return b.average - a.average; });
+
+        if (ranked.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px;color:#666">Aucune note enregistrée pour cet examen. Saisissez des notes pour générer le classement.</div>';
+          return;
+        }
+
+        var top10 = ranked.slice(0, 10);
+        var totalRanked = ranked.length;
+
+        var rows = top10.map(function (s, idx) {
+          var rank = idx + 1;
+          var rankCls = getRankClass(rank);
+          var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+          var avgCls = s.average >= 16 ? 'grade-excellent' : s.average >= 14 ? 'grade-good' : s.average >= 10 ? 'grade-passable' : 'grade-fail';
+          return '<tr>' +
+            '<td style="text-align:center;font-weight:bold;font-size:1.05rem"><span class="rank-badge ' + rankCls + '">' + rank + '</span> ' + medal + '</td>' +
+            '<td style="text-align:left"><strong>' + escapeHtml(s.name) + '</strong><br><small style="color:#999">' + escapeHtml(s.matricule) + '</small></td>' +
+            '<td style="text-align:left"><i class="fas fa-school" style="color:#3498db;font-size:0.78rem" aria-hidden="true"></i> ' + escapeHtml(s.institution) + '</td>' +
+            '<td style="text-align:center"><span class="mention-badge ' + s.mention.cls + '">' + s.mention.text + '</span></td>' +
+            '<td style="text-align:center;font-weight:bold;font-size:1.05rem" class="' + avgCls + '">' + s.average.toFixed(2) + '/20</td>' +
+            '</tr>';
+        }).join('');
+
+        var note = totalRanked > 10
+          ? '<p style="font-size:0.74rem;color:#666;margin-top:10px"><i class="fas fa-info-circle" aria-hidden="true"></i> Affichage des 10 premiers sur ' + totalRanked + ' élève(s) classé(s). Voir l\'onglet <strong>Analyse</strong> pour le classement complet.</p>'
+          : '<p style="font-size:0.74rem;color:#666;margin-top:10px"><i class="fas fa-info-circle" aria-hidden="true"></i> ' + totalRanked + ' élève(s) classé(s) au total.</p>';
+
+        container.innerHTML =
+          '<div style="overflow-x:auto">' +
+          '<table class="grades-table" style="width:100%;font-size:0.85rem">' +
+            '<thead><tr>' +
+              '<th style="text-align:center;width:60px">Rang</th>' +
+              '<th style="text-align:left">Élève</th>' +
+              '<th style="text-align:left">Établissement</th>' +
+              '<th style="text-align:center">Mention</th>' +
+              '<th style="text-align:center">Moyenne</th>' +
+            '</tr></thead>' +
+            '<tbody>' + rows + '</tbody>' +
+          '</table>' +
+          '</div>' + note;
       }
 
       // ===== STATISTIQUES PAR MATIÈRE =====
@@ -1755,7 +2232,6 @@
           var st = getSubjectClassStats(subj);
           sumPoints += st.points;
           sumCoeffs += st.coefficient;
-          var avgClass = st.count > 0 ? 'grade-good' : 'grade-fail';
           var gradeClass = st.average >= 16 ? 'grade-excellent' : st.average >= 14 ? 'grade-good' : st.average >= 10 ? 'grade-passable' : 'grade-fail';
           var catBadge = subj.category === 'scientific' ? '<span class="badge badge-scientific">Sci.</span>' : '<span class="badge badge-literary">Lit.</span>';
           rows += '<tr>' +
@@ -1770,9 +2246,22 @@
             '</tr>';
         });
 
-        // Moyenne générale = Σ(moyenne_matière × coefficient_matière) / Σ(coefficient_matière)
-        var generalAvg = sumCoeffs > 0 ? sumPoints / sumCoeffs : 0;
-        var generalClass = generalAvg >= 16 ? 'grade-excellent' : generalAvg >= 14 ? 'grade-good' : generalAvg >= 10 ? 'grade-passable' : 'grade-fail';
+        // Deux moyennes générales distinctes (peuvent différer si tous les
+        // élèves n'ont pas exactement les mêmes matières) :
+        //  - parMatiere : Σ(moyenne_matière × coeff) / Σ(coeff)  -- pondération par matière
+        //  - parEleve   : Σ(points élève) / Σ(coeff élève)       -- pondération par élève
+        // La moyenne "par élève" est la référence utilisée partout ailleurs
+        // (onglet Stats, onglet Analyse, bulletins). On l'affiche ici pour
+        // garantir la cohérence entre tous les écrans.
+        var bySubjectAvg = sumCoeffs > 0 ? sumPoints / sumCoeffs : 0;
+        var studentsList = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
+        var byStudentPts = 0, byStudentCf = 0;
+        studentsList.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          byStudentPts += d.points; byStudentCf += d.coeffs;
+        });
+        var byStudentAvg = byStudentCf > 0 ? byStudentPts / byStudentCf : 0;
+        var generalClass = byStudentAvg >= 16 ? 'grade-excellent' : byStudentAvg >= 14 ? 'grade-good' : byStudentAvg >= 10 ? 'grade-passable' : 'grade-fail';
 
         container.innerHTML =
           '<h3 class="form-title" style="font-size:1rem;margin-bottom:10px"><i class="fas fa-table" aria-hidden="true"></i> Statistiques par matière (moyennes pondérées par coefficient)</h3>' +
@@ -1792,18 +2281,251 @@
             '<tfoot><tr style="background:#f8f9fa;font-weight:bold">' +
               '<td style="text-align:left">TOTAUX</td>' +
               '<td>' + sumCoeffs + '</td>' +
-              '<td colspan="5" style="text-align:right">Moyenne générale pondérée = Σ points / Σ coefficients =</td>' +
-              '<td class="' + generalClass + '">' + generalAvg.toFixed(2) + '/20</td>' +
+              '<td colspan="5" style="text-align:right">Moy. pondérée par matière (Σ points / Σ coeff) =</td>' +
+              '<td>' + bySubjectAvg.toFixed(2) + '/20</td>' +
+            '</tr>' +
+            '<tr style="background:#e8f4fd;font-weight:bold">' +
+              '<td colspan="7" style="text-align:right">Moy. pondérée par élève (référence utilisée partout ailleurs) =</td>' +
+              '<td class="' + generalClass + '">' + byStudentAvg.toFixed(2) + '/20</td>' +
             '</tr></tfoot>' +
           '</table>' +
           '</div>' +
-          '<p style="font-size:0.72rem;color:#666;margin-top:8px"><i class="fas fa-info-circle" aria-hidden="true"></i> La "Moy. classe" est la moyenne arithmétique des notes des élèves dans la matière. La "Moyenne générale pondérée" combine les moyennes de chaque matière en les pondérant par leur coefficient : ceci garantit qu\'une matière à fort coefficient pèse plus lourd dans le résultat final.</p>';
+          '<p style="font-size:0.72rem;color:#666;margin-top:8px"><i class="fas fa-info-circle" aria-hidden="true"></i> <strong>Moy. pondérée par matière</strong> = Σ(moyenne_matière × coeff) / Σ(coeff). <strong>Moy. pondérée par élève</strong> = Σ(points élève) / Σ(coeff élève). Les deux coïncident quand tous les élèves ont exactement les mêmes matières ; sinon la moyenne "par élève" est la référence utilisée dans les bulletins, l\'onglet Stats et l\'onglet Analyse.</p>';
+      }
+
+      // ===== ANALYSE AVANCÉE =====
+      // Calcule les quartiles Q1, Médiane, Q3 d'un tableau de valeurs triées.
+      function quartile(sorted, q) {
+        if (!sorted.length) return 0;
+        var pos = (sorted.length - 1) * q;
+        var base = Math.floor(pos);
+        var rest = pos - base;
+        if (sorted[base + 1] !== undefined) {
+          return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+        }
+        return sorted[base];
+      }
+
+      // Met à jour les cartes synthétiques d'analyse :
+      //  - Top 10 / Bottom 5 élèves
+      //  - Quartiles (Q1, Médiane, Q3)
+      //  - Meilleure / pire matière de la classe
+      //  - Comparaison moyennes Scientifiques vs Littéraires
+      function updateAnalysisHighlights() {
+        var container = document.getElementById('analysisHighlights');
+        if (!container) return;
+        var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
+
+        if (students.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px">Aucun élève pour cette analyse</div>';
+          return;
+        }
+
+        // Top / Bottom
+        var ranked = students.map(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          return {
+            id: s.id, name: s.firstName + ' ' + s.lastName, matricule: s.matricule,
+            institution: s.institution || (activeSession ? activeSession.institution : ''),
+            average: d.average, points: d.points, coeffs: d.coeffs,
+            hasGrades: d.coeffs > 0
+          };
+        }).filter(function (s) { return s.hasGrades; })
+          .sort(function (a, b) { return b.average - a.average; });
+
+        if (ranked.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px">Aucune note enregistrée pour cet examen</div>';
+          return;
+        }
+
+        var top10 = ranked.slice(0, Math.min(10, ranked.length));
+        var bottom5 = ranked.slice(-Math.min(5, ranked.length)).reverse();
+
+        // Quartiles
+        var avgs = ranked.map(function (r) { return r.average; }).sort(function (a, b) { return a - b; });
+        var q1 = quartile(avgs, 0.25);
+        var med = quartile(avgs, 0.50);
+        var q3 = quartile(avgs, 0.75);
+
+        // Meilleure / pire matière
+        var subjects = appData.subjects.filter(function (s) { return s.exam === appData.currentExam; });
+        var subjectStatsList = subjects.map(function (subj) {
+          var st = getSubjectClassStats(subj);
+          return { name: subj.name, coefficient: subj.coefficient, average: st.average, count: st.count };
+        }).filter(function (x) { return x.count > 0; })
+          .sort(function (a, b) { return b.average - a.average; });
+
+        var bestSubject = subjectStatsList[0] || null;
+        var worstSubject = subjectStatsList[subjectStatsList.length - 1] || null;
+
+        // Comparaison scientifique vs littéraire (moyennes pondérées par élève)
+        var sciPts = 0, sciCf = 0, litPts = 0, litCf = 0;
+        students.forEach(function (s) {
+          var sd = getStudentCategoryDetail(s.id, 'scientific');
+          var ld = getStudentCategoryDetail(s.id, 'literary');
+          sciPts += sd.points; sciCf += sd.coeffs;
+          litPts += ld.points; litCf += ld.coeffs;
+        });
+        var sciAvg = sciCf > 0 ? sciPts / sciCf : 0;
+        var litAvg = litCf > 0 ? litPts / litCf : 0;
+
+        // Rendu HTML
+        function rankItem(r, idx, isTop) {
+          var cls = isTop ? 'grade-good' : 'grade-fail';
+          var icon = isTop ? '<i class="fas fa-trophy" style="color:#fcd116"></i>' : '<i class="fas fa-exclamation-triangle" style="color:#e74c3c"></i>';
+          var medal = isTop && idx === 0 ? ' 🥇' : isTop && idx === 1 ? ' 🥈' : isTop && idx === 2 ? ' 🥉' : '';
+          var instHtml = r.institution
+            ? '<br><small style="color:#3498db;margin-left:22px"><i class="fas fa-school" style="font-size:0.7rem" aria-hidden="true"></i> ' + escapeHtml(r.institution) + '</small>'
+            : '';
+          return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:5px 8px;border-bottom:1px solid #eee;font-size:0.8rem">' +
+            '<span style="flex:1">' + icon + ' <strong>#' + (idx + 1) + '</strong>' + medal + ' ' + escapeHtml(r.name) + ' <small style="color:#999">(' + escapeHtml(r.matricule) + ')</small>' + instHtml + '</span>' +
+            '<span class="' + cls + '" style="font-weight:bold;padding:2px 8px;border-radius:6px;color:#fff;white-space:nowrap;margin-left:8px">' + r.average.toFixed(2) + '/20</span>' +
+            '</div>';
+        }
+
+        var topHtml = top10.map(function (r, i) { return rankItem(r, i, true); }).join('');
+        var botHtml = bottom5.map(function (r, i) { return rankItem(r, i, false); }).join('');
+
+        function card(title, icon, bodyHtml, accent) {
+          return '<div style="border:1px solid #e0e0e0;border-radius:10px;padding:12px;background:#fff">' +
+            '<h4 style="font-size:0.88rem;margin-bottom:8px;color:' + (accent || '#2c3e50') + '"><i class="fas ' + icon + '" aria-hidden="true"></i> ' + title + '</h4>' +
+            bodyHtml +
+            '</div>';
+        }
+
+        var quartileBody =
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">' +
+            '<div><div style="font-size:0.7rem;color:#888">Q1 (25%)</div><div style="font-size:1.1rem;font-weight:bold;color:#f39c12">' + q1.toFixed(2) + '</div></div>' +
+            '<div><div style="font-size:0.7rem;color:#888">Médiane</div><div style="font-size:1.2rem;font-weight:bold;color:#3498db">' + med.toFixed(2) + '</div></div>' +
+            '<div><div style="font-size:0.7rem;color:#888">Q3 (75%)</div><div style="font-size:1.1rem;font-weight:bold;color:#2ecc71">' + q3.toFixed(2) + '</div></div>' +
+          '</div>' +
+          '<p style="font-size:0.7rem;color:#666;margin-top:8px">Sur ' + avgs.length + ' élève(s) avec notes.</p>';
+
+        var subjectBody = bestSubject && worstSubject
+          ? '<div style="font-size:0.8rem">' +
+              '<div style="margin-bottom:6px"><i class="fas fa-arrow-up" style="color:#2ecc71"></i> Meilleure : <strong>' + escapeHtml(bestSubject.name) + '</strong> (coeff ' + bestSubject.coefficient + ') — <span style="color:#2ecc71;font-weight:bold">' + bestSubject.average.toFixed(2) + '/20</span></div>' +
+              '<div><i class="fas fa-arrow-down" style="color:#e74c3c"></i> Plus fragile : <strong>' + escapeHtml(worstSubject.name) + '</strong> (coeff ' + worstSubject.coefficient + ') — <span style="color:#e74c3c;font-weight:bold">' + worstSubject.average.toFixed(2) + '/20</span></div>' +
+            '</div>'
+          : '<p style="font-size:0.78rem;color:#999">Aucune note enregistrée</p>';
+
+        var catBody =
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
+            '<div style="text-align:center;padding:8px;background:#e3f2fd;border-radius:8px"><div style="font-size:0.7rem;color:#666">Scientifiques</div><div style="font-size:1.2rem;font-weight:bold;color:#1976d2">' + sciAvg.toFixed(2) + '/20</div></div>' +
+            '<div style="text-align:center;padding:8px;background:#fce4ec;border-radius:8px"><div style="font-size:0.7rem;color:#666">Littéraires</div><div style="font-size:1.2rem;font-weight:bold;color:#c2185b">' + litAvg.toFixed(2) + '/20</div></div>' +
+          '</div>' +
+          '<p style="font-size:0.7rem;color:#666;margin-top:6px">' + (sciAvg > litAvg ? 'Les scientifiques dominent' : (litAvg > sciAvg ? 'Les littéraires dominent' : 'Équilibre parfait')) + ' (écart : ' + Math.abs(sciAvg - litAvg).toFixed(2) + ').</p>';
+
+        container.innerHTML =
+          '<h3 class="form-title" style="font-size:1rem;margin-bottom:10px"><i class="fas fa-star" aria-hidden="true"></i> Synthèse rapide de la classe</h3>' +
+          '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">' +
+            card('Top 10 élèves', 'fa-trophy', topHtml, '#f39c12') +
+            card('5 élèves à accompagner', 'fa-heart', botHtml, '#e74c3c') +
+            card('Quartiles des moyennes', 'fa-chart-area', quartileBody, '#3498db') +
+            card('Matières extrêmes', 'fa-balance-scale', subjectBody, '#9b59b6') +
+            card('Scientifique vs Littéraire', 'fa-flask', catBody, '#16a085') +
+          '</div>';
+      }
+
+      // ===== GRAPHIQUES PAR MATIERE =====
+      // Affiche deux graphiques :
+      //  1. Bar chart des moyennes par matière (avec couleur selon réussite)
+      //  2. Bar chart comparant les points pondérés (moyenne × coefficient)
+      var subjectCharts = { averages: null, points: null };
+      function updateSubjectCharts() {
+        var container = document.getElementById('subjectChartsContainer');
+        if (!container) return;
+        if (typeof Chart === 'undefined') return;
+        // Détruit les anciens graphiques
+        if (subjectCharts.averages) { subjectCharts.averages.destroy(); subjectCharts.averages = null; }
+        if (subjectCharts.points) { subjectCharts.points.destroy(); subjectCharts.points = null; }
+
+        var subjects = appData.subjects.filter(function (s) { return s.exam === appData.currentExam; });
+        if (subjects.length === 0) {
+          container.innerHTML = '<div class="form-section" style="text-align:center;padding:12px;font-size:0.82rem;color:#666">Ajoutez des matières pour voir les graphiques</div>';
+          return;
+        }
+
+        var stats = subjects.map(function (subj) {
+          var st = getSubjectClassStats(subj);
+          return {
+            name: subj.name, coefficient: subj.coefficient,
+            average: st.count > 0 ? st.average : 0,
+            points: st.count > 0 ? st.points : 0,
+            count: st.count,
+            category: subj.category
+          };
+        });
+
+        container.innerHTML =
+          '<h3 class="form-title" style="font-size:1rem;margin-bottom:10px"><i class="fas fa-chart-bar" aria-hidden="true"></i> Graphiques par matière</h3>' +
+          '<div class="charts-row">' +
+            '<div><h4 style="text-align:center;font-size:0.82rem">Moyenne de classe par matière</h4><canvas id="subjectAveragesChart" class="chart-container"></canvas></div>' +
+            '<div><h4 style="text-align:center;font-size:0.82rem">Points pondérés (moy × coeff) par matière</h4><canvas id="subjectPointsChart" class="chart-container"></canvas></div>' +
+          '</div>';
+
+        var labels = stats.map(function (s) { return s.name; });
+        // Couleurs selon la moyenne : vert >=14, bleu >=10, orange >=8, rouge <8
+        function colorFor(avg) {
+          if (avg >= 14) return 'rgba(46,204,113,0.7)';
+          if (avg >= 10) return 'rgba(52,152,219,0.7)';
+          if (avg >= 8) return 'rgba(243,156,18,0.7)';
+          return 'rgba(231,76,60,0.7)';
+        }
+        var avgColors = stats.map(function (s) { return colorFor(s.average); });
+        var ptsColors = stats.map(function (s) { return s.category === 'scientific' ? 'rgba(25,118,210,0.7)' : 'rgba(194,24,91,0.7)'; });
+
+        var ctx1 = document.getElementById('subjectAveragesChart');
+        if (ctx1) {
+          subjectCharts.averages = new Chart(ctx1.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Moyenne /20',
+                data: stats.map(function (s) { return s.average; }),
+                backgroundColor: avgColors,
+                borderColor: avgColors.map(function (c) { return c.replace('0.7', '1'); }),
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true, maintainAspectRatio: true,
+              scales: { y: { beginAtZero: true, max: 20 } },
+              plugins: { legend: { display: false } }
+            }
+          });
+        }
+
+        var ctx2 = document.getElementById('subjectPointsChart');
+        if (ctx2) {
+          subjectCharts.points = new Chart(ctx2.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Points pondérés (moy × coeff)',
+                data: stats.map(function (s) { return s.points; }),
+                backgroundColor: ptsColors,
+                borderColor: ptsColors.map(function (c) { return c.replace('0.7', '1'); }),
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true, maintainAspectRatio: true,
+              scales: { y: { beginAtZero: true } },
+              plugins: { legend: { display: false } }
+            }
+          });
+        }
       }
 
       function updateAnalysisTab() {
         // Toujours rafraîchir les statistiques par matière (moyennes pondérées
-        // par coefficient) avant l'analyse par élève.
+        // par coefficient), les cartes synthétiques et les graphiques avant
+        // l'analyse par élève.
         updateSubjectStats();
+        updateAnalysisHighlights();
+        updateSubjectCharts();
         var students = appData.students.filter(function (s) { return s.exam === appData.currentExam; });
         var container = document.getElementById('studentsAnalysisContainer');
         if (!container) return;
@@ -1812,41 +2534,73 @@
         var studentsData = students.map(function (s) {
           var detail = getStudentAverageDetail(s.id);
           var avg = detail.average;
+          var hasGrades = detail.coeffs > 0;
           var gradesDetails = getStudentGrades(s.id).map(function (g) {
             var subj = appData.subjects.find(function (sub) { return sub.id === g.subjectId; });
             return { subjectName: subj ? subj.name : 'Inconnu', grade: g.value, coefficient: subj ? subj.coefficient : 1, category: subj ? subj.category : 'literary' };
           });
           var hasDifficulty = gradesDetails.some(function (g) { return g.grade < 10; });
-          return { id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, average: avg, totalCoeffs: detail.coeffs, totalPoints: detail.points, gradesDetails: gradesDetails, hasDifficulty: hasDifficulty, isPassing: avg >= 10 };
+          return { id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, institution: s.institution || '', average: avg, hasGrades: hasGrades, totalCoeffs: detail.coeffs, totalPoints: detail.points, gradesDetails: gradesDetails, hasDifficulty: hasDifficulty, isPassing: hasGrades && avg >= 10 };
         });
 
         var searchTerm = (document.getElementById('searchStudentInput').value || '').toLowerCase();
         var diffFilter = document.getElementById('filterDifficultySelect').value || 'all';
 
         studentsData = studentsData.filter(function (s) {
-          var match = searchTerm === '' || s.firstName.toLowerCase().indexOf(searchTerm) !== -1 || s.lastName.toLowerCase().indexOf(searchTerm) !== -1 || s.matricule.toLowerCase().indexOf(searchTerm) !== -1;
+          // La recherche inclut désormais le nom de l'établissement
+          var match = searchTerm === '' || s.firstName.toLowerCase().indexOf(searchTerm) !== -1 || s.lastName.toLowerCase().indexOf(searchTerm) !== -1 || s.matricule.toLowerCase().indexOf(searchTerm) !== -1 || (s.institution || '').toLowerCase().indexOf(searchTerm) !== -1;
           if (!match) return false;
           if (diffFilter === 'difficulty') return s.hasDifficulty;
           if (diffFilter === 'good') return !s.hasDifficulty;
           return true;
         });
 
-        // Moyenne générale = moyenne pondérée par le total des coefficients de
-        // chaque élève (et non simple moyenne des moyennes individuelles).
-        var sumPoints = 0, sumCoeffs = 0;
-        studentsData.forEach(function (s) { sumPoints += s.totalPoints; sumCoeffs += s.totalCoeffs; });
-        var avgGeneral = sumCoeffs > 0 ? (sumPoints / sumCoeffs).toFixed(2) : 0;
+        // Statistiques de synthèse calculées sur l'ensemble non filtré pour
+        // rester stables (sinon la valeur change quand on tape dans la
+        // recherche). Pour la moyenne générale on pondère par les coefficients.
+        var allStudentsData = students.map(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          return { points: d.points, coeffs: d.coeffs, hasGrades: d.coeffs > 0, isPassing: d.coeffs > 0 && d.average >= 10 };
+        });
+        var allWithGrades = allStudentsData.filter(function (s) { return s.hasGrades; });
+        var sumPts = 0, sumCf = 0;
+        allWithGrades.forEach(function (s) { sumPts += s.points; sumCf += s.coeffs; });
+        var globalAvg = sumCf > 0 ? (sumPts / sumCf).toFixed(2) : '0.00';
+        var globalSuccess = allWithGrades.length > 0 ? Math.round(allWithGrades.filter(function (s) { return s.isPassing; }).length / allWithGrades.length * 100) : 0;
 
-        var el1 = document.getElementById('totalStudentsStat'); if (el1) el1.textContent = studentsData.length;
-        var el2 = document.getElementById('studentsWithDiffStat'); if (el2) el2.textContent = studentsData.filter(function (s) { return s.hasDifficulty; }).length;
-        var el3 = document.getElementById('globalAvgStat'); if (el3) el3.textContent = avgGeneral + '/20';
-        var el4 = document.getElementById('successRateStat'); if (el4) el4.textContent = (studentsData.length > 0 ? Math.round(studentsData.filter(function (s) { return s.isPassing; }).length / studentsData.length * 100) : 0) + '%';
+        var el1 = document.getElementById('totalStudentsStat'); if (el1) el1.textContent = students.length;
+        var el2 = document.getElementById('studentsWithDiffStat'); if (el2) el2.textContent = allWithGrades.filter(function (s) {
+          // recompte les difficultés sur la classe entière
+          return false;
+        }).length;
+        // Pour les "difficultés", on recompte depuis students (toute la classe)
+        var diffCount = 0;
+        students.forEach(function (s) {
+          var grades = getStudentGrades(s.id);
+          if (grades.some(function (g) { return g.value < 10; })) diffCount++;
+        });
+        if (el2) el2.textContent = diffCount;
+        var el3 = document.getElementById('globalAvgStat'); if (el3) el3.textContent = globalAvg + '/20';
+        var el4 = document.getElementById('successRateStat'); if (el4) el4.textContent = globalSuccess + '%';
 
-        studentsData.sort(function (a, b) { return b.average - a.average; });
-        container.innerHTML = studentsData.map(function (s, idx) {
-          return '<div class="student-analysis-card"><div class="student-analysis-header"><div><span class="student-name">' + escapeHtml(s.firstName) + ' ' + escapeHtml(s.lastName) + '</span><br><small style="color:#666">' + escapeHtml(s.matricule) + '</small></div><div><span class="student-average ' + (s.isPassing ? 'average-pass' : 'average-fail') + '">' + s.average.toFixed(2) + '/20</span><span style="margin-left:10px;font-size:0.78rem">Rang: ' + (idx + 1) + '</span></div></div><div class="subjects-grid">' + s.gradesDetails.map(function (g) {
-            return '<div class="subject-item ' + (g.grade < 10 ? 'subject-difficulty' : 'subject-good') + '"><span>' + escapeHtml(g.subjectName) + '</span><span class="' + (g.grade < 10 ? 'subject-grade-low' : 'subject-grade-high') + '">' + g.grade + '/20</span></div>';
-          }).join('') + '</div></div>';
+        // Classement : élèves avec notes d'abord (triés), puis élèves sans notes
+        var withGrades = studentsData.filter(function (s) { return s.hasGrades; }).sort(function (a, b) { return b.average - a.average; });
+        var withoutGrades = studentsData.filter(function (s) { return !s.hasGrades; });
+        var ranked = withGrades.concat(withoutGrades);
+
+        container.innerHTML = ranked.map(function (s, idx) {
+          var avgStr = s.hasGrades ? s.average.toFixed(2) + '/20' : '—';
+          var passCls = !s.hasGrades ? 'average-fail' : (s.isPassing ? 'average-pass' : 'average-fail');
+          var rankStr = s.hasGrades ? (idx + 1) : '—';
+          var subjectsHtml = s.gradesDetails.length > 0
+            ? s.gradesDetails.map(function (g) {
+                return '<div class="subject-item ' + (g.grade < 10 ? 'subject-difficulty' : 'subject-good') + '"><span>' + escapeHtml(g.subjectName) + '</span><span class="' + (g.grade < 10 ? 'subject-grade-low' : 'subject-grade-high') + '">' + g.grade + '/20</span></div>';
+              }).join('')
+            : '<div style="color:#999;font-size:0.78rem;font-style:italic;padding:8px">Aucune note enregistrée</div>';
+          var instHtml = s.institution
+            ? '<br><small style="color:#3498db"><i class="fas fa-school" aria-hidden="true"></i> ' + escapeHtml(s.institution) + '</small>'
+            : '';
+          return '<div class="student-analysis-card"><div class="student-analysis-header"><div><span class="student-name">' + escapeHtml(s.firstName) + ' ' + escapeHtml(s.lastName) + '</span><br><small style="color:#666">' + escapeHtml(s.matricule) + '</small>' + instHtml + '</div><div><span class="student-average ' + passCls + '">' + avgStr + '</span><span style="margin-left:10px;font-size:0.78rem">Rang: ' + rankStr + '</span></div></div><div class="subjects-grid">' + subjectsHtml + '</div></div>';
         }).join('');
       }
 
@@ -1856,6 +2610,7 @@
           var detail = getStudentAverageDetail(s.id);
           return {
             nom: s.lastName, prenom: s.firstName, matricule: s.matricule,
+            etablissement: s.institution || '',
             moyenne: detail.average.toFixed(2),
             total_points: detail.points,
             total_coefficients: detail.coeffs,
@@ -1891,6 +2646,7 @@
           var litDetail = getStudentCategoryDetail(s.id, 'literary');
           return {
             id: s.id, lastName: s.lastName, firstName: s.firstName, matricule: s.matricule, exam: s.exam,
+            institution: s.institution || '',
             average: detail.average,
             totalPoints: detail.points,
             totalCoeffs: detail.coeffs,
@@ -1903,23 +2659,33 @@
           };
         });
 
-        studentsWithAvg.sort(function (a, b) { return b.average - a.average; });
+        // On sépare les élèves avec notes (classés) des élèves sans notes
+        // (affichés à la fin avec "Non noté"). Évite qu'un élève sans note
+        // apparaisse avec une moyenne 0/20 et un rang trompeur.
+        var studentsWithGrades = studentsWithAvg.filter(function (s) { return s.totalCoeffs > 0; });
+        var studentsWithoutGrades = studentsWithAvg.filter(function (s) { return s.totalCoeffs === 0; });
+
+        studentsWithGrades.sort(function (a, b) { return b.average - a.average; });
         // Moyenne de classe = moyenne pondérée par le total de coefficients de
         // chaque élève (somme des points / somme des coefficients).
         var classSumPoints = 0, classSumCoeffs = 0;
-        studentsWithAvg.forEach(function (s) { classSumPoints += s.totalPoints; classSumCoeffs += s.totalCoeffs; });
+        studentsWithGrades.forEach(function (s) { classSumPoints += s.totalPoints; classSumCoeffs += s.totalCoeffs; });
         var classAvg = classSumCoeffs > 0 ? classSumPoints / classSumCoeffs : 0;
-        var successRate = studentsWithAvg.length > 0 ? (studentsWithAvg.filter(function (s) { return s.average >= 10; }).length / studentsWithAvg.length) * 100 : 0;
+        // Taux de réussite calculé sur les élèves ayant des notes seulement.
+        var successRate = studentsWithGrades.length > 0 ? (studentsWithGrades.filter(function (s) { return s.average >= 10; }).length / studentsWithGrades.length) * 100 : 0;
+        // Concatène : élèves classés d'abord, puis élèves non notés à la fin.
+        var rankedStudents = studentsWithGrades.concat(studentsWithoutGrades);
 
         bulletinPreviews = [];
         var grid = document.createElement('div');
         grid.className = 'bulletin-grid';
 
-        studentsWithAvg.forEach(function (student, idx) {
+        rankedStudents.forEach(function (student, idx) {
+          var hasGrades = student.totalCoeffs > 0;
           var rank = idx + 1;
-          var total = studentsWithAvg.length;
-          var percentage = ((rank / total) * 100).toFixed(1);
-          var mention = getMention(student.average);
+          var total = studentsWithGrades.length;
+          var percentage = total > 0 ? ((rank / total) * 100).toFixed(1) : '0.0';
+          var mention = hasGrades ? getMention(student.average) : { text: 'NON NOTÉ', cls: 'mention-fail' };
 
           var gradesHtml = '';
           var scientificPoints = 0, scientificCoeffs = 0;
@@ -1932,30 +2698,38 @@
             else { literaryPoints += g.grade * g.coefficient; literaryCoeffs += g.coefficient; }
           });
 
+          if (!hasGrades) {
+            gradesHtml = '<tr><td colspan="5" style="text-align:center;color:#999;font-style:italic;padding:12px">Aucune note enregistrée pour cet élève</td></tr>';
+          }
+
           var scientificTotal = scientificCoeffs > 0 ? (scientificPoints / scientificCoeffs).toFixed(2) : '0.00';
           var literaryTotal = literaryCoeffs > 0 ? (literaryPoints / literaryCoeffs).toFixed(2) : '0.00';
           // Totaux calculés directement à partir des sommes (et non reconstruits
           // à partir de la moyenne) pour garantir la cohérence des chiffres.
           var totalPoints = (scientificPoints + literaryPoints).toFixed(1);
           var totalCoeffs = scientificCoeffs + literaryCoeffs;
-          // Vérification de cohérence : average doit être égal à totalPoints / totalCoeffs.
-          // On utilise totalPoints / totalCoeffs pour l'affichage afin d'éviter tout
-          // écart d'arrondi entre la moyenne affichée et les totaux affichés.
-          var computedAvg = totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
+          var avgDisplay = hasGrades ? student.average.toFixed(2) + '/20' : '—';
+          var rankDisplay = hasGrades ? (rank + '/' + total) : '—';
+          var ecartDisplay = hasGrades ? (student.average - classAvg).toFixed(2) : '—';
+
+          // Établissement de l'élève : on privilégie celui enregistré sur
+          // l'élève ; à défaut on prend celui de la session active.
+          var studentInstitution = student.institution || (activeSession ? activeSession.institution : 'Ministère de l\'Éducation');
 
           var fullHtml =
-            '<div class="bulletin-header"><span class="school-year">Année Scolaire 2025-2026</span><h2>BULLETIN D\'EXAMEN BLANC</h2><h3>' + student.exam + '</h3><p style="font-size:0.7rem;color:#666;margin-top:5px">Établissement: ' + (activeSession ? activeSession.institution : 'Ministère de l\'Éducation') + '</p></div>' +
-            '<div class="student-info-card"><div class="student-detail"><p><strong>Nom :</strong> ' + escapeHtml(student.lastName) + '</p><p><strong>Prénom :</strong> ' + escapeHtml(student.firstName) + '</p><p><strong>Matricule :</strong> ' + escapeHtml(student.matricule) + '</p></div><div class="average-box"><div class="avg-value">' + student.average.toFixed(2) + '/20</div><div>Moyenne Générale</div></div><div class="mention-box ' + mention.cls + '"><div>' + mention.text + '</div><div>Mention</div></div></div>' +
+            '<div class="bulletin-header"><span class="school-year">Année Scolaire 2025-2026</span><h2>BULLETIN D\'EXAMEN BLANC</h2><h3>' + student.exam + '</h3><p style="font-size:0.7rem;color:#666;margin-top:5px">Établissement: ' + escapeHtml(studentInstitution) + '</p></div>' +
+            '<div class="student-info-card"><div class="student-detail"><p><strong>Nom :</strong> ' + escapeHtml(student.lastName) + '</p><p><strong>Prénom :</strong> ' + escapeHtml(student.firstName) + '</p><p><strong>Matricule :</strong> ' + escapeHtml(student.matricule) + '</p><p><strong>Établissement :</strong> ' + escapeHtml(studentInstitution) + '</p></div><div class="average-box"><div class="avg-value">' + avgDisplay + '</div><div>Moyenne Générale</div></div><div class="mention-box ' + mention.cls + '"><div>' + mention.text + '</div><div>Mention</div></div></div>' +
             '<div class="category-summary"><div class="category-card scientific"><h4>Matières Scientifiques</h4><div style="font-size:1.1rem;font-weight:bold">' + scientificTotal + '/20</div></div><div class="category-card literary"><h4>Matières Littéraires</h4><div style="font-size:1.1rem;font-weight:bold">' + literaryTotal + '/20</div></div></div>' +
-            '<table class="grades-table"><thead><tr><th>Matières</th><th>Coeff.</th><th>Note</th><th>Points</th><th>Enseignant</th></tr></thead><tbody>' + gradesHtml + '</tbody><tfoot><tr style="background:#f8f9fa;font-weight:bold"><td style="text-align:left">Totaux</td><td>' + totalCoeffs + '</td><td>' + student.average.toFixed(2) + '/20</td><td>' + totalPoints + '</td><td></td></tr></tfoot></table>' +
-            '<div class="stats-summary"><div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ' + getRankClass(rank) + '">' + rank + '/' + total + '</div></div><div class="stat-item"><div class="stat-label">Pourcentage</div><div class="stat-number">' + percentage + '%</div></div><div class="stat-item"><div class="stat-label">Moy. Classe</div><div class="stat-number">' + classAvg.toFixed(2) + '/20</div></div><div class="stat-item"><div class="stat-label">Écart</div><div class="stat-number ' + (student.average >= classAvg ? 'grade-good' : 'grade-fail') + '">' + (student.average - classAvg).toFixed(2) + '</div></div><div class="stat-item"><div class="stat-label">Taux Réussite</div><div class="stat-number">' + successRate.toFixed(1) + '%</div></div></div>' +
-            '<div style="margin-top:16px;padding:12px;background:#f0f8ff;border-radius:10px;text-align:center"><p><strong>Appréciation :</strong> ' + getAppreciation(student.average) + '</p></div>' +
+            '<table class="grades-table"><thead><tr><th>Matières</th><th>Coeff.</th><th>Note</th><th>Points</th><th>Enseignant</th></tr></thead><tbody>' + gradesHtml + '</tbody><tfoot><tr style="background:#f8f9fa;font-weight:bold"><td style="text-align:left">Totaux</td><td>' + totalCoeffs + '</td><td>' + avgDisplay + '</td><td>' + totalPoints + '</td><td></td></tr></tfoot></table>' +
+            '<div class="stats-summary"><div class="stat-item"><div class="stat-label">Rang</div><div class="stat-number rank-badge ' + getRankClass(rank) + '">' + rankDisplay + '</div></div><div class="stat-item"><div class="stat-label">Pourcentage</div><div class="stat-number">' + percentage + '%</div></div><div class="stat-item"><div class="stat-label">Moy. Classe</div><div class="stat-number">' + classAvg.toFixed(2) + '/20</div></div><div class="stat-item"><div class="stat-label">Écart</div><div class="stat-number ' + (hasGrades && student.average >= classAvg ? 'grade-good' : 'grade-fail') + '">' + ecartDisplay + '</div></div><div class="stat-item"><div class="stat-label">Taux Réussite</div><div class="stat-number">' + successRate.toFixed(1) + '%</div></div></div>' +
+            '<div style="margin-top:16px;padding:12px;background:#f0f8ff;border-radius:10px;text-align:center"><p><strong>Appréciation :</strong> ' + (hasGrades ? getAppreciation(student.average) : 'Aucune note enregistrée.') + '</p></div>' +
             '<div style="margin-top:16px;text-align:center;font-size:0.68rem;color:#999;border-top:1px solid #eee;padding-top:12px"><p>Date: ' + new Date().toLocaleDateString('fr-FR') + ' – Le Chef d\'Établissement</p></div>';
 
           bulletinPreviews.push(fullHtml);
 
           var card = document.createElement('div');
           card.className = 'bulletin-card';
+          if (!hasGrades) card.style.opacity = '0.7';
           card.tabIndex = 0;
           card.setAttribute('role', 'button');
           card.setAttribute('aria-label', 'Aperçu du bulletin de ' + escapeHtml(student.firstName) + ' ' + escapeHtml(student.lastName));
@@ -1963,8 +2737,8 @@
             '<div class="card-flag" aria-hidden="true"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="c"></div><div class="st"></div></div>' +
             '<h3>' + escapeHtml(student.lastName) + ' ' + escapeHtml(student.firstName) + '</h3>' +
             '<div class="card-meta">' +
-              '<span>Moy: ' + student.average.toFixed(2) + '/20</span>' +
-              '<span class="rank-badge-sm">Rang: ' + rank + '/' + total + '</span>' +
+              '<span>Moy: ' + avgDisplay + '</span>' +
+              '<span class="rank-badge-sm">Rang: ' + rankDisplay + '</span>' +
               '<span>' + escapeHtml(mention.text) + '</span>' +
             '</div>' +
             '<div class="card-actions">' +
@@ -1977,18 +2751,38 @@
 
         container.appendChild(grid);
 
-        container.addEventListener('click', function (e) {
-          var previewBtn = e.target.closest('[data-preview]');
-          if (previewBtn) {
-            openBulletinPreview(parseInt(previewBtn.getAttribute('data-preview')));
-            return;
-          }
-          var printBtn = e.target.closest('[data-printpreview]');
-          if (printBtn) {
-            var pIdx = parseInt(printBtn.getAttribute('data-printpreview'));
-            printBulletinFromArray(pIdx);
-          }
-        });
+        // Le listener est attaché une seule fois (au premier appel) via un flag
+        // dataset, pour éviter l'accumulation à chaque régénération des
+        // bulletins (sinon N clics déclenchent N fenêtres d'impression).
+        if (!container.dataset.bound) {
+          container.addEventListener('click', function (e) {
+            var previewBtn = e.target.closest('[data-preview]');
+            if (previewBtn) {
+              openBulletinPreview(parseInt(previewBtn.getAttribute('data-preview')));
+              return;
+            }
+            var printBtn = e.target.closest('[data-printpreview]');
+            if (printBtn) {
+              var pIdx = parseInt(printBtn.getAttribute('data-printpreview'));
+              printBulletinFromArray(pIdx);
+            }
+            // Clic sur la carte elle-même (hors boutons) = ouvrir l'aperçu
+            var card = e.target.closest('.bulletin-card');
+            if (card && !previewBtn && !printBtn) {
+              var idx = Array.prototype.indexOf.call(card.parentNode.children, card);
+              if (idx >= 0) openBulletinPreview(idx);
+            }
+          });
+          container.addEventListener('keydown', function (e) {
+            // Enter / Space sur une carte focalisée ouvre l'aperçu
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var card = e.target.closest('.bulletin-card');
+            if (!card) return;
+            var idx = Array.prototype.indexOf.call(card.parentNode.children, card);
+            if (idx >= 0) { openBulletinPreview(idx); e.preventDefault(); }
+          });
+          container.dataset.bound = '1';
+        }
 
         showAlert(students.length + ' bulletin(s) généré(s) avec succès !', 'success');
       }
@@ -2077,13 +2871,17 @@
         var f = document.getElementById('firstName').value.trim();
         var m = document.getElementById('matricule').value.trim();
         var e = document.getElementById('studentExam').value;
-        if (!l || !f || !m) { showAlert('Veuillez remplir tous les champs', 'error'); return; }
+        var inst = document.getElementById('studentInstitution').value.trim();
+        // Si l'établissement n'est pas précisé, on prend celui de la session active
+        if (!inst && activeSession) inst = activeSession.institution;
+        if (!l || !f || !m) { showAlert('Veuillez remplir tous les champs obligatoires', 'error'); return; }
         if (appData.students.some(function (s) { return s.matricule === m; })) { showAlert('Ce matricule existe déjà', 'error'); return; }
-        appData.students.push({ id: appData.nextStudentId++, lastName: l, firstName: f, matricule: m, exam: e });
+        appData.students.push({ id: appData.nextStudentId++, lastName: l, firstName: f, matricule: m, exam: e, institution: inst });
         fullUIUpdate();
         document.getElementById('lastName').value = '';
         document.getElementById('firstName').value = '';
         document.getElementById('matricule').value = '';
+        document.getElementById('studentInstitution').value = '';
         showAlert('Élève ajouté avec succès', 'success');
       }
 
@@ -2091,17 +2889,22 @@
         var s = appData.students.find(function (st) { return st.id === id; });
         if (!s) return;
         var nl = prompt('Nouveau nom:', s.lastName);
+        if (nl === null) return;
         var nf = prompt('Nouveau prénom:', s.firstName);
+        if (nf === null) return;
         var nm = prompt('Nouveau matricule:', s.matricule);
-        if (nl && nf && nm) {
-          if (nm !== s.matricule && appData.students.some(function (st) { return st.matricule === nm; })) {
-            showAlert('Ce matricule existe déjà', 'error');
-            return;
-          }
-          s.lastName = nl; s.firstName = nf; s.matricule = nm;
-          fullUIUpdate();
-          showAlert('Élève modifié', 'success');
+        if (nm === null) return;
+        var ni = prompt('Établissement:', s.institution || (activeSession ? activeSession.institution : ''));
+        if (ni === null) return;
+        nl = nl.trim(); nf = nf.trim(); nm = nm.trim(); ni = ni.trim();
+        if (!nl || !nf || !nm) { showAlert('Nom, prénom et matricule sont obligatoires', 'error'); return; }
+        if (nm !== s.matricule && appData.students.some(function (st) { return st.matricule === nm; })) {
+          showAlert('Ce matricule existe déjà', 'error');
+          return;
         }
+        s.lastName = nl; s.firstName = nf; s.matricule = nm; s.institution = ni;
+        fullUIUpdate();
+        showAlert('Élève modifié', 'success');
       }
 
       function deleteStudent(id) {
@@ -2114,11 +2917,11 @@
 
       function addSubject() {
         var n = document.getElementById('subjectName').value.trim();
-        var c = parseInt(document.getElementById('coefficient').value);
+        var c = parseInt(document.getElementById('coefficient').value, 10);
         var cat = document.getElementById('subjectCategory').value;
         var e = document.getElementById('subjectExam').value;
-        if (!n || c < 1) { showAlert('Nom et coefficient valides requis', 'error'); return; }
-        if (appData.subjects.some(function (s) { return s.name === n && s.exam === e; })) { showAlert('Cette matière existe déjà pour cet examen', 'error'); return; }
+        if (!n || isNaN(c) || c < 1) { showAlert('Nom et coefficient valides requis (coefficient entier ≥ 1)', 'error'); return; }
+        if (appData.subjects.some(function (s) { return s.name.toLowerCase() === n.toLowerCase() && s.exam === e; })) { showAlert('Cette matière existe déjà pour cet examen', 'error'); return; }
         appData.subjects.push({ id: appData.nextSubjectId++, name: n, coefficient: c, category: cat, exam: e });
         fullUIUpdate();
         document.getElementById('subjectName').value = '';
@@ -2129,8 +2932,15 @@
         var s = appData.subjects.find(function (sub) { return sub.id === id; });
         if (!s) return;
         var nn = prompt('Nouveau nom:', s.name);
-        var nc = prompt('Nouveau coefficient:', s.coefficient);
-        if (nn && nc) { s.name = nn; s.coefficient = parseInt(nc); fullUIUpdate(); showAlert('Matière modifiée', 'success'); }
+        if (nn === null) return;
+        nn = nn.trim();
+        var nc = prompt('Nouveau coefficient (entier ≥ 1):', s.coefficient);
+        if (nc === null) return;
+        var ncNum = parseInt(nc, 10);
+        if (!nn || isNaN(ncNum) || ncNum < 1) { showAlert('Nom et coefficient valides requis (coefficient entier ≥ 1)', 'error'); return; }
+        s.name = nn; s.coefficient = ncNum;
+        fullUIUpdate();
+        showAlert('Matière modifiée', 'success');
       }
 
       function deleteSubject(id) {
@@ -2142,9 +2952,11 @@
       }
 
       function addGrade() {
-        var sid = parseInt(document.getElementById('gradeStudent').value);
-        var subid = parseInt(document.getElementById('gradeSubject').value);
-        var val = parseFloat(document.getElementById('gradeValue').value);
+        var sid = parseInt(document.getElementById('gradeStudent').value, 10);
+        var subid = parseInt(document.getElementById('gradeSubject').value, 10);
+        // Normalise la virgule décimale (certains navigateurs localisés renvoient "12,5")
+        var valRaw = String(document.getElementById('gradeValue').value || '').replace(',', '.');
+        var val = parseFloat(valRaw);
         var t = document.getElementById('gradeTeacher').value.trim();
         if (!sid || !subid || isNaN(val) || val < 0 || val > 20 || !t) {
           showAlert('Tous les champs requis (note entre 0 et 20)', 'error');
@@ -2168,11 +2980,17 @@
         var g = appData.grades.find(function (gr) { return gr.id === id; });
         if (!g) return;
         var nv = prompt('Nouvelle note (/20):', g.value);
-        if (nv && !isNaN(nv) && nv >= 0 && nv <= 20) {
-          g.value = parseFloat(nv);
-          fullUIUpdate();
-          showAlert('Note modifiée', 'success');
+        if (nv === null) return;
+        // Accepte la virgule décimale (saisie française au clavier)
+        nv = String(nv).trim().replace(',', '.');
+        var n = parseFloat(nv);
+        if (isNaN(n) || n < 0 || n > 20) {
+          showAlert('Note invalide (doit être entre 0 et 20)', 'error');
+          return;
         }
+        g.value = n;
+        fullUIUpdate();
+        showAlert('Note modifiée', 'success');
       }
 
       function deleteGrade(id) {
@@ -2191,6 +3009,26 @@
         updateGeneralStats();
         updateAnalysisTab();
         updateCounters();
+        // Met à jour le libellé de l'examen courant affiché dans l'onglet Base
+        var examLabel = document.getElementById('currentExamLabel');
+        if (examLabel) examLabel.textContent = appData.currentExam;
+        // Synchronise les <select> d'examen des formulaires "Ajouter un élève"
+        // et "Ajouter une matière" avec l'examen courant. Évite qu'un utilisateur
+        // bascule sur BAC1 puis ajoute par erreur un élève en BEPC.
+        var se = document.getElementById('studentExam');
+        if (se) se.value = appData.currentExam;
+        var sube = document.getElementById('subjectExam');
+        if (sube) sube.value = appData.currentExam;
+        // Remplit le datalist des établissements déjà saisis (autocomplétion)
+        var dl = document.getElementById('institutionList');
+        if (dl) {
+          var set = {};
+          appData.students.forEach(function (s) {
+            if (s.institution) set[s.institution] = true;
+          });
+          if (activeSession && activeSession.institution) set[activeSession.institution] = true;
+          dl.innerHTML = Object.keys(set).map(function (i) { return '<option value="' + escapeHtml(i) + '">'; }).join('');
+        }
         saveToLocalStorage();
       }
 
@@ -2201,47 +3039,6 @@
       window.deleteSubject = deleteSubject;
       window.editGrade = editGrade;
       window.deleteGrade = deleteGrade;
-      window.printBulletin = function (btn) {
-        var bulletin = btn.closest('.bulletin-section').cloneNode(true);
-        var w = window.open('', '_blank');
-        w.document.write('<!DOCTYPE html><html><head><title>Bulletin Scolaire</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>');
-        w.document.write('* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI",Arial,sans-serif; }');
-        w.document.write('body { padding: 20px; background: white; }');
-        w.document.write('.bulletin-section { max-width: 1100px; margin: 0 auto; }');
-        w.document.write('.bulletin-header { text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 3px solid #3498db; }');
-        w.document.write('.bulletin-header h2 { font-size: 1.5rem; }');
-        w.document.write('.student-info-card { background: #f8f9fa; border-radius: 12px; padding: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }');
-        w.document.write('.average-box { background: #3498db; color: white; padding: 12px 20px; border-radius: 12px; text-align: center; }');
-        w.document.write('.average-box .avg-value { font-size: 1.8rem; font-weight: bold; }');
-        w.document.write('.mention-box { padding: 12px 20px; border-radius: 12px; text-align: center; color: white; }');
-        w.document.write('.mention-exc { background: linear-gradient(135deg,#ffd700,#ff8c00); color: #2c3e50; }');
-        w.document.write('.mention-tb { background: #2ecc71; }');
-        w.document.write('.mention-bien { background: #3498db; }');
-        w.document.write('.mention-passable { background: #f39c12; }');
-        w.document.write('.mention-fail { background: #e74c3c; }');
-        w.document.write('.category-summary { display: flex; gap: 16px; margin: 16px 0; justify-content: center; flex-wrap: wrap; }');
-        w.document.write('.category-card { background: #f8f9fa; border-radius: 10px; padding: 10px 16px; text-align: center; border-left: 4px solid; }');
-        w.document.write('.category-card.scientific { border-left-color: #3498db; }');
-        w.document.write('.category-card.literary { border-left-color: #e91e63; }');
-        w.document.write('.grades-table { width: 100%; border-collapse: collapse; margin: 16px 0; }');
-        w.document.write('.grades-table th { background: #2c3e50; color: white; padding: 8px; text-align: center; }');
-        w.document.write('.grades-table td { padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; }');
-        w.document.write('.grade-excellent { color: #2ecc71; font-weight: bold; }');
-        w.document.write('.grade-good { color: #3498db; font-weight: bold; }');
-        w.document.write('.grade-passable { color: #f39c12; font-weight: bold; }');
-        w.document.write('.grade-fail { color: #e74c3c; font-weight: bold; }');
-        w.document.write('.stats-summary { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px dashed #ddd; }');
-        w.document.write('.stat-item { text-align: center; flex: 1; }');
-        w.document.write('.rank-badge { background: #ffd700; padding: 4px 10px; border-radius: 20px; display: inline-block; font-weight: bold; }');
-        w.document.write('.rank-badge.first { background: linear-gradient(135deg,#ffd700,#ffed4e); }');
-        w.document.write('.rank-badge.second { background: linear-gradient(135deg,#c0c0c0,#e0e0e0); }');
-        w.document.write('.rank-badge.third { background: linear-gradient(135deg,#cd7f32,#e8a87c); }');
-        w.document.write('button { display: none; }');
-        w.document.write('@media print { button { display: none; } body { padding: 0; } }');
-        w.document.write('</style></head><body>' + bulletin.outerHTML + '</body></html>');
-        w.document.close();
-        w.print();
-      };
 
       // ===== INIT =====
       document.addEventListener('DOMContentLoaded', function () {
@@ -2301,6 +3098,36 @@
         document.getElementById('syncCheckBtn').addEventListener('click', checkIntegrity);
         document.getElementById('resetAllBtn').addEventListener('click', resetAllData);
         document.getElementById('exportAnalysisBtn').addEventListener('click', exportAnalysis);
+
+        // CSV Templates
+        document.getElementById('downloadTemplateStudentsBtn').addEventListener('click', downloadTemplateStudents);
+        document.getElementById('downloadTemplateSubjectsBtn').addEventListener('click', downloadTemplateSubjects);
+        document.getElementById('downloadTemplateGradesBtn').addEventListener('click', downloadTemplateGrades);
+
+        // CSV Imports (avec lecteur de fichier générique)
+        function readCSVFile(file, callback) {
+          if (!file) return;
+          var reader = new FileReader();
+          reader.onload = function (ev) { callback(ev.target.result); };
+          reader.onerror = function () { showAlert('Erreur de lecture du fichier', 'error'); };
+          reader.readAsText(file, 'UTF-8');
+        }
+        document.getElementById('importCsvStudentsInput').addEventListener('change', function (e) {
+          if (e.target.files && e.target.files[0]) readCSVFile(e.target.files[0], importStudentsFromCSV);
+          e.target.value = '';
+        });
+        document.getElementById('importCsvSubjectsInput').addEventListener('change', function (e) {
+          if (e.target.files && e.target.files[0]) readCSVFile(e.target.files[0], importSubjectsFromCSV);
+          e.target.value = '';
+        });
+        document.getElementById('importCsvGradesInput').addEventListener('change', function (e) {
+          if (e.target.files && e.target.files[0]) readCSVFile(e.target.files[0], importGradesFromCSV);
+          e.target.value = '';
+        });
+
+        // Export stats matières
+        var exportSubjStatsBtn = document.getElementById('exportSubjectStatsBtn');
+        if (exportSubjStatsBtn) exportSubjStatsBtn.addEventListener('click', exportSubjectStatsToCSV);
 
         // Filter
         document.getElementById('searchStudentInput').addEventListener('input', updateAnalysisTab);
