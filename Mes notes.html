@@ -322,16 +322,18 @@
 
     table {
       width: 100%; border-collapse: collapse;
-      min-width: 440px;
+      min-width: 620px;
       table-layout: fixed;
     }
 
-    table th:nth-child(1), table td:nth-child(1) { width: 28%; text-align: left; }
-    table th:nth-child(2), table td:nth-child(2) { width: 8%; }
-    table th:nth-child(3), table td:nth-child(3) { width: 14%; }
-    table th:nth-child(4), table td:nth-child(4) { width: 12%; }
-    table th:nth-child(5), table td:nth-child(5) { width: 22%; }
-    table th:nth-child(6), table td:nth-child(6) { width: 16%; }
+    table th:nth-child(1), table td:nth-child(1) { width: 18%; text-align: left; }
+    table th:nth-child(2), table td:nth-child(2) { width: 7%; }
+    table th:nth-child(3), table td:nth-child(3) { width: 10%; }
+    table th:nth-child(4), table td:nth-child(4) { width: 9%; }
+    table th:nth-child(5), table td:nth-child(5) { width: 11%; }
+    table th:nth-child(6), table td:nth-child(6) { width: 8%; }
+    table th:nth-child(7), table td:nth-child(7) { width: 16%; }
+    table th:nth-child(8), table td:nth-child(8) { width: 21%; }
 
     th, td {
       padding: clamp(6px, 1.5vw, 10px);
@@ -407,6 +409,90 @@
     .btn-logout { background: var(--color-danger); }
     .btn-print { background: var(--color-secondary); }
 
+    /* ========== RANK CONTEXT CARD ========== */
+    .rank-context-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: clamp(14px, 3vw, 20px);
+      margin-bottom: clamp(14px, 2.5vw, 20px);
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 22vw, 200px), 1fr));
+      gap: clamp(10px, 2vw, 15px);
+    }
+    .rank-context-card .rc-item {
+      text-align: center;
+      padding: clamp(8px, 1.5vw, 12px);
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+    }
+    .rank-context-card .rc-item.highlight {
+      background: linear-gradient(135deg, var(--flag-green), #004d3a);
+      color: #fff;
+    }
+    .rank-context-card .rc-value {
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-weight: bold;
+    }
+    .rank-context-card .rc-label {
+      font-size: clamp(0.62rem, 2.2vw, 0.72rem);
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+    .rank-context-card .rc-item.highlight .rc-label { opacity: 0.9; }
+
+    /* ========== TOP 10 TABLE ========== */
+    #top10Table .my-row {
+      background: linear-gradient(135deg, rgba(0,106,78,0.12), rgba(102,126,234,0.12));
+      font-weight: bold;
+    }
+    #top10Table .my-row td { border-bottom: 2px solid var(--flag-green); }
+
+    /* ========== SUMMARY TABLE (classement général) ========== */
+    #summaryTable { min-width: 720px; table-layout: fixed; }
+    #summaryTable th:nth-child(1), #summaryTable td:nth-child(1) { width: 9%; }
+    #summaryTable th:nth-child(2), #summaryTable td:nth-child(2) { width: 24%; text-align: left; }
+    #summaryTable th:nth-child(3), #summaryTable td:nth-child(3) { width: 22%; text-align: left; font-size: 0.72rem; }
+    #summaryTable th:nth-child(4), #summaryTable td:nth-child(4) { width: 9%; }
+    #summaryTable th:nth-child(5), #summaryTable td:nth-child(5) { width: 11%; }
+    #summaryTable th:nth-child(6), #summaryTable td:nth-child(6) { width: 12%; }
+    #summaryTable th:nth-child(7), #summaryTable td:nth-child(7) { width: 13%; }
+    #summaryTable .my-row {
+      background: linear-gradient(135deg, rgba(0,106,78,0.12), rgba(102,126,234,0.12));
+      font-weight: bold;
+    }
+    #summaryTable .my-row td { border-bottom: 2px solid var(--flag-green); }
+    .rank-medal { font-size: 1.1rem; }
+    .mention-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: clamp(0.56rem, 2.2vw, 0.66rem);
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .mention-badge.mention-exc { background: linear-gradient(135deg, #f1c40f, #f39c12); color: var(--color-text); }
+    .mention-badge.mention-tb { background: var(--color-success); }
+    .mention-badge.mention-bien { background: var(--color-secondary); }
+    .mention-badge.mention-passable { background: var(--color-warning); }
+    .mention-badge.mention-fail { background: var(--color-danger); }
+
+    /* ========== STATUS BADGES (Admis / Ajourné) ========== */
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: clamp(0.58rem, 2.2vw, 0.68rem);
+      font-weight: bold;
+      color: #fff;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    .status-admis { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .status-ajourne { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+    .status-pending { background: var(--color-muted); }
+
     /* ========== ALERT ========== */
     .alert {
       padding: clamp(10px, 2vw, 12px);
@@ -454,8 +540,8 @@
       .stat-card i { font-size: 1.2rem; }
       .stat-card .label { font-size: 0.58rem; }
       .grades-section { border-radius: 0; padding: 10px; overflow-x: auto; }
-      .table-container { min-width: 360px; }
-      table { min-width: 360px; }
+      .table-container { min-width: 560px; }
+      table { min-width: 560px; }
       th, td { padding: 5px 3px; font-size: 0.6rem; }
       .category-badge { font-size: 0.5rem; padding: 1px 5px; }
       .appreciation-section { border-radius: 0; padding: 10px; }
@@ -474,7 +560,7 @@
       .action-buttons { flex-direction: column; }
       .action-buttons .btn-action { width: 100%; text-align: center; }
       .category-badge { white-space: normal; word-break: break-word; }
-      .table-container { min-width: 420px; }
+      .table-container { min-width: 600px; }
     }
 
     /* ========== RESPONSIVE – TABLETTE PORTRAIT (641px–768px) ========== */
@@ -541,8 +627,8 @@
       .stat-card .label { font-size: 0.5rem; }
       .grades-section { padding: 8px; margin-bottom: 10px; }
       .grades-section h3 { font-size: 0.75rem; margin-bottom: 8px; }
-      .table-container { min-width: 340px; }
-      table { min-width: 340px; }
+      .table-container { min-width: 540px; }
+      table { min-width: 540px; }
       th, td { padding: 3px 2px; font-size: 0.55rem; }
       .category-badge { font-size: 0.48rem; padding: 1px 4px; }
       .appreciation-section { padding: 8px; margin-bottom: 10px; }
@@ -644,18 +730,38 @@
       <div id="loginAlert" class="alert" role="alert"></div>
       <form id="loginForm" novalidate>
         <div class="form-group">
-          <label for="studentName"><i class="fas fa-user" aria-hidden="true"></i> Nom et Prénom</label>
-          <input type="text" id="studentName" placeholder="Ex: Dupont Jean" required autocomplete="off">
-          <small>Entrez votre nom suivi de votre prénom (ex: Dupont Jean)</small>
+          <label for="studentName"><i class="fas fa-user" aria-hidden="true"></i> Prénom et Nom</label>
+          <input type="text" id="studentName" placeholder="Ex: Jean Dupont ou Dupont Jean" required autocomplete="off">
+          <small>Entrez votre prénom et votre nom (l'ordre n'a pas d'importance)</small>
         </div>
         <div class="form-group">
           <label for="studentPassword"><i class="fas fa-key" aria-hidden="true"></i> Mot de passe</label>
           <input type="password" id="studentPassword" placeholder="Votre matricule" required>
-          <small>Votre mot de passe est votre numéro matricule</small>
+          <small>Votre mot de passe est votre numéro matricule (ex: BEPC001)</small>
         </div>
         <button type="submit" class="btn-connect"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Se connecter</button>
-        <button type="button" class="btn-back" id="backToHomeBtn"><i class="fas fa-home" aria-hidden="true"></i> Retour à l'accueil</button>
       </form>
+      <button type="button" class="btn-back" id="backToHomeBtn" style="margin-top:10px"><i class="fas fa-home" aria-hidden="true"></i> Retour à l'accueil</button>
+
+      <!-- Alerte : données réelles détectées (mode admin) -->
+      <div id="realDataAlert" style="display:none;margin-top:12px;padding:12px;background:#fff3cd;border-radius:10px;border-left:4px solid var(--color-warning);font-size:0.78rem">
+        <p style="color:#856404"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> <strong>Données réelles détectées.</strong> Les identifiants de démonstration ne fonctionnent pas car des données provenant de l'application d'administration ont été trouvées dans ce navigateur.</p>
+        <p style="margin-top:6px;color:#856404">Si vous êtes un élève, utilisez les identifiants fournis par votre établissement. Si vous souhaitez tester l'application avec les données de démonstration :</p>
+        <button type="button" class="btn-back" id="resetToDemoBtn" style="margin-top:8px;background:var(--color-warning)"><i class="fas fa-sync-alt" aria-hidden="true"></i> Basculer en mode démonstration</button>
+      </div>
+
+      <!-- Section d'aide : identifiants de démonstration -->
+      <div id="demoCredentialsHelp" class="demo-help" style="display:none;margin-top:16px;padding:12px;background:#e8f4fd;border-radius:10px;border-left:4px solid var(--color-secondary);font-size:0.78rem">
+        <details>
+          <summary style="cursor:pointer;font-weight:600;color:var(--color-secondary)"><i class="fas fa-info-circle" aria-hidden="true"></i> Comptes de démonstration (cliquez pour afficher)</summary>
+          <p style="margin-top:8px;color:var(--color-muted)">Mode démonstration activé. Utilisez un des comptes ci-dessous :</p>
+          <table style="width:100%;margin-top:8px;font-size:0.72rem;border-collapse:collapse">
+            <thead><tr style="background:rgba(0,0,0,0.05)"><th style="padding:4px 6px;text-align:left">Nom</th><th style="padding:4px 6px;text-align:left">Matricule</th><th style="padding:4px 6px;text-align:left">Examen</th></tr></thead>
+            <tbody id="demoCredentialsBody"></tbody>
+          </table>
+          <p style="margin-top:6px;font-size:0.68rem;color:var(--color-muted)"><i class="fas fa-lightbulb" aria-hidden="true"></i> Astuce : vous pouvez saisir le nom dans l'ordre "Prénom Nom" ou "Nom Prénom".</p>
+        </details>
+      </div>
     </section>
 
     <!-- Result Panel -->
@@ -667,6 +773,9 @@
 
       <div class="stats-grid" id="statsGrid"></div>
 
+      <!-- Carte de position dans la classe : rang + moyenne de classe -->
+      <div id="rankContextCard" class="rank-context-card"></div>
+
       <div class="grades-section">
         <h3><i class="fas fa-table" aria-hidden="true"></i> Détail des notes par matière</h3>
         <div class="table-container">
@@ -677,6 +786,8 @@
                 <th scope="col">Coeff.</th>
                 <th scope="col">Note /20</th>
                 <th scope="col">Points</th>
+                <th scope="col">Moy. classe</th>
+                <th scope="col">Rang</th>
                 <th scope="col">Catégorie</th>
                 <th scope="col">Enseignant</th>
               </tr>
@@ -685,6 +796,26 @@
             <tfoot id="gradesFooter"></tfoot>
           </table>
         </div>
+      </div>
+
+      <!-- Classement complet de la classe (tous les élèves) -->
+      <div class="grades-section" id="top10Section">
+        <h3><i class="fas fa-trophy" aria-hidden="true"></i> Classement de ma classe</h3>
+        <div class="table-container">
+          <table id="top10Table">
+            <thead>
+              <tr>
+                <th scope="col">Rang</th>
+                <th scope="col">Élève</th>
+                <th scope="col">Établissement</th>
+                <th scope="col">Moyenne</th>
+                <th scope="col">Statut</th>
+              </tr>
+            </thead>
+            <tbody id="top10Body"></tbody>
+          </table>
+        </div>
+        <p id="rankingNote" style="font-size:0.72rem;color:var(--color-muted);margin-top:10px"></p>
       </div>
 
       <div class="appreciation-section" id="appreciationSection">
@@ -699,6 +830,88 @@
         </button>
         <button class="btn-action btn-print" id="printResultsBtn" type="button">
           <i class="fas fa-print" aria-hidden="true"></i> Imprimer mes résultats
+        </button>
+        <button class="btn-action btn-print" id="showSummaryBtn" type="button" style="background:linear-gradient(135deg,var(--flag-green),#004d3a)">
+          <i class="fas fa-trophy" aria-hidden="true"></i> Classement général
+        </button>
+      </div>
+    </section>
+
+    <!-- Summary Panel : classement général de tous les élèves (accessible après connexion) -->
+    <section id="summaryPanel" class="result-panel" role="region" aria-label="Classement général">
+      <div class="student-info-card">
+        <h2><i class="fas fa-trophy" aria-hidden="true"></i> Classement Général — Tous Élèves</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>📚 Examen</strong>
+            <span>
+              <select id="summaryExamFilter" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:6px;padding:4px 8px;font-size:0.85rem">
+                <option value="ALL">Tous</option>
+                <option value="BEPC">BEPC</option>
+                <option value="BAC1">BAC1</option>
+                <option value="BAC2">BAC2</option>
+              </select>
+            </span>
+          </div>
+          <div class="info-item">
+            <strong>🏫 Établissement</strong>
+            <span>
+              <select id="summaryInstitutionFilter" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:6px;padding:4px 8px;font-size:0.85rem;max-width:200px">
+                <option value="ALL">Tous</option>
+              </select>
+            </span>
+          </div>
+          <div class="info-item">
+            <strong>👥 Élèves classés</strong>
+            <span id="summaryStudentCount">—</span>
+          </div>
+          <div class="info-item">
+            <strong>📊 Moy. générale</strong>
+            <span id="summaryClassAvg">—</span>
+          </div>
+          <div class="info-item">
+            <strong>✅ Admis</strong>
+            <span id="summaryAdmisCount">—</span>
+          </div>
+          <div class="info-item">
+            <strong>❌ Ajournés</strong>
+            <span id="summaryAjourneCount">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grades-section">
+        <h3><i class="fas fa-list-ol" aria-hidden="true"></i> Mentions et statuts de tous les élèves</h3>
+        <div class="table-container">
+          <table id="summaryTable">
+            <thead>
+              <tr>
+                <th scope="col">Rang</th>
+                <th scope="col">Élève</th>
+                <th scope="col">Établissement</th>
+                <th scope="col">Examen</th>
+                <th scope="col">Moyenne</th>
+                <th scope="col">Mention</th>
+                <th scope="col">Statut</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
+        </div>
+        <p style="font-size:0.72rem;color:var(--color-muted);margin-top:10px">
+          <i class="fas fa-info-circle" aria-hidden="true"></i> <strong>Admis</strong> = moyenne ≥ 10/20 — <strong>Ajourné</strong> = moyenne &lt; 10/20. Seuls les élèves ayant au moins une note apparaissent. La moyenne est pondérée par les coefficients des matières.
+        </p>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-action btn-logout" id="summaryBackBtn" type="button">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i> Retour à mes résultats
+        </button>
+        <button class="btn-action btn-print" id="printSummaryBtn" type="button">
+          <i class="fas fa-print" aria-hidden="true"></i> Imprimer le classement
+        </button>
+        <button class="btn-action btn-logout" id="summaryLogoutBtn" type="button">
+          <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Se déconnecter
         </button>
       </div>
     </section>
@@ -715,38 +928,175 @@
 
       var appData = { students: [], subjects: [], grades: [], currentExam: 'BEPC' };
       var currentStudent = null;
+      var isDemoMode = false; // true si les données de démo sont chargées
 
       function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function (m) {
+        if (str === undefined || str === null) return '';
+        return String(str).replace(/[&<>"']/g, function (m) {
           if (m === '&') return '&amp;';
           if (m === '<') return '&lt;';
           if (m === '>') return '&gt;';
+          if (m === '"') return '&quot;';
+          if (m === "'") return '&#39;';
           return m;
         });
       }
 
       function loadData() {
-        var saved = localStorage.getItem('examData_ADMIN_001');
-        if (saved) {
+        // L'application admin enregistre les données sous des clés de la forme
+        // "examData_<username>" (ex: examData_ADMIN_001, examData_CEG_746529_1004,
+        // examData_LYCEE_001). On parcourt TOUTES ces clés pour fusionner les
+        // données de plusieurs établissements — un élève peut ainsi consulter
+        // ses résultats quel que soit le compte admin qui les a saisis.
+        var merged = { students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
+        var seenStudentMatricules = new Set();
+        var seenSubjectKeys = new Set();
+        var idMap = { students: {}, subjects: {} };
+
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (!key || key.indexOf('examData_') !== 0) continue;
+          var raw = localStorage.getItem(key);
+          if (!raw) continue;
           try {
-            var data = JSON.parse(saved);
-            appData.students = data.students || [];
-            appData.subjects = data.subjects || [];
-            appData.grades = data.grades || [];
-            appData.currentExam = data.currentExam || 'BEPC';
-          } catch (e) { /* ignore */ }
+            var data = JSON.parse(raw);
+            // Importe les élèves (avec re-mappage des IDs pour éviter les collisions)
+            (data.students || []).forEach(function (s) {
+              if (s.matricule && seenStudentMatricules.has(s.matricule)) {
+                // CRITIQUE : même si on ignore l'élève (doublon de matricule),
+                // on doit quand même mapper son ancien ID vers l'ID fusionné
+                // existant — sinon ses notes seront silencieusement perdues.
+                var existingStudent = merged.students.find(function (x) { return x.matricule === s.matricule; });
+                if (existingStudent) idMap.students[s.id] = existingStudent.id;
+                return;
+              }
+              if (s.matricule) seenStudentMatricules.add(s.matricule);
+              var newId = merged.nextStudentId++;
+              idMap.students[s.id] = newId;
+              merged.students.push({
+                id: newId,
+                lastName: s.lastName, firstName: s.firstName,
+                matricule: s.matricule, exam: s.exam,
+                institution: s.institution || ''
+              });
+            });
+            // Importe les matières
+            (data.subjects || []).forEach(function (s) {
+              if (!s.name || !s.exam) return; // garde-fou
+              var subKey = s.name.toLowerCase() + '|' + s.exam;
+              if (seenSubjectKeys.has(subKey)) {
+                // Matière déjà importée : on mappe vers l'ID existant
+                var existing = merged.subjects.find(function (x) {
+                  return x.name.toLowerCase() === s.name.toLowerCase() && x.exam === s.exam;
+                });
+                if (existing) idMap.subjects[s.id] = existing.id;
+                return;
+              }
+              seenSubjectKeys.add(subKey);
+              var newId = merged.nextSubjectId++;
+              idMap.subjects[s.id] = newId;
+              merged.subjects.push({
+                id: newId,
+                name: s.name, coefficient: s.coefficient,
+                category: s.category, exam: s.exam
+              });
+            });
+            // Importe les notes (avec re-mappage des IDs)
+            (data.grades || []).forEach(function (g) {
+              var newStudentId = idMap.students[g.studentId];
+              var newSubjectId = idMap.subjects[g.subjectId];
+              if (!newStudentId || !newSubjectId) return;
+              // Évite les doublons (même élève + même matière)
+              var exists = merged.grades.some(function (x) {
+                return x.studentId === newStudentId && x.subjectId === newSubjectId;
+              });
+              if (exists) return;
+              merged.grades.push({
+                id: merged.nextGradeId++,
+                studentId: newStudentId, subjectId: newSubjectId,
+                value: g.value, teacher: g.teacher || '-'
+              });
+            });
+          } catch (e) { /* ignore malformed entries */ }
         }
-        if (appData.students.length === 0) loadDemoData();
+
+        appData.students = merged.students;
+        appData.subjects = merged.subjects;
+        appData.grades = merged.grades;
+        appData.currentExam = 'BEPC';
+        isDemoMode = false;
+
+        // Si aucune donnée réelle n'est trouvée, on charge des données de démonstration
+        if (appData.students.length === 0) {
+          loadDemoData();
+          isDemoMode = true;
+        }
+        // Affiche la section d'aide avec les identifiants de démo si le mode démo est actif
+        updateDemoHelpVisibility();
+      }
+
+      // Affiche ou masque la section d'aide avec les identifiants de démonstration.
+      // En mode démo, on liste tous les comptes disponibles pour que l'utilisateur
+      // puisse se connecter. En mode réel (données depuis l'admin), on affiche une
+      // alerte informant que les identifiants de démo ne fonctionnent pas.
+      function updateDemoHelpVisibility() {
+        var helpDiv = document.getElementById('demoCredentialsHelp');
+        var realAlert = document.getElementById('realDataAlert');
+        if (isDemoMode && appData.students.length > 0) {
+          // Mode démo : affiche les comptes de démonstration
+          if (helpDiv) {
+            helpDiv.style.display = 'block';
+            var body = document.getElementById('demoCredentialsBody');
+            if (body) {
+              body.innerHTML = appData.students.map(function (s) {
+                return '<tr style="border-bottom:1px solid #eee">' +
+                  '<td style="padding:4px 6px">' + escapeHtml(s.firstName + ' ' + s.lastName) + '</td>' +
+                  '<td style="padding:4px 6px"><code>' + escapeHtml(s.matricule) + '</code></td>' +
+                  '<td style="padding:4px 6px">' + escapeHtml(s.exam || '—') + '</td>' +
+                  '</tr>';
+              }).join('');
+            }
+          }
+          if (realAlert) realAlert.style.display = 'none';
+        } else {
+          // Mode réel : masque les comptes de démo, affiche l'alerte
+          if (helpDiv) helpDiv.style.display = 'none';
+          if (realAlert && appData.students.length > 0) realAlert.style.display = 'block';
+        }
+      }
+
+      // Bascule en mode démonstration en supprimant les données réelles
+      // stockées par l'application d'administration dans localStorage.
+      // ⚠️ Cela ne supprime PAS les données de l'admin (clé examAppActiveSession),
+      // uniquement les clés examData_* qui contiennent les élèves/matières/notes.
+      function resetToDemoMode() {
+        if (!confirm('Voulez-vous basculer en mode démonstration ? Les données locales de l\'application d\'administration (élèves, matières, notes) seront supprimées de CE navigateur. L\'application admin les régénérera si besoin.')) return;
+        var keysToRemove = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (key && key.indexOf('examData_') === 0) keysToRemove.push(key);
+        }
+        keysToRemove.forEach(function (k) { localStorage.removeItem(k); });
+        showAlert('Mode démonstration activé. La page va se recharger...', 'success');
+        setTimeout(function () { window.location.reload(); }, 1000);
       }
 
       function loadDemoData() {
+        // Données de démonstration : inclut le champ "institution" et suffisamment
+        // d'élèves pour que le classement Top 10 soit significatif.
         appData.students = [
-          { id: 1, lastName: 'Dupont', firstName: 'Jean', matricule: 'BEPC001', exam: 'BEPC' },
-          { id: 2, lastName: 'Martin', firstName: 'Sophie', matricule: 'BEPC002', exam: 'BEPC' },
-          { id: 3, lastName: 'Bernard', firstName: 'Lucas', matricule: 'BAC1001', exam: 'BAC1' },
-          { id: 4, lastName: 'Petit', firstName: 'Emma', matricule: 'BAC2001', exam: 'BAC2' },
-          { id: 5, lastName: 'Kouassi', firstName: 'Amadou', matricule: 'BEPC003', exam: 'BEPC' }
+          { id: 1, lastName: 'Dupont', firstName: 'Jean', matricule: 'BEPC001', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 2, lastName: 'Martin', firstName: 'Sophie', matricule: 'BEPC002', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 3, lastName: 'Bernard', firstName: 'Lucas', matricule: 'BAC1001', exam: 'BAC1', institution: 'Lycée de Tokin' },
+          { id: 4, lastName: 'Petit', firstName: 'Emma', matricule: 'BAC2001', exam: 'BAC2', institution: 'Lycée de Tokin' },
+          { id: 5, lastName: 'Kouassi', firstName: 'Amadou', matricule: 'BEPC003', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 6, lastName: 'Traore', firstName: 'Awa', matricule: 'BEPC004', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 7, lastName: 'Camara', firstName: 'Mamadou', matricule: 'BEPC005', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 8, lastName: 'Diop', firstName: 'Fatou', matricule: 'BEPC006', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 9, lastName: 'Sow', firstName: 'Ibrahim', matricule: 'BEPC007', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 10, lastName: 'Bah', firstName: 'Aissatou', matricule: 'BEPC008', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 11, lastName: 'Kone', firstName: 'Adama', matricule: 'BEPC009', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 12, lastName: 'Yao', firstName: 'Grace', matricule: 'BEPC010', exam: 'BEPC', institution: 'CEG Massedena' }
         ];
         appData.subjects = [
           { id: 1, name: 'Mathématiques', coefficient: 4, category: 'scientific', exam: 'BEPC' },
@@ -761,47 +1111,114 @@
           { id: 10, name: 'Philosophie', coefficient: 4, category: 'literary', exam: 'BAC2' }
         ];
         appData.grades = [
+          // Jean Dupont (BEPC001)
           { id: 1, studentId: 1, subjectId: 1, value: 15, teacher: 'M. Kouassi' },
           { id: 2, studentId: 1, subjectId: 2, value: 14, teacher: 'Mme Konan' },
           { id: 3, studentId: 1, subjectId: 3, value: 16, teacher: 'M. Yao' },
           { id: 4, studentId: 1, subjectId: 4, value: 13, teacher: "Mme N'Guessan" },
           { id: 5, studentId: 1, subjectId: 5, value: 12, teacher: 'M. Koffi' },
           { id: 6, studentId: 1, subjectId: 6, value: 11, teacher: 'Mme Kouadio' },
+          // Sophie Martin (BEPC002)
           { id: 7, studentId: 2, subjectId: 1, value: 8, teacher: 'M. Kouassi' },
           { id: 8, studentId: 2, subjectId: 2, value: 15, teacher: 'Mme Konan' },
           { id: 9, studentId: 2, subjectId: 3, value: 12, teacher: 'M. Yao' },
           { id: 10, studentId: 2, subjectId: 4, value: 14, teacher: "Mme N'Guessan" },
           { id: 11, studentId: 2, subjectId: 5, value: 9, teacher: 'M. Koffi' },
           { id: 12, studentId: 2, subjectId: 6, value: 10, teacher: 'Mme Kouadio' },
+          // Lucas Bernard (BAC1001)
           { id: 13, studentId: 3, subjectId: 7, value: 13, teacher: 'M. Kouassi' },
           { id: 14, studentId: 3, subjectId: 8, value: 11, teacher: 'Mme Konan' },
+          // Emma Petit (BAC2001)
           { id: 15, studentId: 4, subjectId: 9, value: 16, teacher: 'M. Kouassi' },
           { id: 16, studentId: 4, subjectId: 10, value: 14, teacher: 'Mme Konan' },
+          // Amadou Kouassi (BEPC003)
           { id: 17, studentId: 5, subjectId: 1, value: 11, teacher: 'M. Kouassi' },
           { id: 18, studentId: 5, subjectId: 2, value: 10, teacher: 'Mme Konan' },
           { id: 19, studentId: 5, subjectId: 3, value: 9, teacher: 'M. Yao' },
           { id: 20, studentId: 5, subjectId: 4, value: 12, teacher: "Mme N'Guessan" },
           { id: 21, studentId: 5, subjectId: 5, value: 8, teacher: 'M. Koffi' },
-          { id: 22, studentId: 5, subjectId: 6, value: 10, teacher: 'Mme Kouadio' }
+          { id: 22, studentId: 5, subjectId: 6, value: 10, teacher: 'Mme Kouadio' },
+          // Awa Traore (BEPC004) — top élève
+          { id: 23, studentId: 6, subjectId: 1, value: 17, teacher: 'M. Kouassi' },
+          { id: 24, studentId: 6, subjectId: 2, value: 16, teacher: 'Mme Konan' },
+          { id: 25, studentId: 6, subjectId: 3, value: 18, teacher: 'M. Yao' },
+          { id: 26, studentId: 6, subjectId: 4, value: 15, teacher: "Mme N'Guessan" },
+          { id: 27, studentId: 6, subjectId: 5, value: 14, teacher: 'M. Koffi' },
+          { id: 28, studentId: 6, subjectId: 6, value: 16, teacher: 'Mme Kouadio' },
+          // Mamadou Camara (BEPC005)
+          { id: 29, studentId: 7, subjectId: 1, value: 13, teacher: 'M. Kouassi' },
+          { id: 30, studentId: 7, subjectId: 2, value: 12, teacher: 'Mme Konan' },
+          { id: 31, studentId: 7, subjectId: 3, value: 14, teacher: 'M. Yao' },
+          { id: 32, studentId: 7, subjectId: 4, value: 11, teacher: "Mme N'Guessan" },
+          { id: 33, studentId: 7, subjectId: 5, value: 15, teacher: 'M. Koffi' },
+          { id: 34, studentId: 7, subjectId: 6, value: 13, teacher: 'Mme Kouadio' },
+          // Fatou Diop (BEPC006)
+          { id: 35, studentId: 8, subjectId: 1, value: 16, teacher: 'M. Kouassi' },
+          { id: 36, studentId: 8, subjectId: 2, value: 15, teacher: 'Mme Konan' },
+          { id: 37, studentId: 8, subjectId: 3, value: 13, teacher: 'M. Yao' },
+          { id: 38, studentId: 8, subjectId: 4, value: 17, teacher: "Mme N'Guessan" },
+          { id: 39, studentId: 8, subjectId: 5, value: 14, teacher: 'M. Koffi' },
+          { id: 40, studentId: 8, subjectId: 6, value: 12, teacher: 'Mme Kouadio' },
+          // Ibrahim Sow (BEPC007)
+          { id: 41, studentId: 9, subjectId: 1, value: 9, teacher: 'M. Kouassi' },
+          { id: 42, studentId: 9, subjectId: 2, value: 11, teacher: 'Mme Konan' },
+          { id: 43, studentId: 9, subjectId: 3, value: 8, teacher: 'M. Yao' },
+          { id: 44, studentId: 9, subjectId: 4, value: 10, teacher: "Mme N'Guessan" },
+          { id: 45, studentId: 9, subjectId: 5, value: 7, teacher: 'M. Koffi' },
+          { id: 46, studentId: 9, subjectId: 6, value: 9, teacher: 'Mme Kouadio' },
+          // Aissatou Bah (BEPC008)
+          { id: 47, studentId: 10, subjectId: 1, value: 14, teacher: 'M. Kouassi' },
+          { id: 48, studentId: 10, subjectId: 2, value: 13, teacher: 'Mme Konan' },
+          { id: 49, studentId: 10, subjectId: 3, value: 15, teacher: 'M. Yao' },
+          { id: 50, studentId: 10, subjectId: 4, value: 12, teacher: "Mme N'Guessan" },
+          { id: 51, studentId: 10, subjectId: 5, value: 16, teacher: 'M. Koffi' },
+          { id: 52, studentId: 10, subjectId: 6, value: 14, teacher: 'Mme Kouadio' },
+          // Adama Kone (BEPC009)
+          { id: 53, studentId: 11, subjectId: 1, value: 12, teacher: 'M. Kouassi' },
+          { id: 54, studentId: 11, subjectId: 2, value: 14, teacher: 'Mme Konan' },
+          { id: 55, studentId: 11, subjectId: 3, value: 11, teacher: 'M. Yao' },
+          { id: 56, studentId: 11, subjectId: 4, value: 13, teacher: "Mme N'Guessan" },
+          { id: 57, studentId: 11, subjectId: 5, value: 10, teacher: 'M. Koffi' },
+          { id: 58, studentId: 11, subjectId: 6, value: 12, teacher: 'Mme Kouadio' },
+          // Grace Yao (BEPC010)
+          { id: 59, studentId: 12, subjectId: 1, value: 18, teacher: 'M. Kouassi' },
+          { id: 60, studentId: 12, subjectId: 2, value: 17, teacher: 'Mme Konan' },
+          { id: 61, studentId: 12, subjectId: 3, value: 16, teacher: 'M. Yao' },
+          { id: 62, studentId: 12, subjectId: 4, value: 15, teacher: "Mme N'Guessan" },
+          { id: 63, studentId: 12, subjectId: 5, value: 19, teacher: 'M. Koffi' },
+          { id: 64, studentId: 12, subjectId: 6, value: 17, teacher: 'Mme Kouadio' }
         ];
       }
 
+      // Renvoie les notes de l'élève en filtrant aussi par examen (pour éviter
+      // toute contamination si un même élève apparaissait dans plusieurs examens).
       function getStudentGrades(studentId) {
-        return appData.grades.filter(function (g) { return g.studentId === studentId; });
+        var student = appData.students.find(function (s) { return s.id === studentId; });
+        var exam = student ? student.exam : appData.currentExam;
+        return appData.grades.filter(function (g) {
+          if (g.studentId !== studentId) return false;
+          var subj = getSubjectById(g.subjectId);
+          return subj ? subj.exam === exam : false;
+        });
       }
 
       function getSubjectById(subjectId) {
         return appData.subjects.find(function (s) { return s.id === subjectId; });
       }
 
-      function getStudentAverage(studentId) {
+      // Détail de la moyenne pondérée = { points, coeffs, average }
+      function getStudentAverageDetail(studentId) {
         var grades = getStudentGrades(studentId);
-        var totalPoints = 0, totalCoeffs = 0;
+        var points = 0, coeffs = 0;
         grades.forEach(function (g) {
           var subject = getSubjectById(g.subjectId);
-          if (subject) { totalPoints += g.value * subject.coefficient; totalCoeffs += subject.coefficient; }
+          if (subject) { points += g.value * subject.coefficient; coeffs += subject.coefficient; }
         });
-        return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
+        return { points: points, coeffs: coeffs, average: coeffs > 0 ? points / coeffs : 0, hasGrades: coeffs > 0 };
+      }
+
+      function getStudentAverage(studentId) {
+        return getStudentAverageDetail(studentId).average;
       }
 
       function getStudentAverageByCategory(studentId, category) {
@@ -814,12 +1231,71 @@
         return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
       }
 
+      // ===== STATISTIQUES DE CLASSE =====
+      // Moyenne générale pondérée de la classe (Σ points / Σ coeffs).
+      function getClassWeightedAverage(students) {
+        var totalPoints = 0, totalCoeffs = 0;
+        students.forEach(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          if (d.coeffs > 0) { totalPoints += d.points; totalCoeffs += d.coeffs; }
+        });
+        return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
+      }
+
+      // Renvoie le rang de l'élève dans sa classe + le total d'élèves classés.
+      function getStudentRank(student) {
+        var classmates = appData.students.filter(function (s) { return s.exam === student.exam; });
+        var ranked = classmates.map(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          return { id: s.id, average: d.average, hasGrades: d.coeffs > 0 };
+        }).filter(function (s) { return s.hasGrades; })
+          .sort(function (a, b) { return b.average - a.average; });
+        var rank = 0;
+        for (var i = 0; i < ranked.length; i++) {
+          if (ranked[i].id === student.id) { rank = i + 1; break; }
+        }
+        return { rank: rank, total: ranked.length, ranked: ranked };
+      }
+
+      // Moyenne de la classe dans une matière donnée (moyenne arithmétique
+      // des notes des élèves du même examen dans cette matière).
+      function getSubjectClassAverage(subject) {
+        var subjectGrades = appData.grades.filter(function (g) {
+          return g.subjectId === subject.id;
+        });
+        if (subjectGrades.length === 0) return null;
+        var sum = 0;
+        subjectGrades.forEach(function (g) { sum += g.value; });
+        return sum / subjectGrades.length;
+      }
+
+      // Renvoie le rang de l'élève dans une matière précise.
+      function getStudentSubjectRank(student, subject) {
+        var subjectGrades = appData.grades.filter(function (g) {
+          return g.subjectId === subject.id;
+        });
+        var ranked = subjectGrades.sort(function (a, b) { return b.value - a.value; });
+        var rank = 0;
+        for (var i = 0; i < ranked.length; i++) {
+          if (ranked[i].studentId === student.id) { rank = i + 1; break; }
+        }
+        return { rank: rank, total: ranked.length };
+      }
+
       function getMention(average) {
         if (average >= 16) return { text: 'EXCELLENT', cls: 'mention-exc', icon: '\uD83C\uDFC6' };
         if (average >= 14) return { text: 'TR\u00c8S BIEN', cls: 'mention-tb', icon: '\u2B50' };
         if (average >= 12) return { text: 'BIEN', cls: 'mention-bien', icon: '\uD83D\uDC4D' };
         if (average >= 10) return { text: 'PASSABLE', cls: 'mention-passable', icon: '\u2705' };
         return { text: 'NON ADMIS', cls: 'mention-fail', icon: '\u274C' };
+      }
+
+      // Statut d'admission : ADMIS (moyenne >= 10) ou AJOURNÉ (moyenne < 10).
+      // Renvoie un objet { text, cls, icon } prêt à l'affichage.
+      function getStatus(average, hasGrades) {
+        if (!hasGrades) return { text: 'NON NOTÉ', cls: 'status-pending', icon: 'ℹ️' };
+        if (average >= 10) return { text: 'ADMIS', cls: 'status-admis', icon: '✅' };
+        return { text: 'AJOURNÉ', cls: 'status-ajourne', icon: '❌' };
       }
 
       function getGradeClass(grade) {
@@ -839,14 +1315,31 @@
       }
 
       function authenticateStudent(nameInput, passwordInput) {
-        var nameParts = nameInput.trim().split(' ');
+        // Normalise les espaces multiples (ex: "Jean  Dupont" → "Jean Dupont")
+        var cleaned = nameInput.trim().replace(/\s+/g, ' ');
+        var nameParts = cleaned.split(' ');
         if (nameParts.length < 2) return null;
-        var firstName = nameParts[0];
-        var lastName = nameParts.slice(1).join(' ');
+        // Le matricule est comparé de façon insensible à la casse.
+        var matricule = passwordInput.trim().toLowerCase();
+
+        // On teste DEUX ordres possibles pour le nom :
+        //   1) "Prénom Nom"     → firstName = parts[0], lastName = reste
+        //   2) "Nom Prénom"     → firstName = dernier,   lastName = début
+        // Cela permet de connecter l'élève quel que soit l'ordre saisie,
+        // car en français on utilise souvent "NOM Prénom" (ordre administratif)
+        // mais aussi "Prénom Nom" (ordre courant).
+        var order1 = { firstName: nameParts[0].toLowerCase(), lastName: nameParts.slice(1).join(' ').toLowerCase() };
+        var order2 = { firstName: nameParts[nameParts.length - 1].toLowerCase(), lastName: nameParts.slice(0, -1).join(' ').toLowerCase() };
+
         return appData.students.find(function (s) {
-          return s.firstName.toLowerCase() === firstName.toLowerCase() &&
-                 s.lastName.toLowerCase() === lastName.toLowerCase() &&
-                 s.matricule === passwordInput.trim();
+          if (!s.firstName || !s.lastName || !s.matricule) return false;
+          var sf = s.firstName.toLowerCase();
+          var sl = s.lastName.toLowerCase();
+          var sm = s.matricule.toLowerCase();
+          if (sm !== matricule) return false;
+          // Accepte l'ordre "Prénom Nom" OU "Nom Prénom"
+          return (sf === order1.firstName && sl === order1.lastName) ||
+                 (sf === order2.firstName && sl === order2.lastName);
         }) || null;
       }
 
@@ -858,44 +1351,135 @@
       }
 
       function displayResults(student) {
-        var grades = getStudentGrades(student.id);
-        var average = getStudentAverage(student.id);
-        var mention = getMention(average);
+        var detail = getStudentAverageDetail(student.id);
+        var average = detail.average;
+        var hasGrades = detail.hasGrades;
+        var mention = hasGrades ? getMention(average) : { text: 'NON NOTÉ', cls: 'mention-fail', icon: 'ℹ️' };
         var scientificAvg = getStudentAverageByCategory(student.id, 'scientific');
         var literaryAvg = getStudentAverageByCategory(student.id, 'literary');
+        var grades = getStudentGrades(student.id);
 
+        // Établissement : on prend celui de l'élève, sinon un fallback compact
+        var institution = student.institution || '—';
+
+        // ===== FICHE ÉLÈVE (avec établissement) =====
         document.getElementById('studentInfo').innerHTML =
-          '<div class="info-item"><strong>\uD83D\uDC64 Nom</strong><span>' + escapeHtml(student.lastName) + '</span></div>' +
-          '<div class="info-item"><strong>\uD83D\uDC64 Pr\u00e9nom</strong><span>' + escapeHtml(student.firstName) + '</span></div>' +
-          '<div class="info-item"><strong>\uD83C\uDD94 Matricule</strong><span>' + escapeHtml(student.matricule) + '</span></div>' +
-          '<div class="info-item"><strong>\uD83D\uDCDA Examen</strong><span>' + student.exam + '</span></div>';
+          '<div class="info-item"><strong>👤 Nom</strong><span>' + escapeHtml(student.lastName) + '</span></div>' +
+          '<div class="info-item"><strong>👤 Prénom</strong><span>' + escapeHtml(student.firstName) + '</span></div>' +
+          '<div class="info-item"><strong>🎫 Matricule</strong><span>' + escapeHtml(student.matricule) + '</span></div>' +
+          '<div class="info-item"><strong>🏫 Établissement</strong><span>' + escapeHtml(institution) + '</span></div>' +
+          '<div class="info-item"><strong>📚 Examen</strong><span>' + escapeHtml(student.exam) + '</span></div>' +
+          '<div class="info-item"><strong>📅 Année</strong><span>2025-2026</span></div>';
 
+        // ===== CARTES STATISTIQUES =====
+        var avgDisplay = hasGrades ? average.toFixed(2) + '/20' : '—';
+        var sciDisplay = hasGrades ? scientificAvg.toFixed(2) + '/20' : '—';
+        var litDisplay = hasGrades ? literaryAvg.toFixed(2) + '/20' : '—';
+        // Statut d'admission (Admis / Ajourné) — visible en première position
+        var status = getStatus(average, hasGrades);
+        var statusCardCls = !hasGrades ? 'mention-fail' : (status.cls === 'status-admis' ? 'mention-tb' : 'mention-fail');
         document.getElementById('statsGrid').innerHTML =
+          '<div class="stat-card ' + statusCardCls + '"><i class="fas ' + (hasGrades ? (status.cls === 'status-admis' ? 'fa-check-circle' : 'fa-times-circle') : 'fa-info-circle') + '"></i><div class="value">' + status.text + '</div><div class="label">' + status.icon + ' Statut</div></div>' +
           '<div class="stat-card ' + mention.cls + '"><i class="fas fa-star"></i><div class="value">' + mention.text + '</div><div class="label">' + mention.icon + ' Mention obtenue</div></div>' +
-          '<div class="stat-card"><i class="fas fa-chart-line" style="color:var(--flag-green)"></i><div class="value">' + average.toFixed(2) + '/20</div><div class="label">Moyenne g\u00e9n\u00e9rale</div></div>' +
-          '<div class="stat-card"><i class="fas fa-flask" style="color:var(--color-secondary)"></i><div class="value">' + scientificAvg.toFixed(2) + '/20</div><div class="label">Moyenne scientifique</div></div>' +
-          '<div class="stat-card"><i class="fas fa-book" style="color:#e91e63"></i><div class="value">' + literaryAvg.toFixed(2) + '/20</div><div class="label">Moyenne litt\u00e9raire</div></div>';
+          '<div class="stat-card"><i class="fas fa-chart-line" style="color:var(--flag-green)"></i><div class="value">' + avgDisplay + '</div><div class="label">Moyenne générale</div></div>' +
+          '<div class="stat-card"><i class="fas fa-flask" style="color:var(--color-secondary)"></i><div class="value">' + sciDisplay + '</div><div class="label">Moyenne scientifique</div></div>' +
+          '<div class="stat-card"><i class="fas fa-book" style="color:#e91e63"></i><div class="value">' + litDisplay + '</div><div class="label">Moyenne littéraire</div></div>';
 
+        // ===== CONTEXTE DE CLASSEMENT (rang + moyenne de classe) =====
+        var rankInfo = getStudentRank(student);
+        var allClassmates = appData.students.filter(function (s) { return s.exam === student.exam; });
+        var classAvg = getClassWeightedAverage(allClassmates);
+        var successCount = rankInfo.ranked.filter(function (r) { return r.average >= 10; }).length;
+        var successRate = rankInfo.total > 0 ? Math.round(successCount / rankInfo.total * 100) + '%' : '—';
+
+        var rankValue = hasGrades && rankInfo.rank > 0 ? (rankInfo.rank + ' / ' + rankInfo.total) : '—';
+        var ecart = hasGrades && rankInfo.rank > 0 ? (average - classAvg).toFixed(2) : '—';
+        var ecartSign = (!isNaN(parseFloat(ecart)) && parseFloat(ecart) >= 0) ? '+' : '';
+
+        document.getElementById('rankContextCard').innerHTML =
+          '<div class="rc-item highlight"><div class="rc-value">' + rankValue + '</div><div class="rc-label">🏅 Mon rang</div></div>' +
+          '<div class="rc-item"><div class="rc-value">' + classAvg.toFixed(2) + '/20</div><div class="rc-label">📊 Moy. de classe</div></div>' +
+          '<div class="rc-item"><div class="rc-value">' + ecartSign + ecart + '</div><div class="rc-label">📈 Écart vs classe</div></div>' +
+          '<div class="rc-item"><div class="rc-value">' + successRate + '</div><div class="rc-label">✅ Taux réussite classe</div></div>' +
+          '<div class="rc-item"><div class="rc-value">' + allClassmates.length + '</div><div class="rc-label">👥 Élèves inscrits</div></div>';
+
+        // ===== TABLEAU DES NOTES (avec moy. classe + rang par matière) =====
         var gradesBody = document.getElementById('gradesBody');
         var gradesFooter = document.getElementById('gradesFooter');
         gradesBody.innerHTML = '';
         var totalPoints = 0, totalCoeffs = 0;
 
-        grades.forEach(function (g) {
-          var subject = getSubjectById(g.subjectId);
-          if (subject) {
-            var points = g.value * subject.coefficient;
-            totalPoints += points;
-            totalCoeffs += subject.coefficient;
-            gradesBody.innerHTML +=
-              '<tr><td><strong>' + escapeHtml(subject.name) + '</strong></td><td>' + subject.coefficient + '</td><td class="' + getGradeClass(g.value) + '">' + g.value + '/20</td><td>' + points.toFixed(1) + '</td><td><span class="category-badge ' + (subject.category === 'scientific' ? 'badge-scientific' : 'badge-literary') + '">' + (subject.category === 'scientific' ? 'Scientifique' : 'Litt\u00e9raire') + '</span></td><td>' + escapeHtml(g.teacher) + '</td></tr>';
-          }
-        });
+        if (grades.length === 0) {
+          gradesBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--color-muted);font-style:italic;padding:16px">Aucune note enregistrée pour cet examen.</td></tr>';
+        } else {
+          grades.forEach(function (g) {
+            var subject = getSubjectById(g.subjectId);
+            if (subject) {
+              var points = g.value * subject.coefficient;
+              totalPoints += points;
+              totalCoeffs += subject.coefficient;
+              var classAvgSubj = getSubjectClassAverage(subject);
+              var subjRank = getStudentSubjectRank(student, subject);
+              var classAvgDisplay = classAvgSubj !== null ? classAvgSubj.toFixed(2) : '—';
+              var subjRankDisplay = subjRank.rank > 0 ? (subjRank.rank + '/' + subjRank.total) : '—';
+              // Indicateur visuel : au-dessus ou en-dessous de la moyenne de classe
+              var vsClass = classAvgSubj !== null ? (g.value >= classAvgSubj ? 'grade-good' : 'grade-fail') : '';
+              var vsClassIcon = classAvgSubj !== null ? (g.value >= classAvgSubj ? ' ▲' : ' ▼') : '';
+              gradesBody.innerHTML +=
+                '<tr><td><strong>' + escapeHtml(subject.name) + '</strong></td>' +
+                '<td>' + subject.coefficient + '</td>' +
+                '<td class="' + getGradeClass(g.value) + '">' + g.value + '/20</td>' +
+                '<td>' + points.toFixed(1) + '</td>' +
+                '<td class="' + vsClass + '">' + classAvgDisplay + vsClassIcon + '</td>' +
+                '<td>' + subjRankDisplay + '</td>' +
+                '<td><span class="category-badge ' + (subject.category === 'scientific' ? 'badge-scientific' : 'badge-literary') + '">' + (subject.category === 'scientific' ? 'Sci.' : 'Lit.') + '</span></td>' +
+                '<td>' + escapeHtml(g.teacher) + '</td></tr>';
+            }
+          });
+        }
 
+        var footerAvg = totalCoeffs > 0 ? (totalPoints / totalCoeffs).toFixed(2) : '—';
         gradesFooter.innerHTML =
-          '<tr style="background:var(--color-light);font-weight:bold"><td colspan="2">TOTAL</td><td>' + (totalCoeffs > 0 ? (totalPoints / totalCoeffs).toFixed(2) : 0) + '/20</td><td>' + totalPoints.toFixed(1) + '</td><td colspan="2"></td></tr>';
+          '<tr style="background:var(--color-light);font-weight:bold"><td colspan="2">TOTAL</td><td>' + footerAvg + '/20</td><td>' + totalPoints.toFixed(1) + '</td><td colspan="4"></td></tr>';
 
-        document.getElementById('appreciationText').textContent = getAppreciation(average);
+        // ===== CLASSEMENT COMPLET DE LA CLASSE (tous les élèves) =====
+        var top10Body = document.getElementById('top10Body');
+        var rankingNote = document.getElementById('rankingNote');
+        if (rankInfo.ranked.length === 0) {
+          top10Body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--color-muted);font-style:italic;padding:12px">Aucun élève classé pour cet examen.</td></tr>';
+          if (rankingNote) rankingNote.innerHTML = '';
+        } else {
+          // On affiche TOUS les élèves classés (plus de limite à 10).
+          var allRanked = rankInfo.ranked;
+          top10Body.innerHTML = allRanked.map(function (r, idx) {
+            var rank = idx + 1;
+            var mate = appData.students.find(function (s) { return s.id === r.id; });
+            var mateName = mate ? escapeHtml(mate.firstName + ' ' + mate.lastName) : 'Inconnu';
+            var mateInst = mate && mate.institution ? escapeHtml(mate.institution) : '—';
+            var mateMention = getMention(r.average);
+            var mateStatus = getStatus(r.average, true);
+            var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+            var isMe = r.id === student.id;
+            var rowCls = isMe ? ' class="my-row"' : '';
+            var meLabel = isMe ? ' <span style="color:var(--flag-green);font-size:0.7rem">(Vous)</span>' : '';
+            return '<tr' + rowCls + '>' +
+              '<td><span class="rank-medal">' + medal + '</span> ' + rank + meLabel + '</td>' +
+              '<td style="text-align:left">' + mateName + '</td>' +
+              '<td style="text-align:left;font-size:0.72rem">🏫 ' + mateInst + '</td>' +
+              '<td><span class="mention-badge ' + mateMention.cls + '">' + r.average.toFixed(2) + '/20</span></td>' +
+              '<td><span class="status-badge ' + mateStatus.cls + '">' + mateStatus.icon + ' ' + mateStatus.text + '</span></td>' +
+              '</tr>';
+          }).join('');
+          // Note indiquant le nombre total d'élèves affichés
+          var admisTotal = allRanked.filter(function (r) { return r.average >= 10; }).length;
+          var ajourneTotal = allRanked.length - admisTotal;
+          if (rankingNote) {
+            rankingNote.innerHTML = '<i class="fas fa-info-circle" aria-hidden="true"></i> Classement complet : <strong>' + allRanked.length + ' élève(s)</strong> classé(s) — ✅ ' + admisTotal + ' admis — ❌ ' + ajourneTotal + ' ajourné(s). Votre ligne est surlignée.';
+          }
+        }
+
+        // ===== APPRÉCIATION =====
+        document.getElementById('appreciationText').textContent = hasGrades ? getAppreciation(average) : 'Aucune note enregistrée pour le moment. Veuillez contacter l\'administration.';
         document.getElementById('loginPanel').style.display = 'none';
         document.getElementById('resultPanel').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -905,9 +1489,181 @@
         currentStudent = null;
         document.getElementById('loginPanel').style.display = 'block';
         document.getElementById('resultPanel').style.display = 'none';
+        document.getElementById('summaryPanel').style.display = 'none';
         document.getElementById('studentName').value = '';
         document.getElementById('studentPassword').value = '';
         document.getElementById('loginAlert').className = 'alert';
+      }
+
+      // Retour du classement général vers les résultats de l'élève connecté
+      // (ne déconnecte pas l'élève, contrairement à resetToLogin).
+      function backToResults() {
+        document.getElementById('summaryPanel').style.display = 'none';
+        if (currentStudent) {
+          document.getElementById('resultPanel').style.display = 'block';
+          document.getElementById('loginPanel').style.display = 'none';
+        } else {
+          // Au cas où (ne devrait pas arriver grâce au garde-fou de displaySummary)
+          resetToLogin();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // ===== VUE RÉSUMÉE : TOUS LES ÉLÈVES (mention + moyenne + établissement) =====
+      // Affiche un classement général de tous les élèves (tous examens confondus
+      // ou filtré par examen / établissement), avec pour chacun :
+      //   - son rang,
+      //   - son nom,
+      //   - son établissement,
+      //   - son examen,
+      //   - sa moyenne pondérée,
+      //   - sa mention,
+      //   - son statut (Admis / Ajourné).
+      // ⚠️ ACCÈS PROTÉGÉ : cette vue n'est accessible qu'après authentification
+      // de l'élève. Si currentStudent est null (non connecté), on redirige vers
+      // le panneau de connexion avec un message d'avertissement.
+      function displaySummary() {
+        // Garde-fou : accès interdit sans connexion préalable
+        if (!currentStudent) {
+          showAlert('Veuillez vous connecter pour accéder au classement général.', 'error');
+          resetToLogin();
+          return;
+        }
+        // Masque les autres panneaux et affiche le panneau de classement
+        document.getElementById('loginPanel').style.display = 'none';
+        document.getElementById('resultPanel').style.display = 'none';
+        document.getElementById('summaryPanel').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Remplit le filtre des établissements (une seule fois)
+        var instSelect = document.getElementById('summaryInstitutionFilter');
+        var currentInstFilter = instSelect.value || 'ALL';
+        var institutions = {};
+        appData.students.forEach(function (s) {
+          if (s.institution) institutions[s.institution] = true;
+        });
+        var instOptions = '<option value="ALL">Tous</option>';
+        Object.keys(institutions).sort().forEach(function (i) {
+          instOptions += '<option value="' + escapeHtml(i) + '">' + escapeHtml(i) + '</option>';
+        });
+        instSelect.innerHTML = instOptions;
+        instSelect.value = currentInstFilter;
+
+        renderSummary();
+      }
+
+      function renderSummary() {
+        var examFilter = document.getElementById('summaryExamFilter').value;
+        var instFilter = document.getElementById('summaryInstitutionFilter').value;
+
+        // Filtre les élèves selon les critères sélectionnés
+        var filtered = appData.students.filter(function (s) {
+          if (examFilter !== 'ALL' && s.exam !== examFilter) return false;
+          if (instFilter !== 'ALL' && (s.institution || '') !== instFilter) return false;
+          return true;
+        });
+
+        // Calcule la moyenne de chaque élève et ne garde que ceux qui ont des notes
+        var ranked = filtered.map(function (s) {
+          var d = getStudentAverageDetail(s.id);
+          return {
+            id: s.id,
+            firstName: s.firstName,
+            lastName: s.lastName,
+            matricule: s.matricule,
+            institution: s.institution || '—',
+            exam: s.exam,
+            average: d.average,
+            hasGrades: d.coeffs > 0,
+            points: d.points,
+            coeffs: d.coeffs
+          };
+        }).filter(function (s) { return s.hasGrades; })
+          .sort(function (a, b) { return b.average - a.average; });
+
+        // Met à jour les statistiques de synthèse
+        document.getElementById('summaryStudentCount').textContent = ranked.length;
+        var sumPts = 0, sumCf = 0;
+        var admisCount = 0, ajourneCount = 0;
+        ranked.forEach(function (s) {
+          sumPts += s.points; sumCf += s.coeffs;
+          if (s.average >= 10) admisCount++; else ajourneCount++;
+        });
+        var classAvg = sumCf > 0 ? (sumPts / sumCf).toFixed(2) + '/20' : '—';
+        document.getElementById('summaryClassAvg').textContent = classAvg;
+        document.getElementById('summaryAdmisCount').textContent = admisCount + (ranked.length > 0 ? ' (' + Math.round(admisCount / ranked.length * 100) + '%)' : '');
+        document.getElementById('summaryAjourneCount').textContent = ajourneCount + (ranked.length > 0 ? ' (' + Math.round(ajourneCount / ranked.length * 100) + '%)' : '');
+
+        // Génère les lignes du tableau
+        var summaryBody = document.getElementById('summaryBody');
+        if (ranked.length === 0) {
+          summaryBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--color-muted);font-style:italic;padding:16px">Aucun élève classé pour ces critères.</td></tr>';
+          return;
+        }
+
+        var currentStudentId = currentStudent ? currentStudent.id : -1;
+        summaryBody.innerHTML = ranked.map(function (s, idx) {
+          var rank = idx + 1;
+          var mention = getMention(s.average);
+          var status = getStatus(s.average, true);
+          var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+          var isMe = s.id === currentStudentId;
+          var rowCls = isMe ? ' class="my-row"' : '';
+          var meLabel = isMe ? ' <span style="color:var(--flag-green);font-size:0.7rem">(Vous)</span>' : '';
+          var avgCls = s.average >= 16 ? 'grade-excellent' : s.average >= 14 ? 'grade-good' : s.average >= 10 ? 'grade-passable' : 'grade-fail';
+          return '<tr' + rowCls + '>' +
+            '<td><span class="rank-medal">' + medal + '</span> ' + rank + meLabel + '</td>' +
+            '<td style="text-align:left"><strong>' + escapeHtml(s.firstName + ' ' + s.lastName) + '</strong><br><small style="color:#999">' + escapeHtml(s.matricule) + '</small></td>' +
+            '<td style="text-align:left">🏫 ' + escapeHtml(s.institution) + '</td>' +
+            '<td>' + escapeHtml(s.exam) + '</td>' +
+            '<td class="' + avgCls + '" style="font-weight:bold">' + s.average.toFixed(2) + '/20</td>' +
+            '<td><span class="mention-badge ' + mention.cls + '">' + mention.text + '</span></td>' +
+            '<td><span class="status-badge ' + status.cls + '">' + status.icon + ' ' + status.text + '</span></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      function printSummary() {
+        var clone = document.getElementById('summaryPanel').cloneNode(true);
+        var btns = clone.querySelectorAll('.action-buttons');
+        btns.forEach(function (b) { b.remove(); });
+        var w = window.open('', '_blank');
+        w.document.write('<!DOCTYPE html><html><head><title>Classement Général</title><meta charset="UTF-8">' +
+          '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">' +
+          '<style>' +
+          '*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}' +
+          'body{padding:20px;background:#fff}' +
+          '.student-info-card{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff;border-radius:20px;padding:20px;margin-bottom:20px}' +
+          '.student-info-card h2{font-size:1.2rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,0.3)}' +
+          '.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}' +
+          '.info-item{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px}' +
+          '.info-item strong{display:block;font-size:0.7rem;opacity:0.8;margin-bottom:4px}' +
+          '.info-item span{font-size:0.95rem;font-weight:500}' +
+          '.grades-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0}' +
+          '.grades-section h3{font-size:1rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #3498db;display:inline-block}' +
+          'table{width:100%;border-collapse:collapse}' +
+          'th,td{padding:8px;text-align:center;border-bottom:1px solid #e0e0e0;font-size:0.82rem}' +
+          'th{background:#f8f9fa}' +
+          '.grade-excellent{color:#2ecc71;font-weight:bold}' +
+          '.grade-good{color:#3498db;font-weight:bold}' +
+          '.grade-passable{color:#f39c12;font-weight:bold}' +
+          '.grade-fail{color:#e74c3c;font-weight:bold}' +
+          '.my-row{background:linear-gradient(135deg,rgba(0,106,78,0.12),rgba(102,126,234,0.12));font-weight:bold}' +
+          '.my-row td{border-bottom:2px solid #006a4e}' +
+          '.mention-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.66rem;font-weight:600;color:#fff}' +
+          '.mention-badge.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12);color:#2c3e50}' +
+          '.mention-badge.mention-tb{background:#2ecc71}' +
+          '.mention-badge.mention-bien{background:#3498db}' +
+          '.mention-badge.mention-passable{background:#f39c12}' +
+          '.mention-badge.mention-fail{background:#e74c3c}' +
+          '.status-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.66rem;font-weight:bold;color:#fff;white-space:nowrap}' +
+          '.status-admis{background:linear-gradient(135deg,#27ae60,#2ecc71)}' +
+          '.status-ajourne{background:linear-gradient(135deg,#c0392b,#e74c3c)}' +
+          '.status-pending{background:#7f8c8d}' +
+          '@media print{body{padding:0}}' +
+          '</style></head><body>' + clone.innerHTML + '</body></html>');
+        w.document.close();
+        setTimeout(function () { w.print(); }, 250);
       }
 
       function printResults() {
@@ -915,10 +1671,13 @@
         var btns = clone.querySelectorAll('.action-buttons');
         btns.forEach(function (b) { b.remove(); });
         var w = window.open('', '_blank');
-        w.document.write('<!DOCTYPE html><html><head><title>R\u00e9sultats Scolaires</title><meta charset="UTF-8"><style>' +
+        w.document.write('<!DOCTYPE html><html><head><title>Résultats Scolaires</title><meta charset="UTF-8">' +
+          '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">' +
+          '<style>' +
           '*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}' +
           'body{padding:20px;background:#fff}' +
           '.student-info-card{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff;border-radius:20px;padding:20px;margin-bottom:20px}' +
+          '.student-info-card h2{font-size:1.2rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,0.3)}' +
           '.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}' +
           '.info-item{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px}' +
           '.info-item strong{display:block;font-size:0.7rem;opacity:0.8;margin-bottom:4px}' +
@@ -926,6 +1685,9 @@
           '.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:20px}' +
           '.stat-card{background:#f8f9fa;border-radius:16px;padding:15px;text-align:center}' +
           '.stat-card .value{font-size:1.5rem;font-weight:bold}' +
+          '.stat-card .label{font-size:0.72rem;color:#7f8c8d;margin-top:4px}' +
+          '.stat-card i{font-size:1.6rem;margin-bottom:6px;display:block}' +
+          '.grades-section h3{font-size:1rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #3498db;display:inline-block}' +
           '.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12)}' +
           '.mention-tb{background:linear-gradient(135deg,#1abc9c,#16a085);color:#fff}' +
           '.mention-tb .value,.mention-tb i{color:#fff}' +
@@ -946,7 +1708,27 @@
           '.category-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.66rem;font-weight:600}' +
           '.badge-scientific{background:#3498db;color:#fff}' +
           '.badge-literary{background:#e91e63;color:#fff}' +
+          '.rank-context-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}' +
+          '.rank-context-card .rc-item{text-align:center;padding:12px;border-radius:10px;background:#f5f7fa}' +
+          '.rank-context-card .rc-item.highlight{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff}' +
+          '.rank-context-card .rc-value{font-size:1.4rem;font-weight:bold}' +
+          '.rank-context-card .rc-label{font-size:0.72rem;opacity:0.85;margin-top:4px}' +
+          '#top10Table .my-row{background:linear-gradient(135deg,rgba(0,106,78,0.12),rgba(102,126,234,0.12));font-weight:bold}' +
+          '#top10Table .my-row td{border-bottom:2px solid #006a4e}' +
+          '.rank-medal{font-size:1.1rem}' +
+          '.mention-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.66rem;font-weight:600;color:#fff}' +
+          '.mention-badge.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12);color:#2c3e50}' +
+          '.mention-badge.mention-tb{background:#2ecc71}' +
+          '.mention-badge.mention-bien{background:#3498db}' +
+          '.mention-badge.mention-passable{background:#f39c12}' +
+          '.mention-badge.mention-fail{background:#e74c3c}' +
+          '.status-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.66rem;font-weight:bold;color:#fff;white-space:nowrap}' +
+          '.status-admis{background:linear-gradient(135deg,#27ae60,#2ecc71)}' +
+          '.status-ajourne{background:linear-gradient(135deg,#c0392b,#e74c3c)}' +
+          '.status-pending{background:#7f8c8d}' +
           '.appreciation-section{background:#f0f8ff;border-radius:16px;padding:20px;text-align:center;margin-bottom:20px}' +
+          '.appreciation-section p{font-size:0.95rem;color:#2c3e50;font-style:italic;line-height:1.5}' +
+          '.appreciation-section i{color:#006a4e;margin:0 4px}' +
           '@media print{body{padding:0}}' +
           '</style></head><body>' + clone.innerHTML + '</body></html>');
         w.document.close();
@@ -965,7 +1747,32 @@
             currentStudent = student;
             displayResults(student);
           } else {
-            showAlert('Identifiants incorrects. V\u00e9rifiez votre nom/pr\u00e9nom et votre matricule.', 'error');
+            // Message d'erreur détaillé pour aider l'utilisateur à se connecter
+            var msg = 'Identifiants incorrects. ';
+            if (appData.students.length === 0) {
+              msg += 'Aucun élève enregistré. Contactez l\'administration.';
+            } else if (!passwordInput.trim()) {
+              msg += 'Veuillez saisir votre matricule comme mot de passe.';
+            } else if (!nameInput.trim() || nameInput.trim().split(' ').length < 2) {
+              msg += 'Veuillez saisir votre prénom ET votre nom.';
+            } else {
+              msg += 'Vérifiez votre nom et votre matricule. ';
+              if (isDemoMode) {
+                msg += 'Consultez les comptes de démonstration ci-dessous.';
+              } else {
+                // Vérifie si le matricule existe mais le nom est incorrect
+                var matriculeLower = passwordInput.trim().toLowerCase();
+                var matchByMatricule = appData.students.find(function (s) {
+                  return s.matricule && s.matricule.toLowerCase() === matriculeLower;
+                });
+                if (matchByMatricule) {
+                  msg += 'Le matricule est correct mais le nom ne correspond pas. Saisissez : "' + matchByMatricule.firstName + ' ' + matchByMatricule.lastName + '".';
+                } else {
+                  msg += 'Le matricule saisi n\'existe pas dans la base.';
+                }
+              }
+            }
+            showAlert(msg, 'error');
           }
         });
 
@@ -975,7 +1782,19 @@
           window.location.href = 'index.html';
         });
 
+        // Bouton "Basculer en mode démonstration"
+        var resetDemoBtn = document.getElementById('resetToDemoBtn');
+        if (resetDemoBtn) resetDemoBtn.addEventListener('click', resetToDemoMode);
+
         document.getElementById('printResultsBtn').addEventListener('click', printResults);
+
+        // Vue résumée : classement général de tous les élèves (accès protégé)
+        document.getElementById('showSummaryBtn').addEventListener('click', displaySummary);
+        document.getElementById('summaryBackBtn').addEventListener('click', backToResults);
+        document.getElementById('summaryLogoutBtn').addEventListener('click', resetToLogin);
+        document.getElementById('printSummaryBtn').addEventListener('click', printSummary);
+        document.getElementById('summaryExamFilter').addEventListener('change', renderSummary);
+        document.getElementById('summaryInstitutionFilter').addEventListener('change', renderSummary);
       });
     })();
   </script>
