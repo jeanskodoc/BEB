@@ -8,6 +8,7 @@
   <title>Espace Élève - Consultation des Résultats Scolaires</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* ========== VARIABLES ========== */
     :root {
       --flag-green: #006a4e;
       --flag-yellow: #fcd116;
@@ -448,7 +449,7 @@
     }
     #top10Table .my-row td { border-bottom: 2px solid var(--flag-green); }
 
-    /* ========== SUMMARY TABLE (classement général) ========== */
+    /* ========== SUMMARY TABLE ========== */
     #summaryTable { min-width: 720px; table-layout: fixed; }
     #summaryTable th:nth-child(1), #summaryTable td:nth-child(1) { width: 9%; }
     #summaryTable th:nth-child(2), #summaryTable td:nth-child(2) { width: 24%; text-align: left; }
@@ -478,7 +479,7 @@
     .mention-badge.mention-passable { background: var(--color-warning); }
     .mention-badge.mention-fail { background: var(--color-danger); }
 
-    /* ========== STATUS BADGES (Admis / Ajourné) ========== */
+    /* ========== STATUS BADGES ========== */
     .status-badge {
       display: inline-block;
       padding: 3px 10px;
@@ -527,7 +528,7 @@
       font-size: clamp(0.6rem, 2.2vw, 0.72rem);
     }
 
-    /* ========== RESPONSIVE – TRÈS PETITS ÉCRANS (320px–360px) ========== */
+    /* ========== RESPONSIVE ========== */
     @media (max-width: 360px) {
       .container { padding: 0; }
       .header { border-radius: 0; padding: clamp(10px, 2vw, 14px); margin-bottom: 10px; }
@@ -555,7 +556,6 @@
       .footer { font-size: 0.55rem; padding: 10px; }
     }
 
-    /* ========== RESPONSIVE – MOBILE (361px–640px) ========== */
     @media (min-width: 361px) and (max-width: 640px) {
       .action-buttons { flex-direction: column; }
       .action-buttons .btn-action { width: 100%; text-align: center; }
@@ -563,41 +563,35 @@
       .table-container { min-width: 600px; }
     }
 
-    /* ========== RESPONSIVE – TABLETTE PORTRAIT (641px–768px) ========== */
     @media (min-width: 641px) and (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: clamp(8px, 1.5vw, 12px); }
       .info-grid { grid-template-columns: repeat(2, 1fr); }
       .login-panel { max-width: 400px; }
     }
 
-    /* ========== RESPONSIVE – TABLETTE PAYSAGE (769px–1024px) ========== */
     @media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
       .stats-grid { grid-template-columns: repeat(4, 1fr); }
       .info-grid { grid-template-columns: repeat(4, 1fr); }
       .container { max-width: 900px; }
     }
 
-    /* ========== RESPONSIVE – PETIT ÉCRAN (< 768px) ========== */
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: clamp(8px, 1.5vw, 12px); }
       th, td { padding: 6px 4px; }
       .info-grid { grid-template-columns: 1fr 1fr; }
     }
 
-    /* ========== RESPONSIVE – GRAND ÉCRAN (≥ 1400px) ========== */
     @media (min-width: 1400px) {
       .container { max-width: 1300px; }
       .stats-grid { grid-template-columns: repeat(4, 1fr); }
       .info-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
-    /* ========== RESPONSIVE – TRÈS GRAND ÉCRAN (≥ 1800px) ========== */
     @media (min-width: 1800px) {
       .container { max-width: 1500px; }
       .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
     }
 
-    /* ========== PAYSAGE MOBILE (hauteur limitée) ========== */
     @media (max-height: 500px) and (orientation: landscape) {
       body { padding: 6px; }
       .header { padding: 8px; margin-bottom: 6px; }
@@ -638,13 +632,11 @@
       .footer { margin-top: 10px; padding-top: 8px; }
     }
 
-    /* ========== PAYSAGE TABLETTE ========== */
     @media (min-height: 600px) and (max-height: 900px) and (orientation: landscape) {
       .container { max-width: 1000px; }
       .login-panel { max-width: 380px; }
     }
 
-    /* ========== APPAREILS FOLDABLES ========== */
     @media (min-width: 280px) and (max-width: 320px) {
       .header { padding: 8px; }
       .flag-togo { width: 28px; height: 28px; }
@@ -654,28 +646,22 @@
       .btn-connect { padding: 10px; }
     }
 
-    /* ========== TOUCH – CIBLES MINIMALES 44px ========== */
     @media (pointer: coarse) {
-      .btn-connect, .btn-back, .btn-action {
-        min-height: 44px;
-      }
+      .btn-connect, .btn-back, .btn-action { min-height: 44px; }
       .form-group input { min-height: 44px; }
       .stat-card { cursor: default; }
     }
 
-    /* ========== HOVER – PAS DE SURVOL SUR TOUCH ========== */
     @media (hover: none) {
       .stat-card:hover { transform: none; }
       .btn-connect:hover, .btn-back:hover { transform: none; }
       .btn-action:hover { transform: none; }
     }
 
-    /* ========== HAUTE DENSITÉ ========== */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
       .flag-togo-inner .star { background: #fff; }
     }
 
-    /* ========== PRÉFÉRENCE MOTION ========== */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -683,14 +669,12 @@
       }
     }
 
-    /* ========== MODE SOMBRE (optionnel) ========== */
     @media (prefers-color-scheme: dark) {
       :root {
         --color-bg: #1a1a2e;
       }
     }
 
-    /* ========== PRINT ========== */
     @media print {
       body { background: #fff; padding: 0; }
       .header, .login-panel, .action-buttons, .footer { display: none !important; }
@@ -737,13 +721,13 @@
         <div class="form-group">
           <label for="studentPassword"><i class="fas fa-key" aria-hidden="true"></i> Mot de passe</label>
           <input type="password" id="studentPassword" placeholder="Votre matricule" required>
-          <small>Votre mot de passe est votre numéro matricule (ex: BEPC001)</small>
+          <small>Votre mot de passe est votre numéro matricule (ex: ELV001)</small>
         </div>
         <button type="submit" class="btn-connect"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Se connecter</button>
       </form>
       <button type="button" class="btn-back" id="backToHomeBtn" style="margin-top:10px"><i class="fas fa-home" aria-hidden="true"></i> Retour à l'accueil</button>
 
-      <!-- Alerte : données réelles détectées (mode admin) -->
+      <!-- Alerte : données réelles détectées -->
       <div id="realDataAlert" style="display:none;margin-top:12px;padding:12px;background:#fff3cd;border-radius:10px;border-left:4px solid var(--color-warning);font-size:0.78rem">
         <p style="color:#856404"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> <strong>Données réelles détectées.</strong> Les identifiants de démonstration ne fonctionnent pas car des données provenant de l'application d'administration ont été trouvées dans ce navigateur.</p>
         <p style="margin-top:6px;color:#856404">Si vous êtes un élève, utilisez les identifiants fournis par votre établissement. Si vous souhaitez tester l'application avec les données de démonstration :</p>
@@ -773,7 +757,6 @@
 
       <div class="stats-grid" id="statsGrid"></div>
 
-      <!-- Carte de position dans la classe : rang + moyenne de classe -->
       <div id="rankContextCard" class="rank-context-card"></div>
 
       <div class="grades-section">
@@ -798,7 +781,6 @@
         </div>
       </div>
 
-      <!-- Classement complet de la classe (tous les élèves) -->
       <div class="grades-section" id="top10Section">
         <h3><i class="fas fa-trophy" aria-hidden="true"></i> Classement de ma classe</h3>
         <div class="table-container">
@@ -834,7 +816,7 @@
       </div>
     </section>
 
-    <!-- Summary Panel : classement général de tous les élèves (accessible après connexion) -->
+    <!-- Summary Panel -->
     <section id="summaryPanel" class="result-panel" role="region" aria-label="Classement général">
       <div class="student-info-card">
         <h2><i class="fas fa-trophy" aria-hidden="true"></i> Classement Général — Tous Élèves</h2>
@@ -922,7 +904,7 @@
 
       var appData = { students: [], subjects: [], grades: [], currentExam: 'BEPC' };
       var currentStudent = null;
-      var isDemoMode = false; // true si les données de démo sont chargées
+      var isDemoMode = false;
 
       function escapeHtml(str) {
         if (str === undefined || str === null) return '';
@@ -937,11 +919,6 @@
       }
 
       function loadData() {
-        // L'application admin enregistre les données sous des clés de la forme
-        // "examData_<username>" (ex: examData_ADMIN_001, examData_CEG_746529_1004,
-        // examData_LYCEE_001). On parcourt TOUTES ces clés pour fusionner les
-        // données de plusieurs établissements — un élève peut ainsi consulter
-        // ses résultats quel que soit le compte admin qui les a saisis.
         var merged = { students: [], subjects: [], grades: [], nextStudentId: 1, nextSubjectId: 1, nextGradeId: 1 };
         var seenStudentMatricules = new Set();
         var seenSubjectKeys = new Set();
@@ -954,12 +931,8 @@
           if (!raw) continue;
           try {
             var data = JSON.parse(raw);
-            // Importe les élèves (avec re-mappage des IDs pour éviter les collisions)
             (data.students || []).forEach(function (s) {
               if (s.matricule && seenStudentMatricules.has(s.matricule)) {
-                // CRITIQUE : même si on ignore l'élève (doublon de matricule),
-                // on doit quand même mapper son ancien ID vers l'ID fusionné
-                // existant — sinon ses notes seront silencieusement perdues.
                 var existingStudent = merged.students.find(function (x) { return x.matricule === s.matricule; });
                 if (existingStudent) idMap.students[s.id] = existingStudent.id;
                 return;
@@ -974,12 +947,10 @@
                 institution: s.institution || ''
               });
             });
-            // Importe les matières
             (data.subjects || []).forEach(function (s) {
-              if (!s.name || !s.exam) return; // garde-fou
+              if (!s.name || !s.exam) return;
               var subKey = s.name.toLowerCase() + '|' + s.exam;
               if (seenSubjectKeys.has(subKey)) {
-                // Matière déjà importée : on mappe vers l'ID existant
                 var existing = merged.subjects.find(function (x) {
                   return x.name.toLowerCase() === s.name.toLowerCase() && x.exam === s.exam;
                 });
@@ -995,12 +966,10 @@
                 category: s.category, exam: s.exam
               });
             });
-            // Importe les notes (avec re-mappage des IDs)
             (data.grades || []).forEach(function (g) {
               var newStudentId = idMap.students[g.studentId];
               var newSubjectId = idMap.subjects[g.subjectId];
               if (!newStudentId || !newSubjectId) return;
-              // Évite les doublons (même élève + même matière)
               var exists = merged.grades.some(function (x) {
                 return x.studentId === newStudentId && x.subjectId === newSubjectId;
               });
@@ -1011,7 +980,7 @@
                 value: g.value, teacher: g.teacher || '-'
               });
             });
-          } catch (e) { /* ignore malformed entries */ }
+          } catch (e) { /* ignore */ }
         }
 
         appData.students = merged.students;
@@ -1020,24 +989,17 @@
         appData.currentExam = 'BEPC';
         isDemoMode = false;
 
-        // Si aucune donnée réelle n'est trouvée, on charge des données de démonstration
         if (appData.students.length === 0) {
           loadDemoData();
           isDemoMode = true;
         }
-        // Affiche la section d'aide avec les identifiants de démo si le mode démo est actif
         updateDemoHelpVisibility();
       }
 
-      // Affiche ou masque la section d'aide avec les identifiants de démonstration.
-      // En mode démo, on liste tous les comptes disponibles pour que l'utilisateur
-      // puisse se connecter. En mode réel (données depuis l'admin), on affiche une
-      // alerte informant que les identifiants de démo ne fonctionnent pas.
       function updateDemoHelpVisibility() {
         var helpDiv = document.getElementById('demoCredentialsHelp');
         var realAlert = document.getElementById('realDataAlert');
         if (isDemoMode && appData.students.length > 0) {
-          // Mode démo : affiche les comptes de démonstration
           if (helpDiv) {
             helpDiv.style.display = 'block';
             var body = document.getElementById('demoCredentialsBody');
@@ -1053,18 +1015,13 @@
           }
           if (realAlert) realAlert.style.display = 'none';
         } else {
-          // Mode réel : masque les comptes de démo, affiche l'alerte
           if (helpDiv) helpDiv.style.display = 'none';
           if (realAlert && appData.students.length > 0) realAlert.style.display = 'block';
         }
       }
 
-      // Bascule en mode démonstration en supprimant les données réelles
-      // stockées par l'application d'administration dans localStorage.
-      // ⚠️ Cela ne supprime PAS les données de l'admin (clé examAppActiveSession),
-      // uniquement les clés examData_* qui contiennent les élèves/matières/notes.
       function resetToDemoMode() {
-        if (!confirm('Voulez-vous basculer en mode démonstration ? Les données locales de l\'application d\'administration (élèves, matières, notes) seront supprimées de CE navigateur. L\'application admin les régénérera si besoin.')) return;
+        if (!confirm('Voulez-vous basculer en mode démonstration ? Les données locales de l\'application d\'administration (élèves, matières, notes) seront supprimées de CE navigateur.')) return;
         var keysToRemove = [];
         for (var i = 0; i < localStorage.length; i++) {
           var key = localStorage.key(i);
@@ -1076,476 +1033,473 @@
       }
 
       function loadDemoData() {
-        // Données de démonstration : inclut le champ "institution" et suffisamment
-        // d'élèves pour que le classement Top 10 soit significatif.
         appData.students = [
-  { id: 1, lastName: 'Traore', firstName: 'Adama', matricule: 'ELV001', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 2, lastName: 'Diakite', firstName: 'Aissata', matricule: 'ELV002', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 3, lastName: 'Kone', firstName: 'Aminata', matricule: 'ELV003', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 4, lastName: 'Cisse', firstName: 'Amadou', matricule: 'ELV004', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 5, lastName: 'Sidibe', firstName: 'Assa', matricule: 'ELV005', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 6, lastName: 'Diarra', firstName: 'Bakary', matricule: 'ELV006', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 7, lastName: 'Coulibaly', firstName: 'Bintou', matricule: 'ELV007', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 8, lastName: 'Sissoko', firstName: 'Djibril', matricule: 'ELV008', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 9, lastName: 'Keita', firstName: 'Dramane', matricule: 'ELV009', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 10, lastName: 'Bamba', firstName: 'Fatoumata', matricule: 'ELV010', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 11, lastName: 'Dembele', firstName: 'Fanta', matricule: 'ELV011', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 12, lastName: 'Sanogo', firstName: 'Hadja', matricule: 'ELV012', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 13, lastName: 'Sow', firstName: 'Hawa', matricule: 'ELV013', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 14, lastName: 'Diallo', firstName: 'Ibrahim', matricule: 'ELV014', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 15, lastName: 'Kamara', firstName: 'Idrissa', matricule: 'ELV015', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 16, lastName: 'Toure', firstName: 'Issa', matricule: 'ELV016', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 17, lastName: 'Fofana', firstName: 'Kadiatou', matricule: 'ELV017', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 18, lastName: 'Sangare', firstName: 'Karamoko', matricule: 'ELV018', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 19, lastName: 'Doumbia', firstName: 'Lamine', matricule: 'ELV019', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 20, lastName: 'Traore', firstName: 'Mariam', matricule: 'ELV020', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 21, lastName: 'Cisse', firstName: 'Mamadou', matricule: 'ELV021', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 22, lastName: 'Diabate', firstName: 'Moussa', matricule: 'ELV022', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 23, lastName: 'Sacko', firstName: 'Modibo', matricule: 'ELV023', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 24, lastName: 'Barry', firstName: 'Mohamed', matricule: 'ELV024', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 25, lastName: 'Ndiaye', firstName: 'Nafissatou', matricule: 'ELV025', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 26, lastName: 'Maiga', firstName: 'Nouhoum', matricule: 'ELV026', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 27, lastName: 'Coulibaly', firstName: 'Oumou', matricule: 'ELV027', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 28, lastName: 'Diakite', firstName: 'Ousmane', matricule: 'ELV028', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 29, lastName: 'Kone', firstName: 'Rokia', matricule: 'ELV029', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 30, lastName: 'Diarra', firstName: 'Souleymane', matricule: 'ELV030', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 31, lastName: 'Sidibe', firstName: 'Salimata', matricule: 'ELV031', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 32, lastName: 'Traore', firstName: 'Seydou', matricule: 'ELV032', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 33, lastName: 'Doumbia', firstName: 'Sitan', matricule: 'ELV033', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 34, lastName: 'Sanogo', firstName: 'Tenin', matricule: 'ELV034', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 35, lastName: 'Kamissoko', firstName: 'Tidiane', matricule: 'ELV035', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 36, lastName: 'Dembele', firstName: 'Tiemoko', matricule: 'ELV036', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 37, lastName: 'Bamba', firstName: 'Yacouba', matricule: 'ELV037', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 38, lastName: 'Keita', firstName: 'Youssouf', matricule: 'ELV038', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 39, lastName: 'Coulibaly', firstName: 'Zakaria', matricule: 'ELV039', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 40, lastName: 'Diop', firstName: 'Awa', matricule: 'ELV040', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 41, lastName: 'Niang', firstName: 'Fatou', matricule: 'ELV041', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 42, lastName: 'Diallo', firstName: 'Ali', matricule: 'ELV042', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 43, lastName: 'Sow', firstName: 'Aicha', matricule: 'ELV043', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 44, lastName: 'Faye', firstName: 'Maimouna', matricule: 'ELV044', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 45, lastName: 'Diaby', firstName: 'Cheick', matricule: 'ELV045', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 46, lastName: 'Konate', firstName: 'Abdoulaye', matricule: 'ELV046', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 47, lastName: 'Traore', firstName: 'Mamoutou', matricule: 'ELV047', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 48, lastName: 'Diawara', firstName: 'Ramatoulaye', matricule: 'ELV048', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 49, lastName: 'Ouattara', firstName: 'Kadidia', matricule: 'ELV049', exam: 'BEPC', institution: 'CEG Massedena' },
-  { id: 50, lastName: 'Samake', firstName: 'Mintou', matricule: 'ELV050', exam: 'BEPC', institution: 'CEG Massedena' }
-];
+          { id: 1, lastName: 'Traore', firstName: 'Adama', matricule: 'ELV001', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 2, lastName: 'Diakite', firstName: 'Aissata', matricule: 'ELV002', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 3, lastName: 'Kone', firstName: 'Aminata', matricule: 'ELV003', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 4, lastName: 'Cisse', firstName: 'Amadou', matricule: 'ELV004', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 5, lastName: 'Sidibe', firstName: 'Assa', matricule: 'ELV005', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 6, lastName: 'Diarra', firstName: 'Bakary', matricule: 'ELV006', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 7, lastName: 'Coulibaly', firstName: 'Bintou', matricule: 'ELV007', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 8, lastName: 'Sissoko', firstName: 'Djibril', matricule: 'ELV008', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 9, lastName: 'Keita', firstName: 'Dramane', matricule: 'ELV009', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 10, lastName: 'Bamba', firstName: 'Fatoumata', matricule: 'ELV010', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 11, lastName: 'Dembele', firstName: 'Fanta', matricule: 'ELV011', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 12, lastName: 'Sanogo', firstName: 'Hadja', matricule: 'ELV012', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 13, lastName: 'Sow', firstName: 'Hawa', matricule: 'ELV013', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 14, lastName: 'Diallo', firstName: 'Ibrahim', matricule: 'ELV014', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 15, lastName: 'Kamara', firstName: 'Idrissa', matricule: 'ELV015', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 16, lastName: 'Toure', firstName: 'Issa', matricule: 'ELV016', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 17, lastName: 'Fofana', firstName: 'Kadiatou', matricule: 'ELV017', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 18, lastName: 'Sangare', firstName: 'Karamoko', matricule: 'ELV018', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 19, lastName: 'Doumbia', firstName: 'Lamine', matricule: 'ELV019', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 20, lastName: 'Traore', firstName: 'Mariam', matricule: 'ELV020', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 21, lastName: 'Cisse', firstName: 'Mamadou', matricule: 'ELV021', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 22, lastName: 'Diabate', firstName: 'Moussa', matricule: 'ELV022', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 23, lastName: 'Sacko', firstName: 'Modibo', matricule: 'ELV023', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 24, lastName: 'Barry', firstName: 'Mohamed', matricule: 'ELV024', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 25, lastName: 'Ndiaye', firstName: 'Nafissatou', matricule: 'ELV025', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 26, lastName: 'Maiga', firstName: 'Nouhoum', matricule: 'ELV026', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 27, lastName: 'Coulibaly', firstName: 'Oumou', matricule: 'ELV027', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 28, lastName: 'Diakite', firstName: 'Ousmane', matricule: 'ELV028', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 29, lastName: 'Kone', firstName: 'Rokia', matricule: 'ELV029', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 30, lastName: 'Diarra', firstName: 'Souleymane', matricule: 'ELV030', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 31, lastName: 'Sidibe', firstName: 'Salimata', matricule: 'ELV031', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 32, lastName: 'Traore', firstName: 'Seydou', matricule: 'ELV032', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 33, lastName: 'Doumbia', firstName: 'Sitan', matricule: 'ELV033', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 34, lastName: 'Sanogo', firstName: 'Tenin', matricule: 'ELV034', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 35, lastName: 'Kamissoko', firstName: 'Tidiane', matricule: 'ELV035', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 36, lastName: 'Dembele', firstName: 'Tiemoko', matricule: 'ELV036', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 37, lastName: 'Bamba', firstName: 'Yacouba', matricule: 'ELV037', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 38, lastName: 'Keita', firstName: 'Youssouf', matricule: 'ELV038', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 39, lastName: 'Coulibaly', firstName: 'Zakaria', matricule: 'ELV039', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 40, lastName: 'Diop', firstName: 'Awa', matricule: 'ELV040', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 41, lastName: 'Niang', firstName: 'Fatou', matricule: 'ELV041', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 42, lastName: 'Diallo', firstName: 'Ali', matricule: 'ELV042', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 43, lastName: 'Sow', firstName: 'Aicha', matricule: 'ELV043', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 44, lastName: 'Faye', firstName: 'Maimouna', matricule: 'ELV044', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 45, lastName: 'Diaby', firstName: 'Cheick', matricule: 'ELV045', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 46, lastName: 'Konate', firstName: 'Abdoulaye', matricule: 'ELV046', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 47, lastName: 'Traore', firstName: 'Mamoutou', matricule: 'ELV047', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 48, lastName: 'Diawara', firstName: 'Ramatoulaye', matricule: 'ELV048', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 49, lastName: 'Ouattara', firstName: 'Kadidia', matricule: 'ELV049', exam: 'BEPC', institution: 'CEG Massedena' },
+          { id: 50, lastName: 'Samake', firstName: 'Mintou', matricule: 'ELV050', exam: 'BEPC', institution: 'CEG Massedena' }
+        ];
 
-appData.subjects = [
-  { id: 1, name: 'Mathematiques', coefficient: 3, category: 'scientific', exam: 'BEPC' },
-  { id: 2, name: 'Physique-Chimie', coefficient: 3, category: 'scientific', exam: 'BEPC' },
-  { id: 3, name: 'SVT', coefficient: 1, category: 'scientific', exam: 'BEPC' },
-  { id: 4, name: 'Francais', coefficient: 3, category: 'literary', exam: 'BEPC' },
-  { id: 5, name: 'Anglais', coefficient: 1, category: 'literary', exam: 'BEPC' },
-  { id: 6, name: 'Histoire-Geographie', coefficient: 1, category: 'literary', exam: 'BEPC' },
-  { id: 7, name: 'Education Civique', coefficient: 1, category: 'literary', exam: 'BEPC' }
-];
+        appData.subjects = [
+          { id: 1, name: 'Mathematiques', coefficient: 3, category: 'scientific', exam: 'BEPC' },
+          { id: 2, name: 'Physique-Chimie', coefficient: 3, category: 'scientific', exam: 'BEPC' },
+          { id: 3, name: 'SVT', coefficient: 1, category: 'scientific', exam: 'BEPC' },
+          { id: 4, name: 'Francais', coefficient: 3, category: 'literary', exam: 'BEPC' },
+          { id: 5, name: 'Anglais', coefficient: 1, category: 'literary', exam: 'BEPC' },
+          { id: 6, name: 'Histoire-Geographie', coefficient: 1, category: 'literary', exam: 'BEPC' },
+          { id: 7, name: 'Education Civique', coefficient: 1, category: 'literary', exam: 'BEPC' }
+        ];
 
-appData.grades = [
-  // Adama Traore (ELV001) - id: 1
-  { id: 1, studentId: 1, subjectId: 1, value: 12.5, teacher: 'M.Kone' },
-  { id: 2, studentId: 1, subjectId: 4, value: 14, teacher: 'Mme.Bah' },
-  { id: 3, studentId: 1, subjectId: 2, value: 9, teacher: 'M.Sow' },
-  { id: 4, studentId: 1, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
-  { id: 5, studentId: 1, subjectId: 5, value: 11, teacher: 'M.Diarra' },
-  { id: 6, studentId: 1, subjectId: 6, value: 13.5, teacher: 'Mme.Sidibe' },
-  { id: 7, studentId: 1, subjectId: 7, value: 15, teacher: 'M.Traore' },
-  // Aissata Diakite (ELV002) - id: 2
-  { id: 8, studentId: 2, subjectId: 1, value: 8, teacher: 'M.Kone' },
-  { id: 9, studentId: 2, subjectId: 4, value: 17.5, teacher: 'Mme.Bah' },
-  { id: 10, studentId: 2, subjectId: 2, value: 10, teacher: 'M.Sow' },
-  { id: 11, studentId: 2, subjectId: 3, value: 14, teacher: 'Mme.Coulibaly' },
-  { id: 12, studentId: 2, subjectId: 5, value: 12, teacher: 'M.Diarra' },
-  { id: 13, studentId: 2, subjectId: 6, value: 9.5, teacher: 'Mme.Sidibe' },
-  { id: 14, studentId: 2, subjectId: 7, value: 18, teacher: 'M.Traore' },
-  // Aminata Kone (ELV003) - id: 3
-  { id: 15, studentId: 3, subjectId: 1, value: 6.5, teacher: 'M.Kone' },
-  { id: 16, studentId: 3, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
-  { id: 17, studentId: 3, subjectId: 2, value: 13, teacher: 'M.Sow' },
-  { id: 18, studentId: 3, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
-  { id: 19, studentId: 3, subjectId: 5, value: 7, teacher: 'M.Diarra' },
-  { id: 20, studentId: 3, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
-  { id: 21, studentId: 3, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
-  // Amadou Cisse (ELV004) - id: 4
-  { id: 22, studentId: 4, subjectId: 1, value: 19, teacher: 'M.Kone' },
-  { id: 23, studentId: 4, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
-  { id: 24, studentId: 4, subjectId: 2, value: 14.5, teacher: 'M.Sow' },
-  { id: 25, studentId: 4, subjectId: 3, value: 8.5, teacher: 'Mme.Coulibaly' },
-  { id: 26, studentId: 4, subjectId: 5, value: 18, teacher: 'M.Diarra' },
-  { id: 27, studentId: 4, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
-  { id: 28, studentId: 4, subjectId: 7, value: 11, teacher: 'M.Traore' },
-  // Assa Sidibe (ELV005) - id: 5
-  { id: 29, studentId: 5, subjectId: 1, value: 15.5, teacher: 'M.Kone' },
-  { id: 30, studentId: 5, subjectId: 4, value: 9, teacher: 'Mme.Bah' },
-  { id: 31, studentId: 5, subjectId: 2, value: 17, teacher: 'M.Sow' },
-  { id: 32, studentId: 5, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
-  { id: 33, studentId: 5, subjectId: 5, value: 14, teacher: 'M.Diarra' },
-  { id: 34, studentId: 5, subjectId: 6, value: 7.5, teacher: 'Mme.Sidibe' },
-  { id: 35, studentId: 5, subjectId: 7, value: 16.5, teacher: 'M.Traore' },
-  // Bakary Diarra (ELV006) - id: 6
-  { id: 36, studentId: 6, subjectId: 1, value: 11, teacher: 'M.Kone' },
-  { id: 37, studentId: 6, subjectId: 4, value: 18.5, teacher: 'Mme.Bah' },
-  { id: 38, studentId: 6, subjectId: 2, value: 5.5, teacher: 'M.Sow' },
-  { id: 39, studentId: 6, subjectId: 3, value: 19, teacher: 'Mme.Coulibaly' },
-  { id: 40, studentId: 6, subjectId: 5, value: 10, teacher: 'M.Diarra' },
-  { id: 41, studentId: 6, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
-  { id: 42, studentId: 6, subjectId: 7, value: 9, teacher: 'M.Traore' },
-  // Bintou Coulibaly (ELV007) - id: 7
-  { id: 43, studentId: 7, subjectId: 1, value: 7.5, teacher: 'M.Kone' },
-  { id: 44, studentId: 7, subjectId: 4, value: 12, teacher: 'Mme.Bah' },
-  { id: 45, studentId: 7, subjectId: 2, value: 18, teacher: 'M.Sow' },
-  { id: 46, studentId: 7, subjectId: 3, value: 14.5, teacher: 'Mme.Coulibaly' },
-  { id: 47, studentId: 7, subjectId: 5, value: 6, teacher: 'M.Diarra' },
-  { id: 48, studentId: 7, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
-  { id: 49, studentId: 7, subjectId: 7, value: 13, teacher: 'M.Traore' },
-  // Djibril Sissoko (ELV008) - id: 8
-  { id: 50, studentId: 8, subjectId: 1, value: 16, teacher: 'M.Kone' },
-  { id: 51, studentId: 8, subjectId: 4, value: 8.5, teacher: 'Mme.Bah' },
-  { id: 52, studentId: 8, subjectId: 2, value: 12.5, teacher: 'M.Sow' },
-  { id: 53, studentId: 8, subjectId: 3, value: 10, teacher: 'Mme.Coulibaly' },
-  { id: 54, studentId: 8, subjectId: 5, value: 19.5, teacher: 'M.Diarra' },
-  { id: 55, studentId: 8, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
-  { id: 56, studentId: 8, subjectId: 7, value: 14, teacher: 'M.Traore' },
-  // Dramane Keita (ELV009) - id: 9
-  { id: 57, studentId: 9, subjectId: 1, value: 13, teacher: 'M.Kone' },
-  { id: 58, studentId: 9, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
-  { id: 59, studentId: 9, subjectId: 2, value: 7, teacher: 'M.Sow' },
-  { id: 60, studentId: 9, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
-  { id: 61, studentId: 9, subjectId: 5, value: 15.5, teacher: 'M.Diarra' },
-  { id: 62, studentId: 9, subjectId: 6, value: 9, teacher: 'Mme.Sidibe' },
-  { id: 63, studentId: 9, subjectId: 7, value: 17, teacher: 'M.Traore' },
-  // Fatoumata Bamba (ELV010) - id: 10
-  { id: 64, studentId: 10, subjectId: 1, value: 4.5, teacher: 'M.Kone' },
-  { id: 65, studentId: 10, subjectId: 4, value: 19, teacher: 'Mme.Bah' },
-  { id: 66, studentId: 10, subjectId: 2, value: 11, teacher: 'M.Sow' },
-  { id: 67, studentId: 10, subjectId: 3, value: 6.5, teacher: 'Mme.Coulibaly' },
-  { id: 68, studentId: 10, subjectId: 5, value: 13.5, teacher: 'M.Diarra' },
-  { id: 69, studentId: 10, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
-  { id: 70, studentId: 10, subjectId: 7, value: 8, teacher: 'M.Traore' },
-  // Fanta Dembele (ELV011) - id: 11
-  { id: 71, studentId: 11, subjectId: 1, value: 18, teacher: 'M.Kone' },
-  { id: 72, studentId: 11, subjectId: 4, value: 7.5, teacher: 'Mme.Bah' },
-  { id: 73, studentId: 11, subjectId: 2, value: 15, teacher: 'M.Sow' },
-  { id: 74, studentId: 11, subjectId: 3, value: 12, teacher: 'Mme.Coulibaly' },
-  { id: 75, studentId: 11, subjectId: 5, value: 10.5, teacher: 'M.Diarra' },
-  { id: 76, studentId: 11, subjectId: 6, value: 14.5, teacher: 'Mme.Sidibe' },
-  { id: 77, studentId: 11, subjectId: 7, value: 19.5, teacher: 'M.Traore' },
-  // Hadja Sanogo (ELV012) - id: 12
-  { id: 78, studentId: 12, subjectId: 1, value: 9, teacher: 'M.Kone' },
-  { id: 79, studentId: 12, subjectId: 4, value: 13.5, teacher: 'Mme.Bah' },
-  { id: 80, studentId: 12, subjectId: 2, value: 17.5, teacher: 'M.Sow' },
-  { id: 81, studentId: 12, subjectId: 3, value: 5, teacher: 'Mme.Coulibaly' },
-  { id: 82, studentId: 12, subjectId: 5, value: 16, teacher: 'M.Diarra' },
-  { id: 83, studentId: 12, subjectId: 6, value: 11.5, teacher: 'Mme.Sidibe' },
-  { id: 84, studentId: 12, subjectId: 7, value: 7, teacher: 'M.Traore' },
-  // Hawa Sow (ELV013) - id: 13
-  { id: 85, studentId: 13, subjectId: 1, value: 14, teacher: 'M.Kone' },
-  { id: 86, studentId: 13, subjectId: 4, value: 6, teacher: 'Mme.Bah' },
-  { id: 87, studentId: 13, subjectId: 2, value: 19, teacher: 'M.Sow' },
-  { id: 88, studentId: 13, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
-  { id: 89, studentId: 13, subjectId: 5, value: 17.5, teacher: 'M.Diarra' },
-  { id: 90, studentId: 13, subjectId: 6, value: 13, teacher: 'Mme.Sidibe' },
-  { id: 91, studentId: 13, subjectId: 7, value: 12.5, teacher: 'M.Traore' },
-  // Ibrahim Diallo (ELV014) - id: 14
-  { id: 92, studentId: 14, subjectId: 1, value: 10.5, teacher: 'M.Kone' },
-  { id: 93, studentId: 14, subjectId: 4, value: 15.5, teacher: 'Mme.Bah' },
-  { id: 94, studentId: 14, subjectId: 2, value: 6, teacher: 'M.Sow' },
-  { id: 95, studentId: 14, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
-  { id: 96, studentId: 14, subjectId: 5, value: 9, teacher: 'M.Diarra' },
-  { id: 97, studentId: 14, subjectId: 6, value: 18.5, teacher: 'Mme.Sidibe' },
-  { id: 98, studentId: 14, subjectId: 7, value: 5.5, teacher: 'M.Traore' },
-  // Idrissa Kamara (ELV015) - id: 15
-  { id: 99, studentId: 15, subjectId: 1, value: 17, teacher: 'M.Kone' },
-  { id: 100, studentId: 15, subjectId: 4, value: 11.5, teacher: 'Mme.Bah' },
-  { id: 101, studentId: 15, subjectId: 2, value: 8.5, teacher: 'M.Sow' },
-  { id: 102, studentId: 15, subjectId: 3, value: 19.5, teacher: 'Mme.Coulibaly' },
-  { id: 103, studentId: 15, subjectId: 5, value: 14, teacher: 'M.Diarra' },
-  { id: 104, studentId: 15, subjectId: 6, value: 6.5, teacher: 'Mme.Sidibe' },
-  { id: 105, studentId: 15, subjectId: 7, value: 16, teacher: 'M.Traore' },
-  // Issa Toure (ELV016) - id: 16
-  { id: 106, studentId: 16, subjectId: 1, value: 5, teacher: 'M.Kone' },
-  { id: 107, studentId: 16, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
-  { id: 108, studentId: 16, subjectId: 2, value: 13.5, teacher: 'M.Sow' },
-  { id: 109, studentId: 16, subjectId: 3, value: 7, teacher: 'Mme.Coulibaly' },
-  { id: 110, studentId: 16, subjectId: 5, value: 19, teacher: 'M.Diarra' },
-  { id: 111, studentId: 16, subjectId: 6, value: 10, teacher: 'Mme.Sidibe' },
-  { id: 112, studentId: 16, subjectId: 7, value: 14.5, teacher: 'M.Traore' },
-  // Kadiatou Fofana (ELV017) - id: 17
-  { id: 113, studentId: 17, subjectId: 1, value: 15, teacher: 'M.Kone' },
-  { id: 114, studentId: 17, subjectId: 4, value: 9.5, teacher: 'Mme.Bah' },
-  { id: 115, studentId: 17, subjectId: 2, value: 16.5, teacher: 'M.Sow' },
-  { id: 116, studentId: 17, subjectId: 3, value: 11, teacher: 'Mme.Coulibaly' },
-  { id: 117, studentId: 17, subjectId: 5, value: 7.5, teacher: 'M.Diarra' },
-  { id: 118, studentId: 17, subjectId: 6, value: 17, teacher: 'Mme.Sidibe' },
-  { id: 119, studentId: 17, subjectId: 7, value: 8.5, teacher: 'M.Traore' },
-  // Karamoko Sangare (ELV018) - id: 18
-  { id: 120, studentId: 18, subjectId: 1, value: 12, teacher: 'M.Kone' },
-  { id: 121, studentId: 18, subjectId: 4, value: 14.5, teacher: 'Mme.Bah' },
-  { id: 122, studentId: 18, subjectId: 2, value: 10, teacher: 'M.Sow' },
-  { id: 123, studentId: 18, subjectId: 3, value: 18.5, teacher: 'Mme.Coulibaly' },
-  { id: 124, studentId: 18, subjectId: 5, value: 5.5, teacher: 'M.Diarra' },
-  { id: 125, studentId: 18, subjectId: 6, value: 15.5, teacher: 'Mme.Sidibe' },
-  { id: 126, studentId: 18, subjectId: 7, value: 19, teacher: 'M.Traore' },
-  // Lamine Doumbia (ELV019) - id: 19
-  { id: 127, studentId: 19, subjectId: 1, value: 8.5, teacher: 'M.Kone' },
-  { id: 128, studentId: 19, subjectId: 4, value: 16, teacher: 'Mme.Bah' },
-  { id: 129, studentId: 19, subjectId: 2, value: 12, teacher: 'M.Sow' },
-  { id: 130, studentId: 19, subjectId: 3, value: 9.5, teacher: 'Mme.Coulibaly' },
-  { id: 131, studentId: 19, subjectId: 5, value: 18.5, teacher: 'M.Diarra' },
-  { id: 132, studentId: 19, subjectId: 6, value: 6, teacher: 'Mme.Sidibe' },
-  { id: 133, studentId: 19, subjectId: 7, value: 17.5, teacher: 'M.Traore' },
-  // Mariam Traore (ELV020) - id: 20
-  { id: 134, studentId: 20, subjectId: 1, value: 19.5, teacher: 'M.Kone' },
-  { id: 135, studentId: 20, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
-  { id: 136, studentId: 20, subjectId: 2, value: 14, teacher: 'M.Sow' },
-  { id: 137, studentId: 20, subjectId: 3, value: 17, teacher: 'Mme.Coulibaly' },
-  { id: 138, studentId: 20, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
-  { id: 139, studentId: 20, subjectId: 6, value: 8, teacher: 'Mme.Sidibe' },
-  { id: 140, studentId: 20, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
-  // Mamadou Cisse (ELV021) - id: 21
-  { id: 141, studentId: 21, subjectId: 1, value: 6.5, teacher: 'M.Kone' },
-  { id: 142, studentId: 21, subjectId: 4, value: 17.5, teacher: 'Mme.Bah' },
-  { id: 143, studentId: 21, subjectId: 2, value: 9, teacher: 'M.Sow' },
-  { id: 144, studentId: 21, subjectId: 3, value: 13.5, teacher: 'Mme.Coulibaly' },
-  { id: 145, studentId: 21, subjectId: 5, value: 16, teacher: 'M.Diarra' },
-  { id: 146, studentId: 21, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
-  { id: 147, studentId: 21, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
-  // Moussa Diabate (ELV022) - id: 22
-  { id: 148, studentId: 22, subjectId: 1, value: 14.5, teacher: 'M.Kone' },
-  { id: 149, studentId: 22, subjectId: 4, value: 5.5, teacher: 'Mme.Bah' },
-  { id: 150, studentId: 22, subjectId: 2, value: 18, teacher: 'M.Sow' },
-  { id: 151, studentId: 22, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
-  { id: 152, studentId: 22, subjectId: 5, value: 13, teacher: 'M.Diarra' },
-  { id: 153, studentId: 22, subjectId: 6, value: 19.5, teacher: 'Mme.Sidibe' },
-  { id: 154, studentId: 22, subjectId: 7, value: 7.5, teacher: 'M.Traore' },
-  // Modibo Sacko (ELV023) - id: 23
-  { id: 155, studentId: 23, subjectId: 1, value: 11.5, teacher: 'M.Kone' },
-  { id: 156, studentId: 23, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
-  { id: 157, studentId: 23, subjectId: 2, value: 7, teacher: 'M.Sow' },
-  { id: 158, studentId: 23, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
-  { id: 159, studentId: 23, subjectId: 5, value: 10, teacher: 'M.Diarra' },
-  { id: 160, studentId: 23, subjectId: 6, value: 14, teacher: 'Mme.Sidibe' },
-  { id: 161, studentId: 23, subjectId: 7, value: 17, teacher: 'M.Traore' },
-  // Mohamed Barry (ELV024) - id: 24
-  { id: 162, studentId: 24, subjectId: 1, value: 9, teacher: 'M.Kone' },
-  { id: 163, studentId: 24, subjectId: 4, value: 13, teacher: 'Mme.Bah' },
-  { id: 164, studentId: 24, subjectId: 2, value: 15.5, teacher: 'M.Sow' },
-  { id: 165, studentId: 24, subjectId: 3, value: 6.5, teacher: 'Mme.Coulibaly' },
-  { id: 166, studentId: 24, subjectId: 5, value: 18, teacher: 'M.Diarra' },
-  { id: 167, studentId: 24, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
-  { id: 168, studentId: 24, subjectId: 7, value: 16.5, teacher: 'M.Traore' },
-  // Nafissatou Ndiaye (ELV025) - id: 25
-  { id: 169, studentId: 25, subjectId: 1, value: 16.5, teacher: 'M.Kone' },
-  { id: 170, studentId: 25, subjectId: 4, value: 7, teacher: 'Mme.Bah' },
-  { id: 171, studentId: 25, subjectId: 2, value: 11, teacher: 'M.Sow' },
-  { id: 172, studentId: 25, subjectId: 3, value: 19, teacher: 'Mme.Coulibaly' },
-  { id: 173, studentId: 25, subjectId: 5, value: 12.5, teacher: 'M.Diarra' },
-  { id: 174, studentId: 25, subjectId: 6, value: 9, teacher: 'Mme.Sidibe' },
-  { id: 175, studentId: 25, subjectId: 7, value: 13.5, teacher: 'M.Traore' },
-  // Nouhoum Maiga (ELV026) - id: 26
-  { id: 176, studentId: 26, subjectId: 1, value: 13.5, teacher: 'M.Kone' },
-  { id: 177, studentId: 26, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
-  { id: 178, studentId: 26, subjectId: 2, value: 6, teacher: 'M.Sow' },
-  { id: 179, studentId: 26, subjectId: 3, value: 15, teacher: 'Mme.Coulibaly' },
-  { id: 180, studentId: 26, subjectId: 5, value: 14.5, teacher: 'M.Diarra' },
-  { id: 181, studentId: 26, subjectId: 6, value: 10.5, teacher: 'Mme.Sidibe' },
-  { id: 182, studentId: 26, subjectId: 7, value: 19, teacher: 'M.Traore' },
-  // Oumou Coulibaly (ELV027) - id: 27
-  { id: 183, studentId: 27, subjectId: 1, value: 10, teacher: 'M.Kone' },
-  { id: 184, studentId: 27, subjectId: 4, value: 8.5, teacher: 'Mme.Bah' },
-  { id: 185, studentId: 27, subjectId: 2, value: 17, teacher: 'M.Sow' },
-  { id: 186, studentId: 27, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
-  { id: 187, studentId: 27, subjectId: 5, value: 16.5, teacher: 'M.Diarra' },
-  { id: 188, studentId: 27, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
-  { id: 189, studentId: 27, subjectId: 7, value: 7, teacher: 'M.Traore' },
-  // Ousmane Diakite (ELV028) - id: 28
-  { id: 190, studentId: 28, subjectId: 1, value: 18.5, teacher: 'M.Kone' },
-  { id: 191, studentId: 28, subjectId: 4, value: 12, teacher: 'Mme.Bah' },
-  { id: 192, studentId: 28, subjectId: 2, value: 8, teacher: 'M.Sow' },
-  { id: 193, studentId: 28, subjectId: 3, value: 16, teacher: 'Mme.Coulibaly' },
-  { id: 194, studentId: 28, subjectId: 5, value: 9.5, teacher: 'M.Diarra' },
-  { id: 195, studentId: 28, subjectId: 6, value: 14.5, teacher: 'Mme.Sidibe' },
-  { id: 196, studentId: 28, subjectId: 7, value: 11, teacher: 'M.Traore' },
-  // Rokia Kone (ELV029) - id: 29
-  { id: 197, studentId: 29, subjectId: 1, value: 7, teacher: 'M.Kone' },
-  { id: 198, studentId: 29, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
-  { id: 199, studentId: 29, subjectId: 2, value: 13.5, teacher: 'M.Sow' },
-  { id: 200, studentId: 29, subjectId: 3, value: 10, teacher: 'Mme.Coulibaly' },
-  { id: 201, studentId: 29, subjectId: 5, value: 17.5, teacher: 'M.Diarra' },
-  { id: 202, studentId: 29, subjectId: 6, value: 8.5, teacher: 'Mme.Sidibe' },
-  { id: 203, studentId: 29, subjectId: 7, value: 16, teacher: 'M.Traore' },
-  // Souleymane Diarra (ELV030) - id: 30
-  { id: 204, studentId: 30, subjectId: 1, value: 15.5, teacher: 'M.Kone' },
-  { id: 205, studentId: 30, subjectId: 4, value: 10.5, teacher: 'Mme.Bah' },
-  { id: 206, studentId: 30, subjectId: 2, value: 19.5, teacher: 'M.Sow' },
-  { id: 207, studentId: 30, subjectId: 3, value: 7.5, teacher: 'Mme.Coulibaly' },
-  { id: 208, studentId: 30, subjectId: 5, value: 12, teacher: 'M.Diarra' },
-  { id: 209, studentId: 30, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
-  { id: 210, studentId: 30, subjectId: 7, value: 9.5, teacher: 'M.Traore' },
-  // Salimata Sidibe (ELV031) - id: 31
-  { id: 211, studentId: 31, subjectId: 1, value: 12, teacher: 'M.Kone' },
-  { id: 212, studentId: 31, subjectId: 4, value: 9, teacher: 'Mme.Bah' },
-  { id: 213, studentId: 31, subjectId: 2, value: 16, teacher: 'M.Sow' },
-  { id: 214, studentId: 31, subjectId: 3, value: 18.5, teacher: 'Mme.Coulibaly' },
-  { id: 215, studentId: 31, subjectId: 5, value: 14, teacher: 'M.Diarra' },
-  { id: 216, studentId: 31, subjectId: 6, value: 6.5, teacher: 'Mme.Sidibe' },
-  { id: 217, studentId: 31, subjectId: 7, value: 19, teacher: 'M.Traore' },
-  // Seydou Traore (ELV032) - id: 32
-  { id: 218, studentId: 32, subjectId: 1, value: 8, teacher: 'M.Kone' },
-  { id: 219, studentId: 32, subjectId: 4, value: 14.5, teacher: 'Mme.Bah' },
-  { id: 220, studentId: 32, subjectId: 2, value: 10.5, teacher: 'M.Sow' },
-  { id: 221, studentId: 32, subjectId: 3, value: 12.5, teacher: 'Mme.Coulibaly' },
-  { id: 222, studentId: 32, subjectId: 5, value: 16, teacher: 'M.Diarra' },
-  { id: 223, studentId: 32, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
-  { id: 224, studentId: 32, subjectId: 7, value: 13.5, teacher: 'M.Traore' },
-  // Sitan Doumbia (ELV033) - id: 33
-  { id: 225, studentId: 33, subjectId: 1, value: 17.5, teacher: 'M.Kone' },
-  { id: 226, studentId: 33, subjectId: 4, value: 11, teacher: 'Mme.Bah' },
-  { id: 227, studentId: 33, subjectId: 2, value: 9.5, teacher: 'M.Sow' },
-  { id: 228, studentId: 33, subjectId: 3, value: 15.5, teacher: 'Mme.Coulibaly' },
-  { id: 229, studentId: 33, subjectId: 5, value: 8, teacher: 'M.Diarra' },
-  { id: 230, studentId: 33, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
-  { id: 231, studentId: 33, subjectId: 7, value: 6.5, teacher: 'M.Traore' },
-  // Tenin Sanogo (ELV034) - id: 34
-  { id: 232, studentId: 34, subjectId: 1, value: 13, teacher: 'M.Kone' },
-  { id: 233, studentId: 34, subjectId: 4, value: 16, teacher: 'Mme.Bah' },
-  { id: 234, studentId: 34, subjectId: 2, value: 5.5, teacher: 'M.Sow' },
-  { id: 235, studentId: 34, subjectId: 3, value: 17.5, teacher: 'Mme.Coulibaly' },
-  { id: 236, studentId: 34, subjectId: 5, value: 15, teacher: 'M.Diarra' },
-  { id: 237, studentId: 34, subjectId: 6, value: 12.5, teacher: 'Mme.Sidibe' },
-  { id: 238, studentId: 34, subjectId: 7, value: 8, teacher: 'M.Traore' },
-  // Tidiane Kamissoko (ELV035) - id: 35
-  { id: 239, studentId: 35, subjectId: 1, value: 6, teacher: 'M.Kone' },
-  { id: 240, studentId: 35, subjectId: 4, value: 18.5, teacher: 'Mme.Bah' },
-  { id: 241, studentId: 35, subjectId: 2, value: 14, teacher: 'M.Sow' },
-  { id: 242, studentId: 35, subjectId: 3, value: 9, teacher: 'Mme.Coulibaly' },
-  { id: 243, studentId: 35, subjectId: 5, value: 19, teacher: 'M.Diarra' },
-  { id: 244, studentId: 35, subjectId: 6, value: 10, teacher: 'Mme.Sidibe' },
-  { id: 245, studentId: 35, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
-  // Tiemoko Dembele (ELV036) - id: 36
-  { id: 246, studentId: 36, subjectId: 1, value: 16, teacher: 'M.Kone' },
-  { id: 247, studentId: 36, subjectId: 4, value: 7.5, teacher: 'Mme.Bah' },
-  { id: 248, studentId: 36, subjectId: 2, value: 12.5, teacher: 'M.Sow' },
-  { id: 249, studentId: 36, subjectId: 3, value: 11, teacher: 'Mme.Coulibaly' },
-  { id: 250, studentId: 36, subjectId: 5, value: 13.5, teacher: 'M.Diarra' },
-  { id: 251, studentId: 36, subjectId: 6, value: 19, teacher: 'Mme.Sidibe' },
-  { id: 252, studentId: 36, subjectId: 7, value: 10, teacher: 'M.Traore' },
-  // Yacouba Bamba (ELV037) - id: 37
-  { id: 253, studentId: 37, subjectId: 1, value: 11.5, teacher: 'M.Kone' },
-  { id: 254, studentId: 37, subjectId: 4, value: 15.5, teacher: 'Mme.Bah' },
-  { id: 255, studentId: 37, subjectId: 2, value: 8.5, teacher: 'M.Sow' },
-  { id: 256, studentId: 37, subjectId: 3, value: 14, teacher: 'Mme.Coulibaly' },
-  { id: 257, studentId: 37, subjectId: 5, value: 10, teacher: 'M.Diarra' },
-  { id: 258, studentId: 37, subjectId: 6, value: 16.5, teacher: 'Mme.Sidibe' },
-  { id: 259, studentId: 37, subjectId: 7, value: 18.5, teacher: 'M.Traore' },
-  // Youssouf Keita (ELV038) - id: 38
-  { id: 260, studentId: 38, subjectId: 1, value: 9, teacher: 'M.Kone' },
-  { id: 261, studentId: 38, subjectId: 4, value: 13.5, teacher: 'Mme.Bah' },
-  { id: 262, studentId: 38, subjectId: 2, value: 17.5, teacher: 'M.Sow' },
-  { id: 263, studentId: 38, subjectId: 3, value: 12, teacher: 'Mme.Coulibaly' },
-  { id: 264, studentId: 38, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
-  { id: 265, studentId: 38, subjectId: 6, value: 8, teacher: 'Mme.Sidibe' },
-  { id: 266, studentId: 38, subjectId: 7, value: 14, teacher: 'M.Traore' },
-  // Zakaria Coulibaly (ELV039) - id: 39
-  { id: 267, studentId: 39, subjectId: 1, value: 14, teacher: 'M.Kone' },
-  { id: 268, studentId: 39, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
-  { id: 269, studentId: 39, subjectId: 2, value: 19, teacher: 'M.Sow' },
-  { id: 270, studentId: 39, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
-  { id: 271, studentId: 39, subjectId: 5, value: 7, teacher: 'M.Diarra' },
-  { id: 272, studentId: 39, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
-  { id: 273, studentId: 39, subjectId: 7, value: 12, teacher: 'M.Traore' },
-  // Awa Diop (ELV040) - id: 40
-  { id: 274, studentId: 40, subjectId: 1, value: 18, teacher: 'M.Kone' },
-  { id: 275, studentId: 40, subjectId: 4, value: 11.5, teacher: 'Mme.Bah' },
-  { id: 276, studentId: 40, subjectId: 2, value: 10, teacher: 'M.Sow' },
-  { id: 277, studentId: 40, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
-  { id: 278, studentId: 40, subjectId: 5, value: 16.5, teacher: 'M.Diarra' },
-  { id: 279, studentId: 40, subjectId: 6, value: 9.5, teacher: 'Mme.Sidibe' },
-  { id: 280, studentId: 40, subjectId: 7, value: 17, teacher: 'M.Traore' },
-  // Fatou Niang (ELV041) - id: 41
-  { id: 281, studentId: 41, subjectId: 1, value: 5.5, teacher: 'M.Kone' },
-  { id: 282, studentId: 41, subjectId: 4, value: 17, teacher: 'Mme.Bah' },
-  { id: 283, studentId: 41, subjectId: 2, value: 15, teacher: 'M.Sow' },
-  { id: 284, studentId: 41, subjectId: 3, value: 10.5, teacher: 'Mme.Coulibaly' },
-  { id: 285, studentId: 41, subjectId: 5, value: 14, teacher: 'M.Diarra' },
-  { id: 286, studentId: 41, subjectId: 6, value: 18.5, teacher: 'Mme.Sidibe' },
-  { id: 287, studentId: 41, subjectId: 7, value: 8.5, teacher: 'M.Traore' },
-  // Ali Diallo (ELV042) - id: 42
-  { id: 288, studentId: 42, subjectId: 1, value: 15, teacher: 'M.Kone' },
-  { id: 289, studentId: 42, subjectId: 4, value: 8, teacher: 'Mme.Bah' },
-  { id: 290, studentId: 42, subjectId: 2, value: 11.5, teacher: 'M.Sow' },
-  { id: 291, studentId: 42, subjectId: 3, value: 17, teacher: 'Mme.Coulibaly' },
-  { id: 292, studentId: 42, subjectId: 5, value: 9, teacher: 'M.Diarra' },
-  { id: 293, studentId: 42, subjectId: 6, value: 13.5, teacher: 'Mme.Sidibe' },
-  { id: 294, studentId: 42, subjectId: 7, value: 16, teacher: 'M.Traore' },
-  // Aicha Sow (ELV043) - id: 43
-  { id: 295, studentId: 43, subjectId: 1, value: 10, teacher: 'M.Kone' },
-  { id: 296, studentId: 43, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
-  { id: 297, studentId: 43, subjectId: 2, value: 7.5, teacher: 'M.Sow' },
-  { id: 298, studentId: 43, subjectId: 3, value: 14.5, teacher: 'Mme.Coulibaly' },
-  { id: 299, studentId: 43, subjectId: 5, value: 18, teacher: 'M.Diarra' },
-  { id: 300, studentId: 43, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
-  { id: 301, studentId: 43, subjectId: 7, value: 12.5, teacher: 'M.Traore' },
-  // Maimouna Faye (ELV044) - id: 44
-  { id: 302, studentId: 44, subjectId: 1, value: 12.5, teacher: 'M.Kone' },
-  { id: 303, studentId: 44, subjectId: 4, value: 9.5, teacher: 'Mme.Bah' },
-  { id: 304, studentId: 44, subjectId: 2, value: 16, teacher: 'M.Sow' },
-  { id: 305, studentId: 44, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
-  { id: 306, studentId: 44, subjectId: 5, value: 19.5, teacher: 'M.Diarra' },
-  { id: 307, studentId: 44, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
-  { id: 308, studentId: 44, subjectId: 7, value: 7, teacher: 'M.Traore' },
-  // Cheick Diaby (ELV045) - id: 45
-  { id: 309, studentId: 45, subjectId: 1, value: 17, teacher: 'M.Kone' },
-  { id: 310, studentId: 45, subjectId: 4, value: 14, teacher: 'Mme.Bah' },
-  { id: 311, studentId: 45, subjectId: 2, value: 9, teacher: 'M.Sow' },
-  { id: 312, studentId: 45, subjectId: 3, value: 16, teacher: 'Mme.Coulibaly' },
-  { id: 313, studentId: 45, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
-  { id: 314, studentId: 45, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
-  { id: 315, studentId: 45, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
-  // Abdoulaye Konate (ELV046) - id: 46
-  { id: 316, studentId: 46, subjectId: 1, value: 8.5, teacher: 'M.Kone' },
-  { id: 317, studentId: 46, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
-  { id: 318, studentId: 46, subjectId: 2, value: 12, teacher: 'M.Sow' },
-  { id: 319, studentId: 46, subjectId: 3, value: 9.5, teacher: 'Mme.Coulibaly' },
-  { id: 320, studentId: 46, subjectId: 5, value: 14.5, teacher: 'M.Diarra' },
-  { id: 321, studentId: 46, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
-  { id: 322, studentId: 46, subjectId: 7, value: 18, teacher: 'M.Traore' },
-  // Mamoutou Traore (ELV047) - id: 47
-  { id: 323, studentId: 47, subjectId: 1, value: 13.5, teacher: 'M.Kone' },
-  { id: 324, studentId: 47, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
-  { id: 325, studentId: 47, subjectId: 2, value: 18.5, teacher: 'M.Sow' },
-  { id: 326, studentId: 47, subjectId: 3, value: 7, teacher: 'Mme.Coulibaly' },
-  { id: 327, studentId: 47, subjectId: 5, value: 15.5, teacher: 'M.Diarra' },
-  { id: 328, studentId: 47, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
-  { id: 329, studentId: 47, subjectId: 7, value: 14, teacher: 'M.Traore' },
-  // Ramatoulaye Diawara (ELV048) - id: 48
-  { id: 330, studentId: 48, subjectId: 1, value: 16.5, teacher: 'M.Kone' },
-  { id: 331, studentId: 48, subjectId: 4, value: 12.5, teacher: 'Mme.Bah' },
-  { id: 332, studentId: 48, subjectId: 2, value: 10, teacher: 'M.Sow' },
-  { id: 333, studentId: 48, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
-  { id: 334, studentId: 48, subjectId: 5, value: 8.5, teacher: 'M.Diarra' },
-  { id: 335, studentId: 48, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
-  { id: 336, studentId: 48, subjectId: 7, value: 11, teacher: 'M.Traore' },
-  // Kadidia Ouattara (ELV049) - id: 49
-  { id: 337, studentId: 49, subjectId: 1, value: 7.5, teacher: 'M.Kone' },
-  { id: 338, studentId: 49, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
-  { id: 339, studentId: 49, subjectId: 2, value: 14, teacher: 'M.Sow' },
-  { id: 340, studentId: 49, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
-  { id: 341, studentId: 49, subjectId: 5, value: 10, teacher: 'M.Diarra' },
-  { id: 342, studentId: 49, subjectId: 6, value: 19, teacher: 'Mme.Sidibe' },
-  { id: 343, studentId: 49, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
-  // Mintou Samake (ELV050) - id: 50
-  { id: 344, studentId: 50, subjectId: 1, value: 14.5, teacher: 'M.Kone' },
-  { id: 345, studentId: 50, subjectId: 4, value: 6.5, teacher: 'Mme.Bah' },
-  { id: 346, studentId: 50, subjectId: 2, value: 17, teacher: 'M.Sow' },
-  { id: 347, studentId: 50, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
-  { id: 348, studentId: 50, subjectId: 5, value: 9, teacher: 'M.Diarra' },
-  { id: 349, studentId: 50, subjectId: 6, value: 16.5, teacher: 'Mme.Sidibe' },
-  { id: 350, studentId: 50, subjectId: 7, value: 12, teacher: 'M.Traore' }
-];
+        appData.grades = [
+          // Adama Traore (ELV001) - id: 1
+          { id: 1, studentId: 1, subjectId: 1, value: 12.5, teacher: 'M.Kone' },
+          { id: 2, studentId: 1, subjectId: 4, value: 14, teacher: 'Mme.Bah' },
+          { id: 3, studentId: 1, subjectId: 2, value: 9, teacher: 'M.Sow' },
+          { id: 4, studentId: 1, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
+          { id: 5, studentId: 1, subjectId: 5, value: 11, teacher: 'M.Diarra' },
+          { id: 6, studentId: 1, subjectId: 6, value: 13.5, teacher: 'Mme.Sidibe' },
+          { id: 7, studentId: 1, subjectId: 7, value: 15, teacher: 'M.Traore' },
+          // Aissata Diakite (ELV002) - id: 2
+          { id: 8, studentId: 2, subjectId: 1, value: 8, teacher: 'M.Kone' },
+          { id: 9, studentId: 2, subjectId: 4, value: 17.5, teacher: 'Mme.Bah' },
+          { id: 10, studentId: 2, subjectId: 2, value: 10, teacher: 'M.Sow' },
+          { id: 11, studentId: 2, subjectId: 3, value: 14, teacher: 'Mme.Coulibaly' },
+          { id: 12, studentId: 2, subjectId: 5, value: 12, teacher: 'M.Diarra' },
+          { id: 13, studentId: 2, subjectId: 6, value: 9.5, teacher: 'Mme.Sidibe' },
+          { id: 14, studentId: 2, subjectId: 7, value: 18, teacher: 'M.Traore' },
+          // Aminata Kone (ELV003) - id: 3
+          { id: 15, studentId: 3, subjectId: 1, value: 6.5, teacher: 'M.Kone' },
+          { id: 16, studentId: 3, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
+          { id: 17, studentId: 3, subjectId: 2, value: 13, teacher: 'M.Sow' },
+          { id: 18, studentId: 3, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
+          { id: 19, studentId: 3, subjectId: 5, value: 7, teacher: 'M.Diarra' },
+          { id: 20, studentId: 3, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
+          { id: 21, studentId: 3, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
+          // Amadou Cisse (ELV004) - id: 4
+          { id: 22, studentId: 4, subjectId: 1, value: 19, teacher: 'M.Kone' },
+          { id: 23, studentId: 4, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
+          { id: 24, studentId: 4, subjectId: 2, value: 14.5, teacher: 'M.Sow' },
+          { id: 25, studentId: 4, subjectId: 3, value: 8.5, teacher: 'Mme.Coulibaly' },
+          { id: 26, studentId: 4, subjectId: 5, value: 18, teacher: 'M.Diarra' },
+          { id: 27, studentId: 4, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
+          { id: 28, studentId: 4, subjectId: 7, value: 11, teacher: 'M.Traore' },
+          // Assa Sidibe (ELV005) - id: 5
+          { id: 29, studentId: 5, subjectId: 1, value: 15.5, teacher: 'M.Kone' },
+          { id: 30, studentId: 5, subjectId: 4, value: 9, teacher: 'Mme.Bah' },
+          { id: 31, studentId: 5, subjectId: 2, value: 17, teacher: 'M.Sow' },
+          { id: 32, studentId: 5, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
+          { id: 33, studentId: 5, subjectId: 5, value: 14, teacher: 'M.Diarra' },
+          { id: 34, studentId: 5, subjectId: 6, value: 7.5, teacher: 'Mme.Sidibe' },
+          { id: 35, studentId: 5, subjectId: 7, value: 16.5, teacher: 'M.Traore' },
+          // Bakary Diarra (ELV006) - id: 6
+          { id: 36, studentId: 6, subjectId: 1, value: 11, teacher: 'M.Kone' },
+          { id: 37, studentId: 6, subjectId: 4, value: 18.5, teacher: 'Mme.Bah' },
+          { id: 38, studentId: 6, subjectId: 2, value: 5.5, teacher: 'M.Sow' },
+          { id: 39, studentId: 6, subjectId: 3, value: 19, teacher: 'Mme.Coulibaly' },
+          { id: 40, studentId: 6, subjectId: 5, value: 10, teacher: 'M.Diarra' },
+          { id: 41, studentId: 6, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
+          { id: 42, studentId: 6, subjectId: 7, value: 9, teacher: 'M.Traore' },
+          // Bintou Coulibaly (ELV007) - id: 7
+          { id: 43, studentId: 7, subjectId: 1, value: 7.5, teacher: 'M.Kone' },
+          { id: 44, studentId: 7, subjectId: 4, value: 12, teacher: 'Mme.Bah' },
+          { id: 45, studentId: 7, subjectId: 2, value: 18, teacher: 'M.Sow' },
+          { id: 46, studentId: 7, subjectId: 3, value: 14.5, teacher: 'Mme.Coulibaly' },
+          { id: 47, studentId: 7, subjectId: 5, value: 6, teacher: 'M.Diarra' },
+          { id: 48, studentId: 7, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
+          { id: 49, studentId: 7, subjectId: 7, value: 13, teacher: 'M.Traore' },
+          // Djibril Sissoko (ELV008) - id: 8
+          { id: 50, studentId: 8, subjectId: 1, value: 16, teacher: 'M.Kone' },
+          { id: 51, studentId: 8, subjectId: 4, value: 8.5, teacher: 'Mme.Bah' },
+          { id: 52, studentId: 8, subjectId: 2, value: 12.5, teacher: 'M.Sow' },
+          { id: 53, studentId: 8, subjectId: 3, value: 10, teacher: 'Mme.Coulibaly' },
+          { id: 54, studentId: 8, subjectId: 5, value: 19.5, teacher: 'M.Diarra' },
+          { id: 55, studentId: 8, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
+          { id: 56, studentId: 8, subjectId: 7, value: 14, teacher: 'M.Traore' },
+          // Dramane Keita (ELV009) - id: 9
+          { id: 57, studentId: 9, subjectId: 1, value: 13, teacher: 'M.Kone' },
+          { id: 58, studentId: 9, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
+          { id: 59, studentId: 9, subjectId: 2, value: 7, teacher: 'M.Sow' },
+          { id: 60, studentId: 9, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
+          { id: 61, studentId: 9, subjectId: 5, value: 15.5, teacher: 'M.Diarra' },
+          { id: 62, studentId: 9, subjectId: 6, value: 9, teacher: 'Mme.Sidibe' },
+          { id: 63, studentId: 9, subjectId: 7, value: 17, teacher: 'M.Traore' },
+          // Fatoumata Bamba (ELV010) - id: 10
+          { id: 64, studentId: 10, subjectId: 1, value: 4.5, teacher: 'M.Kone' },
+          { id: 65, studentId: 10, subjectId: 4, value: 19, teacher: 'Mme.Bah' },
+          { id: 66, studentId: 10, subjectId: 2, value: 11, teacher: 'M.Sow' },
+          { id: 67, studentId: 10, subjectId: 3, value: 6.5, teacher: 'Mme.Coulibaly' },
+          { id: 68, studentId: 10, subjectId: 5, value: 13.5, teacher: 'M.Diarra' },
+          { id: 69, studentId: 10, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
+          { id: 70, studentId: 10, subjectId: 7, value: 8, teacher: 'M.Traore' },
+          // Fanta Dembele (ELV011) - id: 11
+          { id: 71, studentId: 11, subjectId: 1, value: 18, teacher: 'M.Kone' },
+          { id: 72, studentId: 11, subjectId: 4, value: 7.5, teacher: 'Mme.Bah' },
+          { id: 73, studentId: 11, subjectId: 2, value: 15, teacher: 'M.Sow' },
+          { id: 74, studentId: 11, subjectId: 3, value: 12, teacher: 'Mme.Coulibaly' },
+          { id: 75, studentId: 11, subjectId: 5, value: 10.5, teacher: 'M.Diarra' },
+          { id: 76, studentId: 11, subjectId: 6, value: 14.5, teacher: 'Mme.Sidibe' },
+          { id: 77, studentId: 11, subjectId: 7, value: 19.5, teacher: 'M.Traore' },
+          // Hadja Sanogo (ELV012) - id: 12
+          { id: 78, studentId: 12, subjectId: 1, value: 9, teacher: 'M.Kone' },
+          { id: 79, studentId: 12, subjectId: 4, value: 13.5, teacher: 'Mme.Bah' },
+          { id: 80, studentId: 12, subjectId: 2, value: 17.5, teacher: 'M.Sow' },
+          { id: 81, studentId: 12, subjectId: 3, value: 5, teacher: 'Mme.Coulibaly' },
+          { id: 82, studentId: 12, subjectId: 5, value: 16, teacher: 'M.Diarra' },
+          { id: 83, studentId: 12, subjectId: 6, value: 11.5, teacher: 'Mme.Sidibe' },
+          { id: 84, studentId: 12, subjectId: 7, value: 7, teacher: 'M.Traore' },
+          // Hawa Sow (ELV013) - id: 13
+          { id: 85, studentId: 13, subjectId: 1, value: 14, teacher: 'M.Kone' },
+          { id: 86, studentId: 13, subjectId: 4, value: 6, teacher: 'Mme.Bah' },
+          { id: 87, studentId: 13, subjectId: 2, value: 19, teacher: 'M.Sow' },
+          { id: 88, studentId: 13, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
+          { id: 89, studentId: 13, subjectId: 5, value: 17.5, teacher: 'M.Diarra' },
+          { id: 90, studentId: 13, subjectId: 6, value: 13, teacher: 'Mme.Sidibe' },
+          { id: 91, studentId: 13, subjectId: 7, value: 12.5, teacher: 'M.Traore' },
+          // Ibrahim Diallo (ELV014) - id: 14
+          { id: 92, studentId: 14, subjectId: 1, value: 10.5, teacher: 'M.Kone' },
+          { id: 93, studentId: 14, subjectId: 4, value: 15.5, teacher: 'Mme.Bah' },
+          { id: 94, studentId: 14, subjectId: 2, value: 6, teacher: 'M.Sow' },
+          { id: 95, studentId: 14, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
+          { id: 96, studentId: 14, subjectId: 5, value: 9, teacher: 'M.Diarra' },
+          { id: 97, studentId: 14, subjectId: 6, value: 18.5, teacher: 'Mme.Sidibe' },
+          { id: 98, studentId: 14, subjectId: 7, value: 5.5, teacher: 'M.Traore' },
+          // Idrissa Kamara (ELV015) - id: 15
+          { id: 99, studentId: 15, subjectId: 1, value: 17, teacher: 'M.Kone' },
+          { id: 100, studentId: 15, subjectId: 4, value: 11.5, teacher: 'Mme.Bah' },
+          { id: 101, studentId: 15, subjectId: 2, value: 8.5, teacher: 'M.Sow' },
+          { id: 102, studentId: 15, subjectId: 3, value: 19.5, teacher: 'Mme.Coulibaly' },
+          { id: 103, studentId: 15, subjectId: 5, value: 14, teacher: 'M.Diarra' },
+          { id: 104, studentId: 15, subjectId: 6, value: 6.5, teacher: 'Mme.Sidibe' },
+          { id: 105, studentId: 15, subjectId: 7, value: 16, teacher: 'M.Traore' },
+          // Issa Toure (ELV016) - id: 16
+          { id: 106, studentId: 16, subjectId: 1, value: 5, teacher: 'M.Kone' },
+          { id: 107, studentId: 16, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
+          { id: 108, studentId: 16, subjectId: 2, value: 13.5, teacher: 'M.Sow' },
+          { id: 109, studentId: 16, subjectId: 3, value: 7, teacher: 'Mme.Coulibaly' },
+          { id: 110, studentId: 16, subjectId: 5, value: 19, teacher: 'M.Diarra' },
+          { id: 111, studentId: 16, subjectId: 6, value: 10, teacher: 'Mme.Sidibe' },
+          { id: 112, studentId: 16, subjectId: 7, value: 14.5, teacher: 'M.Traore' },
+          // Kadiatou Fofana (ELV017) - id: 17
+          { id: 113, studentId: 17, subjectId: 1, value: 15, teacher: 'M.Kone' },
+          { id: 114, studentId: 17, subjectId: 4, value: 9.5, teacher: 'Mme.Bah' },
+          { id: 115, studentId: 17, subjectId: 2, value: 16.5, teacher: 'M.Sow' },
+          { id: 116, studentId: 17, subjectId: 3, value: 11, teacher: 'Mme.Coulibaly' },
+          { id: 117, studentId: 17, subjectId: 5, value: 7.5, teacher: 'M.Diarra' },
+          { id: 118, studentId: 17, subjectId: 6, value: 17, teacher: 'Mme.Sidibe' },
+          { id: 119, studentId: 17, subjectId: 7, value: 8.5, teacher: 'M.Traore' },
+          // Karamoko Sangare (ELV018) - id: 18
+          { id: 120, studentId: 18, subjectId: 1, value: 12, teacher: 'M.Kone' },
+          { id: 121, studentId: 18, subjectId: 4, value: 14.5, teacher: 'Mme.Bah' },
+          { id: 122, studentId: 18, subjectId: 2, value: 10, teacher: 'M.Sow' },
+          { id: 123, studentId: 18, subjectId: 3, value: 18.5, teacher: 'Mme.Coulibaly' },
+          { id: 124, studentId: 18, subjectId: 5, value: 5.5, teacher: 'M.Diarra' },
+          { id: 125, studentId: 18, subjectId: 6, value: 15.5, teacher: 'Mme.Sidibe' },
+          { id: 126, studentId: 18, subjectId: 7, value: 19, teacher: 'M.Traore' },
+          // Lamine Doumbia (ELV019) - id: 19
+          { id: 127, studentId: 19, subjectId: 1, value: 8.5, teacher: 'M.Kone' },
+          { id: 128, studentId: 19, subjectId: 4, value: 16, teacher: 'Mme.Bah' },
+          { id: 129, studentId: 19, subjectId: 2, value: 12, teacher: 'M.Sow' },
+          { id: 130, studentId: 19, subjectId: 3, value: 9.5, teacher: 'Mme.Coulibaly' },
+          { id: 131, studentId: 19, subjectId: 5, value: 18.5, teacher: 'M.Diarra' },
+          { id: 132, studentId: 19, subjectId: 6, value: 6, teacher: 'Mme.Sidibe' },
+          { id: 133, studentId: 19, subjectId: 7, value: 17.5, teacher: 'M.Traore' },
+          // Mariam Traore (ELV020) - id: 20
+          { id: 134, studentId: 20, subjectId: 1, value: 19.5, teacher: 'M.Kone' },
+          { id: 135, studentId: 20, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
+          { id: 136, studentId: 20, subjectId: 2, value: 14, teacher: 'M.Sow' },
+          { id: 137, studentId: 20, subjectId: 3, value: 17, teacher: 'Mme.Coulibaly' },
+          { id: 138, studentId: 20, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
+          { id: 139, studentId: 20, subjectId: 6, value: 8, teacher: 'Mme.Sidibe' },
+          { id: 140, studentId: 20, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
+          // Mamadou Cisse (ELV021) - id: 21
+          { id: 141, studentId: 21, subjectId: 1, value: 6.5, teacher: 'M.Kone' },
+          { id: 142, studentId: 21, subjectId: 4, value: 17.5, teacher: 'Mme.Bah' },
+          { id: 143, studentId: 21, subjectId: 2, value: 9, teacher: 'M.Sow' },
+          { id: 144, studentId: 21, subjectId: 3, value: 13.5, teacher: 'Mme.Coulibaly' },
+          { id: 145, studentId: 21, subjectId: 5, value: 16, teacher: 'M.Diarra' },
+          { id: 146, studentId: 21, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
+          { id: 147, studentId: 21, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
+          // Moussa Diabate (ELV022) - id: 22
+          { id: 148, studentId: 22, subjectId: 1, value: 14.5, teacher: 'M.Kone' },
+          { id: 149, studentId: 22, subjectId: 4, value: 5.5, teacher: 'Mme.Bah' },
+          { id: 150, studentId: 22, subjectId: 2, value: 18, teacher: 'M.Sow' },
+          { id: 151, studentId: 22, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
+          { id: 152, studentId: 22, subjectId: 5, value: 13, teacher: 'M.Diarra' },
+          { id: 153, studentId: 22, subjectId: 6, value: 19.5, teacher: 'Mme.Sidibe' },
+          { id: 154, studentId: 22, subjectId: 7, value: 7.5, teacher: 'M.Traore' },
+          // Modibo Sacko (ELV023) - id: 23
+          { id: 155, studentId: 23, subjectId: 1, value: 11.5, teacher: 'M.Kone' },
+          { id: 156, studentId: 23, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
+          { id: 157, studentId: 23, subjectId: 2, value: 7, teacher: 'M.Sow' },
+          { id: 158, studentId: 23, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
+          { id: 159, studentId: 23, subjectId: 5, value: 10, teacher: 'M.Diarra' },
+          { id: 160, studentId: 23, subjectId: 6, value: 14, teacher: 'Mme.Sidibe' },
+          { id: 161, studentId: 23, subjectId: 7, value: 17, teacher: 'M.Traore' },
+          // Mohamed Barry (ELV024) - id: 24
+          { id: 162, studentId: 24, subjectId: 1, value: 9, teacher: 'M.Kone' },
+          { id: 163, studentId: 24, subjectId: 4, value: 13, teacher: 'Mme.Bah' },
+          { id: 164, studentId: 24, subjectId: 2, value: 15.5, teacher: 'M.Sow' },
+          { id: 165, studentId: 24, subjectId: 3, value: 6.5, teacher: 'Mme.Coulibaly' },
+          { id: 166, studentId: 24, subjectId: 5, value: 18, teacher: 'M.Diarra' },
+          { id: 167, studentId: 24, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
+          { id: 168, studentId: 24, subjectId: 7, value: 16.5, teacher: 'M.Traore' },
+          // Nafissatou Ndiaye (ELV025) - id: 25
+          { id: 169, studentId: 25, subjectId: 1, value: 16.5, teacher: 'M.Kone' },
+          { id: 170, studentId: 25, subjectId: 4, value: 7, teacher: 'Mme.Bah' },
+          { id: 171, studentId: 25, subjectId: 2, value: 11, teacher: 'M.Sow' },
+          { id: 172, studentId: 25, subjectId: 3, value: 19, teacher: 'Mme.Coulibaly' },
+          { id: 173, studentId: 25, subjectId: 5, value: 12.5, teacher: 'M.Diarra' },
+          { id: 174, studentId: 25, subjectId: 6, value: 9, teacher: 'Mme.Sidibe' },
+          { id: 175, studentId: 25, subjectId: 7, value: 13.5, teacher: 'M.Traore' },
+          // Nouhoum Maiga (ELV026) - id: 26
+          { id: 176, studentId: 26, subjectId: 1, value: 13.5, teacher: 'M.Kone' },
+          { id: 177, studentId: 26, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
+          { id: 178, studentId: 26, subjectId: 2, value: 6, teacher: 'M.Sow' },
+          { id: 179, studentId: 26, subjectId: 3, value: 15, teacher: 'Mme.Coulibaly' },
+          { id: 180, studentId: 26, subjectId: 5, value: 14.5, teacher: 'M.Diarra' },
+          { id: 181, studentId: 26, subjectId: 6, value: 10.5, teacher: 'Mme.Sidibe' },
+          { id: 182, studentId: 26, subjectId: 7, value: 19, teacher: 'M.Traore' },
+          // Oumou Coulibaly (ELV027) - id: 27
+          { id: 183, studentId: 27, subjectId: 1, value: 10, teacher: 'M.Kone' },
+          { id: 184, studentId: 27, subjectId: 4, value: 8.5, teacher: 'Mme.Bah' },
+          { id: 185, studentId: 27, subjectId: 2, value: 17, teacher: 'M.Sow' },
+          { id: 186, studentId: 27, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
+          { id: 187, studentId: 27, subjectId: 5, value: 16.5, teacher: 'M.Diarra' },
+          { id: 188, studentId: 27, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
+          { id: 189, studentId: 27, subjectId: 7, value: 7, teacher: 'M.Traore' },
+          // Ousmane Diakite (ELV028) - id: 28
+          { id: 190, studentId: 28, subjectId: 1, value: 18.5, teacher: 'M.Kone' },
+          { id: 191, studentId: 28, subjectId: 4, value: 12, teacher: 'Mme.Bah' },
+          { id: 192, studentId: 28, subjectId: 2, value: 8, teacher: 'M.Sow' },
+          { id: 193, studentId: 28, subjectId: 3, value: 16, teacher: 'Mme.Coulibaly' },
+          { id: 194, studentId: 28, subjectId: 5, value: 9.5, teacher: 'M.Diarra' },
+          { id: 195, studentId: 28, subjectId: 6, value: 14.5, teacher: 'Mme.Sidibe' },
+          { id: 196, studentId: 28, subjectId: 7, value: 11, teacher: 'M.Traore' },
+          // Rokia Kone (ELV029) - id: 29
+          { id: 197, studentId: 29, subjectId: 1, value: 7, teacher: 'M.Kone' },
+          { id: 198, studentId: 29, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
+          { id: 199, studentId: 29, subjectId: 2, value: 13.5, teacher: 'M.Sow' },
+          { id: 200, studentId: 29, subjectId: 3, value: 10, teacher: 'Mme.Coulibaly' },
+          { id: 201, studentId: 29, subjectId: 5, value: 17.5, teacher: 'M.Diarra' },
+          { id: 202, studentId: 29, subjectId: 6, value: 8.5, teacher: 'Mme.Sidibe' },
+          { id: 203, studentId: 29, subjectId: 7, value: 16, teacher: 'M.Traore' },
+          // Souleymane Diarra (ELV030) - id: 30
+          { id: 204, studentId: 30, subjectId: 1, value: 15.5, teacher: 'M.Kone' },
+          { id: 205, studentId: 30, subjectId: 4, value: 10.5, teacher: 'Mme.Bah' },
+          { id: 206, studentId: 30, subjectId: 2, value: 19.5, teacher: 'M.Sow' },
+          { id: 207, studentId: 30, subjectId: 3, value: 7.5, teacher: 'Mme.Coulibaly' },
+          { id: 208, studentId: 30, subjectId: 5, value: 12, teacher: 'M.Diarra' },
+          { id: 209, studentId: 30, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
+          { id: 210, studentId: 30, subjectId: 7, value: 9.5, teacher: 'M.Traore' },
+          // Salimata Sidibe (ELV031) - id: 31
+          { id: 211, studentId: 31, subjectId: 1, value: 12, teacher: 'M.Kone' },
+          { id: 212, studentId: 31, subjectId: 4, value: 9, teacher: 'Mme.Bah' },
+          { id: 213, studentId: 31, subjectId: 2, value: 16, teacher: 'M.Sow' },
+          { id: 214, studentId: 31, subjectId: 3, value: 18.5, teacher: 'Mme.Coulibaly' },
+          { id: 215, studentId: 31, subjectId: 5, value: 14, teacher: 'M.Diarra' },
+          { id: 216, studentId: 31, subjectId: 6, value: 6.5, teacher: 'Mme.Sidibe' },
+          { id: 217, studentId: 31, subjectId: 7, value: 19, teacher: 'M.Traore' },
+          // Seydou Traore (ELV032) - id: 32
+          { id: 218, studentId: 32, subjectId: 1, value: 8, teacher: 'M.Kone' },
+          { id: 219, studentId: 32, subjectId: 4, value: 14.5, teacher: 'Mme.Bah' },
+          { id: 220, studentId: 32, subjectId: 2, value: 10.5, teacher: 'M.Sow' },
+          { id: 221, studentId: 32, subjectId: 3, value: 12.5, teacher: 'Mme.Coulibaly' },
+          { id: 222, studentId: 32, subjectId: 5, value: 16, teacher: 'M.Diarra' },
+          { id: 223, studentId: 32, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
+          { id: 224, studentId: 32, subjectId: 7, value: 13.5, teacher: 'M.Traore' },
+          // Sitan Doumbia (ELV033) - id: 33
+          { id: 225, studentId: 33, subjectId: 1, value: 17.5, teacher: 'M.Kone' },
+          { id: 226, studentId: 33, subjectId: 4, value: 11, teacher: 'Mme.Bah' },
+          { id: 227, studentId: 33, subjectId: 2, value: 9.5, teacher: 'M.Sow' },
+          { id: 228, studentId: 33, subjectId: 3, value: 15.5, teacher: 'Mme.Coulibaly' },
+          { id: 229, studentId: 33, subjectId: 5, value: 8, teacher: 'M.Diarra' },
+          { id: 230, studentId: 33, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
+          { id: 231, studentId: 33, subjectId: 7, value: 6.5, teacher: 'M.Traore' },
+          // Tenin Sanogo (ELV034) - id: 34
+          { id: 232, studentId: 34, subjectId: 1, value: 13, teacher: 'M.Kone' },
+          { id: 233, studentId: 34, subjectId: 4, value: 16, teacher: 'Mme.Bah' },
+          { id: 234, studentId: 34, subjectId: 2, value: 5.5, teacher: 'M.Sow' },
+          { id: 235, studentId: 34, subjectId: 3, value: 17.5, teacher: 'Mme.Coulibaly' },
+          { id: 236, studentId: 34, subjectId: 5, value: 15, teacher: 'M.Diarra' },
+          { id: 237, studentId: 34, subjectId: 6, value: 12.5, teacher: 'Mme.Sidibe' },
+          { id: 238, studentId: 34, subjectId: 7, value: 8, teacher: 'M.Traore' },
+          // Tidiane Kamissoko (ELV035) - id: 35
+          { id: 239, studentId: 35, subjectId: 1, value: 6, teacher: 'M.Kone' },
+          { id: 240, studentId: 35, subjectId: 4, value: 18.5, teacher: 'Mme.Bah' },
+          { id: 241, studentId: 35, subjectId: 2, value: 14, teacher: 'M.Sow' },
+          { id: 242, studentId: 35, subjectId: 3, value: 9, teacher: 'Mme.Coulibaly' },
+          { id: 243, studentId: 35, subjectId: 5, value: 19, teacher: 'M.Diarra' },
+          { id: 244, studentId: 35, subjectId: 6, value: 10, teacher: 'Mme.Sidibe' },
+          { id: 245, studentId: 35, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
+          // Tiemoko Dembele (ELV036) - id: 36
+          { id: 246, studentId: 36, subjectId: 1, value: 16, teacher: 'M.Kone' },
+          { id: 247, studentId: 36, subjectId: 4, value: 7.5, teacher: 'Mme.Bah' },
+          { id: 248, studentId: 36, subjectId: 2, value: 12.5, teacher: 'M.Sow' },
+          { id: 249, studentId: 36, subjectId: 3, value: 11, teacher: 'Mme.Coulibaly' },
+          { id: 250, studentId: 36, subjectId: 5, value: 13.5, teacher: 'M.Diarra' },
+          { id: 251, studentId: 36, subjectId: 6, value: 19, teacher: 'Mme.Sidibe' },
+          { id: 252, studentId: 36, subjectId: 7, value: 10, teacher: 'M.Traore' },
+          // Yacouba Bamba (ELV037) - id: 37
+          { id: 253, studentId: 37, subjectId: 1, value: 11.5, teacher: 'M.Kone' },
+          { id: 254, studentId: 37, subjectId: 4, value: 15.5, teacher: 'Mme.Bah' },
+          { id: 255, studentId: 37, subjectId: 2, value: 8.5, teacher: 'M.Sow' },
+          { id: 256, studentId: 37, subjectId: 3, value: 14, teacher: 'Mme.Coulibaly' },
+          { id: 257, studentId: 37, subjectId: 5, value: 10, teacher: 'M.Diarra' },
+          { id: 258, studentId: 37, subjectId: 6, value: 16.5, teacher: 'Mme.Sidibe' },
+          { id: 259, studentId: 37, subjectId: 7, value: 18.5, teacher: 'M.Traore' },
+          // Youssouf Keita (ELV038) - id: 38
+          { id: 260, studentId: 38, subjectId: 1, value: 9, teacher: 'M.Kone' },
+          { id: 261, studentId: 38, subjectId: 4, value: 13.5, teacher: 'Mme.Bah' },
+          { id: 262, studentId: 38, subjectId: 2, value: 17.5, teacher: 'M.Sow' },
+          { id: 263, studentId: 38, subjectId: 3, value: 12, teacher: 'Mme.Coulibaly' },
+          { id: 264, studentId: 38, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
+          { id: 265, studentId: 38, subjectId: 6, value: 8, teacher: 'Mme.Sidibe' },
+          { id: 266, studentId: 38, subjectId: 7, value: 14, teacher: 'M.Traore' },
+          // Zakaria Coulibaly (ELV039) - id: 39
+          { id: 267, studentId: 39, subjectId: 1, value: 14, teacher: 'M.Kone' },
+          { id: 268, studentId: 39, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
+          { id: 269, studentId: 39, subjectId: 2, value: 19, teacher: 'M.Sow' },
+          { id: 270, studentId: 39, subjectId: 3, value: 16.5, teacher: 'Mme.Coulibaly' },
+          { id: 271, studentId: 39, subjectId: 5, value: 7, teacher: 'M.Diarra' },
+          { id: 272, studentId: 39, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
+          { id: 273, studentId: 39, subjectId: 7, value: 12, teacher: 'M.Traore' },
+          // Awa Diop (ELV040) - id: 40
+          { id: 274, studentId: 40, subjectId: 1, value: 18, teacher: 'M.Kone' },
+          { id: 275, studentId: 40, subjectId: 4, value: 11.5, teacher: 'Mme.Bah' },
+          { id: 276, studentId: 40, subjectId: 2, value: 10, teacher: 'M.Sow' },
+          { id: 277, studentId: 40, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
+          { id: 278, studentId: 40, subjectId: 5, value: 16.5, teacher: 'M.Diarra' },
+          { id: 279, studentId: 40, subjectId: 6, value: 9.5, teacher: 'Mme.Sidibe' },
+          { id: 280, studentId: 40, subjectId: 7, value: 17, teacher: 'M.Traore' },
+          // Fatou Niang (ELV041) - id: 41
+          { id: 281, studentId: 41, subjectId: 1, value: 5.5, teacher: 'M.Kone' },
+          { id: 282, studentId: 41, subjectId: 4, value: 17, teacher: 'Mme.Bah' },
+          { id: 283, studentId: 41, subjectId: 2, value: 15, teacher: 'M.Sow' },
+          { id: 284, studentId: 41, subjectId: 3, value: 10.5, teacher: 'Mme.Coulibaly' },
+          { id: 285, studentId: 41, subjectId: 5, value: 14, teacher: 'M.Diarra' },
+          { id: 286, studentId: 41, subjectId: 6, value: 18.5, teacher: 'Mme.Sidibe' },
+          { id: 287, studentId: 41, subjectId: 7, value: 8.5, teacher: 'M.Traore' },
+          // Ali Diallo (ELV042) - id: 42
+          { id: 288, studentId: 42, subjectId: 1, value: 15, teacher: 'M.Kone' },
+          { id: 289, studentId: 42, subjectId: 4, value: 8, teacher: 'Mme.Bah' },
+          { id: 290, studentId: 42, subjectId: 2, value: 11.5, teacher: 'M.Sow' },
+          { id: 291, studentId: 42, subjectId: 3, value: 17, teacher: 'Mme.Coulibaly' },
+          { id: 292, studentId: 42, subjectId: 5, value: 9, teacher: 'M.Diarra' },
+          { id: 293, studentId: 42, subjectId: 6, value: 13.5, teacher: 'Mme.Sidibe' },
+          { id: 294, studentId: 42, subjectId: 7, value: 16, teacher: 'M.Traore' },
+          // Aicha Sow (ELV043) - id: 43
+          { id: 295, studentId: 43, subjectId: 1, value: 10, teacher: 'M.Kone' },
+          { id: 296, studentId: 43, subjectId: 4, value: 16.5, teacher: 'Mme.Bah' },
+          { id: 297, studentId: 43, subjectId: 2, value: 7.5, teacher: 'M.Sow' },
+          { id: 298, studentId: 43, subjectId: 3, value: 14.5, teacher: 'Mme.Coulibaly' },
+          { id: 299, studentId: 43, subjectId: 5, value: 18, teacher: 'M.Diarra' },
+          { id: 300, studentId: 43, subjectId: 6, value: 11, teacher: 'Mme.Sidibe' },
+          { id: 301, studentId: 43, subjectId: 7, value: 12.5, teacher: 'M.Traore' },
+          // Maimouna Faye (ELV044) - id: 44
+          { id: 302, studentId: 44, subjectId: 1, value: 12.5, teacher: 'M.Kone' },
+          { id: 303, studentId: 44, subjectId: 4, value: 9.5, teacher: 'Mme.Bah' },
+          { id: 304, studentId: 44, subjectId: 2, value: 16, teacher: 'M.Sow' },
+          { id: 305, studentId: 44, subjectId: 3, value: 8, teacher: 'Mme.Coulibaly' },
+          { id: 306, studentId: 44, subjectId: 5, value: 19.5, teacher: 'M.Diarra' },
+          { id: 307, studentId: 44, subjectId: 6, value: 15, teacher: 'Mme.Sidibe' },
+          { id: 308, studentId: 44, subjectId: 7, value: 7, teacher: 'M.Traore' },
+          // Cheick Diaby (ELV045) - id: 45
+          { id: 309, studentId: 45, subjectId: 1, value: 17, teacher: 'M.Kone' },
+          { id: 310, studentId: 45, subjectId: 4, value: 14, teacher: 'Mme.Bah' },
+          { id: 311, studentId: 45, subjectId: 2, value: 9, teacher: 'M.Sow' },
+          { id: 312, studentId: 45, subjectId: 3, value: 16, teacher: 'Mme.Coulibaly' },
+          { id: 313, studentId: 45, subjectId: 5, value: 11.5, teacher: 'M.Diarra' },
+          { id: 314, studentId: 45, subjectId: 6, value: 18, teacher: 'Mme.Sidibe' },
+          { id: 315, studentId: 45, subjectId: 7, value: 10.5, teacher: 'M.Traore' },
+          // Abdoulaye Konate (ELV046) - id: 46
+          { id: 316, studentId: 46, subjectId: 1, value: 8.5, teacher: 'M.Kone' },
+          { id: 317, studentId: 46, subjectId: 4, value: 15, teacher: 'Mme.Bah' },
+          { id: 318, studentId: 46, subjectId: 2, value: 12, teacher: 'M.Sow' },
+          { id: 319, studentId: 46, subjectId: 3, value: 9.5, teacher: 'Mme.Coulibaly' },
+          { id: 320, studentId: 46, subjectId: 5, value: 14.5, teacher: 'M.Diarra' },
+          { id: 321, studentId: 46, subjectId: 6, value: 16, teacher: 'Mme.Sidibe' },
+          { id: 322, studentId: 46, subjectId: 7, value: 18, teacher: 'M.Traore' },
+          // Mamoutou Traore (ELV047) - id: 47
+          { id: 323, studentId: 47, subjectId: 1, value: 13.5, teacher: 'M.Kone' },
+          { id: 324, studentId: 47, subjectId: 4, value: 10, teacher: 'Mme.Bah' },
+          { id: 325, studentId: 47, subjectId: 2, value: 18.5, teacher: 'M.Sow' },
+          { id: 326, studentId: 47, subjectId: 3, value: 7, teacher: 'Mme.Coulibaly' },
+          { id: 327, studentId: 47, subjectId: 5, value: 15.5, teacher: 'M.Diarra' },
+          { id: 328, studentId: 47, subjectId: 6, value: 12, teacher: 'Mme.Sidibe' },
+          { id: 329, studentId: 47, subjectId: 7, value: 14, teacher: 'M.Traore' },
+          // Ramatoulaye Diawara (ELV048) - id: 48
+          { id: 330, studentId: 48, subjectId: 1, value: 16.5, teacher: 'M.Kone' },
+          { id: 331, studentId: 48, subjectId: 4, value: 12.5, teacher: 'Mme.Bah' },
+          { id: 332, studentId: 48, subjectId: 2, value: 10, teacher: 'M.Sow' },
+          { id: 333, studentId: 48, subjectId: 3, value: 18, teacher: 'Mme.Coulibaly' },
+          { id: 334, studentId: 48, subjectId: 5, value: 8.5, teacher: 'M.Diarra' },
+          { id: 335, studentId: 48, subjectId: 6, value: 17.5, teacher: 'Mme.Sidibe' },
+          { id: 336, studentId: 48, subjectId: 7, value: 11, teacher: 'M.Traore' },
+          // Kadidia Ouattara (ELV049) - id: 49
+          { id: 337, studentId: 49, subjectId: 1, value: 7.5, teacher: 'M.Kone' },
+          { id: 338, studentId: 49, subjectId: 4, value: 18, teacher: 'Mme.Bah' },
+          { id: 339, studentId: 49, subjectId: 2, value: 14, teacher: 'M.Sow' },
+          { id: 340, studentId: 49, subjectId: 3, value: 11.5, teacher: 'Mme.Coulibaly' },
+          { id: 341, studentId: 49, subjectId: 5, value: 10, teacher: 'M.Diarra' },
+          { id: 342, studentId: 49, subjectId: 6, value: 19, teacher: 'Mme.Sidibe' },
+          { id: 343, studentId: 49, subjectId: 7, value: 15.5, teacher: 'M.Traore' },
+          // Mintou Samake (ELV050) - id: 50
+          { id: 344, studentId: 50, subjectId: 1, value: 14.5, teacher: 'M.Kone' },
+          { id: 345, studentId: 50, subjectId: 4, value: 6.5, teacher: 'Mme.Bah' },
+          { id: 346, studentId: 50, subjectId: 2, value: 17, teacher: 'M.Sow' },
+          { id: 347, studentId: 50, subjectId: 3, value: 13, teacher: 'Mme.Coulibaly' },
+          { id: 348, studentId: 50, subjectId: 5, value: 9, teacher: 'M.Diarra' },
+          { id: 349, studentId: 50, subjectId: 6, value: 16.5, teacher: 'Mme.Sidibe' },
+          { id: 350, studentId: 50, subjectId: 7, value: 12, teacher: 'M.Traore' }
+        ];
+      }
 
-      // Renvoie les notes de l'élève en filtrant aussi par examen (pour éviter
-      // toute contamination si un même élève apparaissait dans plusieurs examens).
       function getStudentGrades(studentId) {
         var student = appData.students.find(function (s) { return s.id === studentId; });
         var exam = student ? student.exam : appData.currentExam;
@@ -1560,7 +1514,6 @@ appData.grades = [
         return appData.subjects.find(function (s) { return s.id === subjectId; });
       }
 
-      // Détail de la moyenne pondérée = { points, coeffs, average }
       function getStudentAverageDetail(studentId) {
         var grades = getStudentGrades(studentId);
         var points = 0, coeffs = 0;
@@ -1585,8 +1538,6 @@ appData.grades = [
         return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
       }
 
-      // ===== STATISTIQUES DE CLASSE =====
-      // Moyenne générale pondérée de la classe (Σ points / Σ coeffs).
       function getClassWeightedAverage(students) {
         var totalPoints = 0, totalCoeffs = 0;
         students.forEach(function (s) {
@@ -1596,7 +1547,6 @@ appData.grades = [
         return totalCoeffs > 0 ? totalPoints / totalCoeffs : 0;
       }
 
-      // Renvoie le rang de l'élève dans sa classe + le total d'élèves classés.
       function getStudentRank(student) {
         var classmates = appData.students.filter(function (s) { return s.exam === student.exam; });
         var ranked = classmates.map(function (s) {
@@ -1611,8 +1561,6 @@ appData.grades = [
         return { rank: rank, total: ranked.length, ranked: ranked };
       }
 
-      // Moyenne de la classe dans une matière donnée (moyenne arithmétique
-      // des notes des élèves du même examen dans cette matière).
       function getSubjectClassAverage(subject) {
         var subjectGrades = appData.grades.filter(function (g) {
           return g.subjectId === subject.id;
@@ -1623,7 +1571,6 @@ appData.grades = [
         return sum / subjectGrades.length;
       }
 
-      // Renvoie le rang de l'élève dans une matière précise.
       function getStudentSubjectRank(student, subject) {
         var subjectGrades = appData.grades.filter(function (g) {
           return g.subjectId === subject.id;
@@ -1644,8 +1591,6 @@ appData.grades = [
         return { text: 'NON ADMIS', cls: 'mention-fail', icon: '\u274C' };
       }
 
-      // Statut d'admission : ADMIS (moyenne >= 10) ou AJOURNÉ (moyenne < 10).
-      // Renvoie un objet { text, cls, icon } prêt à l'affichage.
       function getStatus(average, hasGrades) {
         if (!hasGrades) return { text: 'NON NOTÉ', cls: 'status-pending', icon: 'ℹ️' };
         if (average >= 10) return { text: 'ADMIS', cls: 'status-admis', icon: '✅' };
@@ -1669,19 +1614,11 @@ appData.grades = [
       }
 
       function authenticateStudent(nameInput, passwordInput) {
-        // Normalise les espaces multiples (ex: "Jean  Dupont" → "Jean Dupont")
         var cleaned = nameInput.trim().replace(/\s+/g, ' ');
         var nameParts = cleaned.split(' ');
         if (nameParts.length < 2) return null;
-        // Le matricule est comparé de façon insensible à la casse.
         var matricule = passwordInput.trim().toLowerCase();
 
-        // On teste DEUX ordres possibles pour le nom :
-        //   1) "Prénom Nom"     → firstName = parts[0], lastName = reste
-        //   2) "Nom Prénom"     → firstName = dernier,   lastName = début
-        // Cela permet de connecter l'élève quel que soit l'ordre saisie,
-        // car en français on utilise souvent "NOM Prénom" (ordre administratif)
-        // mais aussi "Prénom Nom" (ordre courant).
         var order1 = { firstName: nameParts[0].toLowerCase(), lastName: nameParts.slice(1).join(' ').toLowerCase() };
         var order2 = { firstName: nameParts[nameParts.length - 1].toLowerCase(), lastName: nameParts.slice(0, -1).join(' ').toLowerCase() };
 
@@ -1691,7 +1628,6 @@ appData.grades = [
           var sl = s.lastName.toLowerCase();
           var sm = s.matricule.toLowerCase();
           if (sm !== matricule) return false;
-          // Accepte l'ordre "Prénom Nom" OU "Nom Prénom"
           return (sf === order1.firstName && sl === order1.lastName) ||
                  (sf === order2.firstName && sl === order2.lastName);
         }) || null;
@@ -1713,10 +1649,8 @@ appData.grades = [
         var literaryAvg = getStudentAverageByCategory(student.id, 'literary');
         var grades = getStudentGrades(student.id);
 
-        // Établissement : on prend celui de l'élève, sinon un fallback compact
         var institution = student.institution || '—';
 
-        // ===== FICHE ÉLÈVE (avec établissement) =====
         document.getElementById('studentInfo').innerHTML =
           '<div class="info-item"><strong>👤 Nom</strong><span>' + escapeHtml(student.lastName) + '</span></div>' +
           '<div class="info-item"><strong>👤 Prénom</strong><span>' + escapeHtml(student.firstName) + '</span></div>' +
@@ -1725,11 +1659,9 @@ appData.grades = [
           '<div class="info-item"><strong>📚 Examen</strong><span>' + escapeHtml(student.exam) + '</span></div>' +
           '<div class="info-item"><strong>📅 Année</strong><span>2025-2026</span></div>';
 
-        // ===== CARTES STATISTIQUES =====
         var avgDisplay = hasGrades ? average.toFixed(2) + '/20' : '—';
         var sciDisplay = hasGrades ? scientificAvg.toFixed(2) + '/20' : '—';
         var litDisplay = hasGrades ? literaryAvg.toFixed(2) + '/20' : '—';
-        // Statut d'admission (Admis / Ajourné) — visible en première position
         var status = getStatus(average, hasGrades);
         var statusCardCls = !hasGrades ? 'mention-fail' : (status.cls === 'status-admis' ? 'mention-tb' : 'mention-fail');
         document.getElementById('statsGrid').innerHTML =
@@ -1739,7 +1671,6 @@ appData.grades = [
           '<div class="stat-card"><i class="fas fa-flask" style="color:var(--color-secondary)"></i><div class="value">' + sciDisplay + '</div><div class="label">Moyenne scientifique</div></div>' +
           '<div class="stat-card"><i class="fas fa-book" style="color:#e91e63"></i><div class="value">' + litDisplay + '</div><div class="label">Moyenne littéraire</div></div>';
 
-        // ===== CONTEXTE DE CLASSEMENT (rang + moyenne de classe) =====
         var rankInfo = getStudentRank(student);
         var allClassmates = appData.students.filter(function (s) { return s.exam === student.exam; });
         var classAvg = getClassWeightedAverage(allClassmates);
@@ -1757,7 +1688,6 @@ appData.grades = [
           '<div class="rc-item"><div class="rc-value">' + successRate + '</div><div class="rc-label">✅ Taux réussite classe</div></div>' +
           '<div class="rc-item"><div class="rc-value">' + allClassmates.length + '</div><div class="rc-label">👥 Élèves inscrits</div></div>';
 
-        // ===== TABLEAU DES NOTES (avec moy. classe + rang par matière) =====
         var gradesBody = document.getElementById('gradesBody');
         var gradesFooter = document.getElementById('gradesFooter');
         gradesBody.innerHTML = '';
@@ -1776,7 +1706,6 @@ appData.grades = [
               var subjRank = getStudentSubjectRank(student, subject);
               var classAvgDisplay = classAvgSubj !== null ? classAvgSubj.toFixed(2) : '—';
               var subjRankDisplay = subjRank.rank > 0 ? (subjRank.rank + '/' + subjRank.total) : '—';
-              // Indicateur visuel : au-dessus ou en-dessous de la moyenne de classe
               var vsClass = classAvgSubj !== null ? (g.value >= classAvgSubj ? 'grade-good' : 'grade-fail') : '';
               var vsClassIcon = classAvgSubj !== null ? (g.value >= classAvgSubj ? ' ▲' : ' ▼') : '';
               gradesBody.innerHTML +=
@@ -1796,14 +1725,12 @@ appData.grades = [
         gradesFooter.innerHTML =
           '<tr style="background:var(--color-light);font-weight:bold"><td colspan="2">TOTAL</td><td>' + footerAvg + '/20</td><td>' + totalPoints.toFixed(1) + '</td><td colspan="4"></td></tr>';
 
-        // ===== CLASSEMENT COMPLET DE LA CLASSE (tous les élèves) =====
         var top10Body = document.getElementById('top10Body');
         var rankingNote = document.getElementById('rankingNote');
         if (rankInfo.ranked.length === 0) {
           top10Body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--color-muted);font-style:italic;padding:12px">Aucun élève classé pour cet examen.</td></tr>';
           if (rankingNote) rankingNote.innerHTML = '';
         } else {
-          // On affiche TOUS les élèves classés (plus de limite à 10).
           var allRanked = rankInfo.ranked;
           top10Body.innerHTML = allRanked.map(function (r, idx) {
             var rank = idx + 1;
@@ -1824,7 +1751,6 @@ appData.grades = [
               '<td><span class="status-badge ' + mateStatus.cls + '">' + mateStatus.icon + ' ' + mateStatus.text + '</span></td>' +
               '</tr>';
           }).join('');
-          // Note indiquant le nombre total d'élèves affichés
           var admisTotal = allRanked.filter(function (r) { return r.average >= 10; }).length;
           var ajourneTotal = allRanked.length - admisTotal;
           if (rankingNote) {
@@ -1832,7 +1758,6 @@ appData.grades = [
           }
         }
 
-        // ===== APPRÉCIATION =====
         document.getElementById('appreciationText').textContent = hasGrades ? getAppreciation(average) : 'Aucune note enregistrée pour le moment. Veuillez contacter l\'administration.';
         document.getElementById('loginPanel').style.display = 'none';
         document.getElementById('resultPanel').style.display = 'block';
@@ -1849,47 +1774,28 @@ appData.grades = [
         document.getElementById('loginAlert').className = 'alert';
       }
 
-      // Retour du classement général vers les résultats de l'élève connecté
-      // (ne déconnecte pas l'élève, contrairement à resetToLogin).
       function backToResults() {
         document.getElementById('summaryPanel').style.display = 'none';
         if (currentStudent) {
           document.getElementById('resultPanel').style.display = 'block';
           document.getElementById('loginPanel').style.display = 'none';
         } else {
-          // Au cas où (ne devrait pas arriver grâce au garde-fou de displaySummary)
           resetToLogin();
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      // ===== VUE RÉSUMÉE : TOUS LES ÉLÈVES (mention + moyenne + établissement) =====
-      // Affiche un classement général de tous les élèves (tous examens confondus
-      // ou filtré par examen / établissement), avec pour chacun :
-      //   - son rang,
-      //   - son nom,
-      //   - son établissement,
-      //   - son examen,
-      //   - sa moyenne pondérée,
-      //   - sa mention,
-      //   - son statut (Admis / Ajourné).
-      // ⚠️ ACCÈS PROTÉGÉ : cette vue n'est accessible qu'après authentification
-      // de l'élève. Si currentStudent est null (non connecté), on redirige vers
-      // le panneau de connexion avec un message d'avertissement.
       function displaySummary() {
-        // Garde-fou : accès interdit sans connexion préalable
         if (!currentStudent) {
           showAlert('Veuillez vous connecter pour accéder au classement général.', 'error');
           resetToLogin();
           return;
         }
-        // Masque les autres panneaux et affiche le panneau de classement
         document.getElementById('loginPanel').style.display = 'none';
         document.getElementById('resultPanel').style.display = 'none';
         document.getElementById('summaryPanel').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        // Remplit le filtre des établissements (une seule fois)
         var instSelect = document.getElementById('summaryInstitutionFilter');
         var currentInstFilter = instSelect.value || 'ALL';
         var institutions = {};
@@ -1910,14 +1816,12 @@ appData.grades = [
         var examFilter = document.getElementById('summaryExamFilter').value;
         var instFilter = document.getElementById('summaryInstitutionFilter').value;
 
-        // Filtre les élèves selon les critères sélectionnés
         var filtered = appData.students.filter(function (s) {
           if (examFilter !== 'ALL' && s.exam !== examFilter) return false;
           if (instFilter !== 'ALL' && (s.institution || '') !== instFilter) return false;
           return true;
         });
 
-        // Calcule la moyenne de chaque élève et ne garde que ceux qui ont des notes
         var ranked = filtered.map(function (s) {
           var d = getStudentAverageDetail(s.id);
           return {
@@ -1935,7 +1839,6 @@ appData.grades = [
         }).filter(function (s) { return s.hasGrades; })
           .sort(function (a, b) { return b.average - a.average; });
 
-        // Met à jour les statistiques de synthèse
         document.getElementById('summaryStudentCount').textContent = ranked.length;
         var sumPts = 0, sumCf = 0;
         var admisCount = 0, ajourneCount = 0;
@@ -1948,7 +1851,6 @@ appData.grades = [
         document.getElementById('summaryAdmisCount').textContent = admisCount + (ranked.length > 0 ? ' (' + Math.round(admisCount / ranked.length * 100) + '%)' : '');
         document.getElementById('summaryAjourneCount').textContent = ajourneCount + (ranked.length > 0 ? ' (' + Math.round(ajourneCount / ranked.length * 100) + '%)' : '');
 
-        // Génère les lignes du tableau
         var summaryBody = document.getElementById('summaryBody');
         if (ranked.length === 0) {
           summaryBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--color-muted);font-style:italic;padding:16px">Aucun élève classé pour ces critères.</td></tr>';
@@ -1989,7 +1891,6 @@ appData.grades = [
             currentStudent = student;
             displayResults(student);
           } else {
-            // Message d'erreur détaillé pour aider l'utilisateur à se connecter
             var msg = 'Identifiants incorrects. ';
             if (appData.students.length === 0) {
               msg += 'Aucun élève enregistré. Contactez l\'administration.';
@@ -2002,7 +1903,6 @@ appData.grades = [
               if (isDemoMode) {
                 msg += 'Consultez les comptes de démonstration ci-dessous.';
               } else {
-                // Vérifie si le matricule existe mais le nom est incorrect
                 var matriculeLower = passwordInput.trim().toLowerCase();
                 var matchByMatricule = appData.students.find(function (s) {
                   return s.matricule && s.matricule.toLowerCase() === matriculeLower;
@@ -2024,11 +1924,9 @@ appData.grades = [
           window.location.href = 'index.html';
         });
 
-        // Bouton "Basculer en mode démonstration"
         var resetDemoBtn = document.getElementById('resetToDemoBtn');
         if (resetDemoBtn) resetDemoBtn.addEventListener('click', resetToDemoMode);
 
-        // Vue résumée : classement général de tous les élèves (accès protégé)
         document.getElementById('showSummaryBtn').addEventListener('click', displaySummary);
         document.getElementById('summaryBackBtn').addEventListener('click', backToResults);
         document.getElementById('summaryLogoutBtn').addEventListener('click', resetToLogin);
