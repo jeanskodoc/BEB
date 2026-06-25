@@ -828,9 +828,6 @@
         <button class="btn-action btn-logout" id="logoutBtn" type="button">
           <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Se déconnecter
         </button>
-        <button class="btn-action btn-print" id="printResultsBtn" type="button">
-          <i class="fas fa-print" aria-hidden="true"></i> Imprimer mes résultats
-        </button>
         <button class="btn-action btn-print" id="showSummaryBtn" type="button" style="background:linear-gradient(135deg,var(--flag-green),#004d3a)">
           <i class="fas fa-trophy" aria-hidden="true"></i> Classement général
         </button>
@@ -906,9 +903,6 @@
       <div class="action-buttons">
         <button class="btn-action btn-logout" id="summaryBackBtn" type="button">
           <i class="fas fa-arrow-left" aria-hidden="true"></i> Retour à mes résultats
-        </button>
-        <button class="btn-action btn-print" id="printSummaryBtn" type="button">
-          <i class="fas fa-print" aria-hidden="true"></i> Imprimer le classement
         </button>
         <button class="btn-action btn-logout" id="summaryLogoutBtn" type="button">
           <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Se déconnecter
@@ -1623,118 +1617,6 @@
         }).join('');
       }
 
-      function printSummary() {
-        var clone = document.getElementById('summaryPanel').cloneNode(true);
-        var btns = clone.querySelectorAll('.action-buttons');
-        btns.forEach(function (b) { b.remove(); });
-        var w = window.open('', '_blank');
-        w.document.write('<!DOCTYPE html><html><head><title>Classement Général</title><meta charset="UTF-8">' +
-          '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">' +
-          '<style>' +
-          '*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}' +
-          'body{padding:20px;background:#fff}' +
-          '.student-info-card{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff;border-radius:20px;padding:20px;margin-bottom:20px}' +
-          '.student-info-card h2{font-size:1.2rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,0.3)}' +
-          '.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}' +
-          '.info-item{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px}' +
-          '.info-item strong{display:block;font-size:0.7rem;opacity:0.8;margin-bottom:4px}' +
-          '.info-item span{font-size:0.95rem;font-weight:500}' +
-          '.grades-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0}' +
-          '.grades-section h3{font-size:1rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #3498db;display:inline-block}' +
-          'table{width:100%;border-collapse:collapse}' +
-          'th,td{padding:8px;text-align:center;border-bottom:1px solid #e0e0e0;font-size:0.82rem}' +
-          'th{background:#f8f9fa}' +
-          '.grade-excellent{color:#2ecc71;font-weight:bold}' +
-          '.grade-good{color:#3498db;font-weight:bold}' +
-          '.grade-passable{color:#f39c12;font-weight:bold}' +
-          '.grade-fail{color:#e74c3c;font-weight:bold}' +
-          '.my-row{background:linear-gradient(135deg,rgba(0,106,78,0.12),rgba(102,126,234,0.12));font-weight:bold}' +
-          '.my-row td{border-bottom:2px solid #006a4e}' +
-          '.mention-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.66rem;font-weight:600;color:#fff}' +
-          '.mention-badge.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12);color:#2c3e50}' +
-          '.mention-badge.mention-tb{background:#2ecc71}' +
-          '.mention-badge.mention-bien{background:#3498db}' +
-          '.mention-badge.mention-passable{background:#f39c12}' +
-          '.mention-badge.mention-fail{background:#e74c3c}' +
-          '.status-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.66rem;font-weight:bold;color:#fff;white-space:nowrap}' +
-          '.status-admis{background:linear-gradient(135deg,#27ae60,#2ecc71)}' +
-          '.status-ajourne{background:linear-gradient(135deg,#c0392b,#e74c3c)}' +
-          '.status-pending{background:#7f8c8d}' +
-          '@media print{body{padding:0}}' +
-          '</style></head><body>' + clone.innerHTML + '</body></html>');
-        w.document.close();
-        setTimeout(function () { w.print(); }, 250);
-      }
-
-      function printResults() {
-        var clone = document.getElementById('resultPanel').cloneNode(true);
-        var btns = clone.querySelectorAll('.action-buttons');
-        btns.forEach(function (b) { b.remove(); });
-        var w = window.open('', '_blank');
-        w.document.write('<!DOCTYPE html><html><head><title>Résultats Scolaires</title><meta charset="UTF-8">' +
-          '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">' +
-          '<style>' +
-          '*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}' +
-          'body{padding:20px;background:#fff}' +
-          '.student-info-card{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff;border-radius:20px;padding:20px;margin-bottom:20px}' +
-          '.student-info-card h2{font-size:1.2rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,0.3)}' +
-          '.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}' +
-          '.info-item{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px}' +
-          '.info-item strong{display:block;font-size:0.7rem;opacity:0.8;margin-bottom:4px}' +
-          '.info-item span{font-size:0.95rem;font-weight:500}' +
-          '.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:20px}' +
-          '.stat-card{background:#f8f9fa;border-radius:16px;padding:15px;text-align:center}' +
-          '.stat-card .value{font-size:1.5rem;font-weight:bold}' +
-          '.stat-card .label{font-size:0.72rem;color:#7f8c8d;margin-top:4px}' +
-          '.stat-card i{font-size:1.6rem;margin-bottom:6px;display:block}' +
-          '.grades-section h3{font-size:1rem;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #3498db;display:inline-block}' +
-          '.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12)}' +
-          '.mention-tb{background:linear-gradient(135deg,#1abc9c,#16a085);color:#fff}' +
-          '.mention-tb .value,.mention-tb i{color:#fff}' +
-          '.mention-bien{background:linear-gradient(135deg,#3498db,#2980b9);color:#fff}' +
-          '.mention-bien .value,.mention-bien i{color:#fff}' +
-          '.mention-passable{background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff}' +
-          '.mention-passable .value,.mention-passable i{color:#fff}' +
-          '.mention-fail{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}' +
-          '.mention-fail .value,.mention-fail i{color:#fff}' +
-          '.grades-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0}' +
-          'table{width:100%;border-collapse:collapse}' +
-          'th,td{padding:10px;text-align:center;border-bottom:1px solid #e0e0e0}' +
-          'th{background:#f8f9fa}' +
-          '.grade-excellent{color:#2ecc71;font-weight:bold}' +
-          '.grade-good{color:#3498db;font-weight:bold}' +
-          '.grade-passable{color:#f39c12;font-weight:bold}' +
-          '.grade-fail{color:#e74c3c;font-weight:bold}' +
-          '.category-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:0.66rem;font-weight:600}' +
-          '.badge-scientific{background:#3498db;color:#fff}' +
-          '.badge-literary{background:#e91e63;color:#fff}' +
-          '.rank-context-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}' +
-          '.rank-context-card .rc-item{text-align:center;padding:12px;border-radius:10px;background:#f5f7fa}' +
-          '.rank-context-card .rc-item.highlight{background:linear-gradient(135deg,#006a4e,#004d3a);color:#fff}' +
-          '.rank-context-card .rc-value{font-size:1.4rem;font-weight:bold}' +
-          '.rank-context-card .rc-label{font-size:0.72rem;opacity:0.85;margin-top:4px}' +
-          '#top10Table .my-row{background:linear-gradient(135deg,rgba(0,106,78,0.12),rgba(102,126,234,0.12));font-weight:bold}' +
-          '#top10Table .my-row td{border-bottom:2px solid #006a4e}' +
-          '.rank-medal{font-size:1.1rem}' +
-          '.mention-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.66rem;font-weight:600;color:#fff}' +
-          '.mention-badge.mention-exc{background:linear-gradient(135deg,#f1c40f,#f39c12);color:#2c3e50}' +
-          '.mention-badge.mention-tb{background:#2ecc71}' +
-          '.mention-badge.mention-bien{background:#3498db}' +
-          '.mention-badge.mention-passable{background:#f39c12}' +
-          '.mention-badge.mention-fail{background:#e74c3c}' +
-          '.status-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.66rem;font-weight:bold;color:#fff;white-space:nowrap}' +
-          '.status-admis{background:linear-gradient(135deg,#27ae60,#2ecc71)}' +
-          '.status-ajourne{background:linear-gradient(135deg,#c0392b,#e74c3c)}' +
-          '.status-pending{background:#7f8c8d}' +
-          '.appreciation-section{background:#f0f8ff;border-radius:16px;padding:20px;text-align:center;margin-bottom:20px}' +
-          '.appreciation-section p{font-size:0.95rem;color:#2c3e50;font-style:italic;line-height:1.5}' +
-          '.appreciation-section i{color:#006a4e;margin:0 4px}' +
-          '@media print{body{padding:0}}' +
-          '</style></head><body>' + clone.innerHTML + '</body></html>');
-        w.document.close();
-        w.print();
-      }
-
       document.addEventListener('DOMContentLoaded', function () {
         loadData();
 
@@ -1786,13 +1668,10 @@
         var resetDemoBtn = document.getElementById('resetToDemoBtn');
         if (resetDemoBtn) resetDemoBtn.addEventListener('click', resetToDemoMode);
 
-        document.getElementById('printResultsBtn').addEventListener('click', printResults);
-
         // Vue résumée : classement général de tous les élèves (accès protégé)
         document.getElementById('showSummaryBtn').addEventListener('click', displaySummary);
         document.getElementById('summaryBackBtn').addEventListener('click', backToResults);
         document.getElementById('summaryLogoutBtn').addEventListener('click', resetToLogin);
-        document.getElementById('printSummaryBtn').addEventListener('click', printSummary);
         document.getElementById('summaryExamFilter').addEventListener('change', renderSummary);
         document.getElementById('summaryInstitutionFilter').addEventListener('change', renderSummary);
       });
